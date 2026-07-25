@@ -400,21 +400,22 @@
       fadeElements.forEach(el => el.classList.add('is-visible'));
     }
 
-    // 2. Theme Transition on Scroll
-    const contactSection = document.getElementById('contact');
+    // 2. Alternating Theme Transition on Scroll
+    const themeSections = document.querySelectorAll('header.hero, section');
     const themeObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          document.body.classList.add('dark-theme');
-        } else if (entry.boundingClientRect.top > 0) {
-          document.body.classList.remove('dark-theme');
+          const index = Array.from(themeSections).indexOf(entry.target);
+          if (index % 2 !== 0) {
+            document.body.classList.add('dark-theme');
+          } else {
+            document.body.classList.remove('dark-theme');
+          }
         }
       });
-    }, { threshold: 0.25 }); 
+    }, { rootMargin: "-50% 0px -50% 0px" }); 
 
-    if (contactSection) {
-      themeObserver.observe(contactSection);
-    }
+    themeSections.forEach(section => themeObserver.observe(section));
   });
 </script>
 
