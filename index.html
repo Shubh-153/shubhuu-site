@@ -28,6 +28,7 @@
     --accent:#2954A6;
     --accent-soft:#EAF0FA;
     --line:#DEDDD8;
+    --shadow: rgba(0,0,0,0.06);
     --mono:'IBM Plex Mono', monospace;
     --sans:'IBM Plex Sans', sans-serif;
     --display:'Space Grotesk', sans-serif;
@@ -35,7 +36,9 @@
   *{margin:0;padding:0;box-sizing:border-box;}
   html{scroll-behavior:smooth;}
   body{
-    background:var(--bg);
+    background-color:var(--bg);
+    background-image:radial-gradient(circle at top center, var(--accent-soft) 0%, transparent 60%);
+    background-attachment:fixed;
     color:var(--ink);
     font-family:var(--sans);
     line-height:1.6;
@@ -61,7 +64,21 @@
   nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;}
   .brand{font-family:var(--display);font-weight:700;font-size:1.05rem;letter-spacing:-0.01em;}
   .navlinks{display:flex;gap:28px;font-family:var(--mono);font-size:0.82rem;color:var(--ink-soft);}
-  .navlinks a{transition:color .15s;}
+  .navlinks a {
+    transition: color .2s ease;
+    position: relative;
+    padding-bottom: 2px;
+  }
+  .navlinks a::after {
+    content: ''; position: absolute; width: 0; height: 1.5px;
+    bottom: 0; left: 50%; background-color: var(--accent);
+    transition: width 0.2s ease, left 0.2s ease;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .navlinks a:hover::after, .navlinks a:focus-visible::after {
+      width: 100%; left: 0;
+    }
+  }
   .navlinks a:hover, .navlinks a:focus-visible{color:var(--accent);}
   .navlinks a:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:2px;}
   @media (max-width:600px){ .navlinks{gap:16px;} .navlinks span{display:none;} }
@@ -186,9 +203,20 @@
     --accent: #6B94FA;
     --accent-soft: #1E283C;
     --line: #2A2D35;
+    --shadow: rgba(0,0,0,0.3);
   }
-  body, .project, nav, .shell, .blog-empty, .skill-chip, .btn, .contact-value a {
+  body, nav, .shell, .blog-empty, .skill-chip, .btn, .contact-value a {
     transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease;
+  }
+  .project {
+    transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .project:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 24px var(--shadow);
+      border-color: var(--accent);
+    }
   }
   body.dark-theme nav { background: rgba(17, 18, 22, 0.88); }
 
@@ -388,13 +416,25 @@
     const fadeElements = document.querySelectorAll(animSelectors);
     
     if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      let staggerDelay = 0;
+      let staggerTimeout;
       const fadeObserver = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
+            if (staggerDelay > 0) {
+              entry.target.style.transitionDelay = `${staggerDelay}ms, ${staggerDelay}ms`;
+            }
             entry.target.classList.add('is-visible');
+            
+            const delaySnapshot = staggerDelay;
+            setTimeout(() => { entry.target.style.transitionDelay = ''; }, delaySnapshot + 300);
+            
+            staggerDelay += 50;
             observer.unobserve(entry.target);
           }
         });
+        clearTimeout(staggerTimeout);
+        staggerTimeout = setTimeout(() => { staggerDelay = 0; }, 100);
       }, { rootMargin: "0px 0px -40px 0px" });
       
       fadeElements.forEach(el => fadeObserver.observe(el));
