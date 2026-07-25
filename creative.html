@@ -180,7 +180,7 @@
 </div>
 
 <!-- Preloader Sequence -->
-<div id="preloader"><div class="loader-text">[ INITIALIZING CONSTELLATION ]</div></div>
+<div id="preloader"><div class="loader-text">[ ENTERING INTO THE CREATIVE SPACE ]</div></div>
 
 <!-- Interactive Particle WebGL/Canvas -->
 <canvas id="galaxy"></canvas>
@@ -260,14 +260,20 @@
     const rocketEl = cursorEl.querySelector('.rocket');
     const cameraEl = cursorEl.querySelector('.camera');
     
-    let cursorX = window.innerWidth / 2;
-    let cursorY = window.innerHeight / 2;
-    let targetX = cursorX;
-    let targetY = cursorY;
+    let cursorX = -100;
+    let cursorY = -100;
+    let targetX = -100;
+    let targetY = -100;
     let currentAngle = 0;
     let isHoveringPhoto = false;
+    let hasMoved = false;
 
     window.addEventListener('mousemove', (e) => {
+      if (!hasMoved) {
+        hasMoved = true;
+        cursorX = e.clientX;
+        cursorY = e.clientY;
+      }
       targetX = e.clientX;
       targetY = e.clientY;
     });
