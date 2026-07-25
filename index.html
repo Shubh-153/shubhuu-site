@@ -400,13 +400,13 @@
       fadeElements.forEach(el => el.classList.add('is-visible'));
     }
 
-    // 2. Alternating Theme Transition on Scroll
+    // 2. Custom Theme Transition on Scroll
     const themeSections = document.querySelectorAll('header.hero, section');
     const themeObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          const index = Array.from(themeSections).indexOf(entry.target);
-          if (index % 2 !== 0) {
+          const id = entry.target.id;
+          if (id === 'projects' || id === 'skills') {
             document.body.classList.add('dark-theme');
           } else {
             document.body.classList.remove('dark-theme');
