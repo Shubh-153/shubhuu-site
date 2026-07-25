@@ -371,6 +371,32 @@
   </div>
 </section>
 
+<section id="creative">
+  <div class="wrap">
+    <p class="path">~/creative</p>
+    <h2>Photography & Video</h2>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 32px;">
+      <div class="creative-img" style="aspect-ratio: 4/5; border-radius: 8px; overflow: hidden; background: var(--bg-raised);">
+        <img src="profile1.png" alt="Creative 1" style="width: 100%; height: 100%; object-fit: cover; filter: grayscale(100%); transition: filter 0.4s ease, transform 0.4s ease;" onmouseover="this.style.filter='grayscale(0%)'; this.style.transform='scale(1.05)';" onmouseout="this.style.filter='grayscale(100%)'; this.style.transform='scale(1)';">
+      </div>
+      <div class="creative-img" style="aspect-ratio: 4/5; border-radius: 8px; overflow: hidden; background: var(--bg-raised);">
+        <img src="profile2.png" alt="Creative 2" style="width: 100%; height: 100%; object-fit: cover; filter: grayscale(100%); transition: filter 0.4s ease, transform 0.4s ease;" onmouseover="this.style.filter='grayscale(0%)'; this.style.transform='scale(1.05)';" onmouseout="this.style.filter='grayscale(100%)'; this.style.transform='scale(1)';">
+      </div>
+      <div class="creative-img" style="aspect-ratio: 4/5; border-radius: 8px; overflow: hidden; background: var(--bg-raised);">
+        <img src="profile3.png" alt="Creative 3" style="width: 100%; height: 100%; object-fit: cover; filter: grayscale(100%); transition: filter 0.4s ease, transform 0.4s ease;" onmouseover="this.style.filter='grayscale(0%)'; this.style.transform='scale(1.05)';" onmouseout="this.style.filter='grayscale(100%)'; this.style.transform='scale(1)';">
+      </div>
+    </div>
+    
+    <div style="text-align: right;">
+      <a href="/creative.html" class="btn ghost" style="display:inline-flex; align-items:center; gap:8px;">
+        Explore Gallery 
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
 <section id="skills">
   <div class="wrap">
     <p class="path">~/skills</p>
@@ -477,7 +503,7 @@
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     // 1. Text Entrance Animations
-    const animSelectors = 'h1, h2, .hero-sub, .shell, .project, .skill-group, .blog-empty, .contact-row';
+    const animSelectors = 'h1, h2, .hero-sub, .shell, .project, .creative-img, .skill-group, .blog-empty, .contact-row';
     const fadeElements = document.querySelectorAll(animSelectors);
     
     if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -513,7 +539,7 @@
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           const id = entry.target.id;
-          if (id === 'projects' || id === 'skills') {
+          if (id === 'projects' || id === 'skills' || id === 'creative') {
             document.body.classList.add('dark-theme');
           } else {
             document.body.classList.remove('dark-theme');
