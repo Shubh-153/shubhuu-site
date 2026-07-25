@@ -29,6 +29,27 @@
     overflow-x: hidden;
   }
   
+  /* CUSTOM CURSOR */
+  @media (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    body, a, .magnetic-btn, .gallery-item, iframe { cursor: none !important; }
+    #custom-cursor {
+      position: fixed; top: 0; left: 0;
+      width: 24px; height: 24px;
+      margin-left: -12px; margin-top: -12px;
+      pointer-events: none; z-index: 10000;
+      will-change: transform;
+    }
+    .cursor-icon {
+      position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%;
+      display: flex; justify-content: center; align-items: center;
+      transition: opacity 0.3s ease;
+    }
+  }
+  @media (pointer: coarse), (prefers-reduced-motion: reduce) {
+    #custom-cursor { display: none !important; }
+  }
+
   /* PRELOADER */
   #preloader {
     position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
@@ -138,6 +159,26 @@
 </head>
 <body>
 
+<!-- Custom Cursor -->
+<div id="custom-cursor">
+  <!-- Rocket Spaceship -->
+  <div class="cursor-icon rocket" style="opacity: 1;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/>
+      <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/>
+      <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/>
+      <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/>
+    </svg>
+  </div>
+  <!-- Camera -->
+  <div class="cursor-icon camera" style="opacity: 0;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/>
+      <circle cx="12" cy="13" r="3"/>
+    </svg>
+  </div>
+</div>
+
 <!-- Preloader Sequence -->
 <div id="preloader"><div class="loader-text">[ INITIALIZING CONSTELLATION ]</div></div>
 
@@ -213,6 +254,64 @@
 </div>
 
 <script>
+  // --- 0. CUSTOM CURSOR LOGIC ---
+  const cursorEl = document.getElementById('custom-cursor');
+  if (cursorEl && window.matchMedia('(pointer: fine)').matches && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const rocketEl = cursorEl.querySelector('.rocket');
+    const cameraEl = cursorEl.querySelector('.camera');
+    
+    let cursorX = window.innerWidth / 2;
+    let cursorY = window.innerHeight / 2;
+    let targetX = cursorX;
+    let targetY = cursorY;
+    let currentAngle = 0;
+    let isHoveringPhoto = false;
+
+    window.addEventListener('mousemove', (e) => {
+      targetX = e.clientX;
+      targetY = e.clientY;
+    });
+
+    document.querySelectorAll('.gallery-item').forEach(item => {
+      item.addEventListener('mouseenter', () => {
+        isHoveringPhoto = true;
+        rocketEl.style.opacity = '0';
+        cameraEl.style.opacity = '1';
+      });
+      item.addEventListener('mouseleave', () => {
+        isHoveringPhoto = false;
+        rocketEl.style.opacity = '1';
+        cameraEl.style.opacity = '0';
+      });
+    });
+
+    function updateCursor() {
+      // Lerp for smooth trailing effect
+      cursorX += (targetX - cursorX) * 0.2;
+      cursorY += (targetY - cursorY) * 0.2;
+
+      const dx = targetX - cursorX;
+      const dy = targetY - cursorY;
+      
+      // Calculate rotation if moving
+      if (Math.abs(dx) > 1 || Math.abs(dy) > 1) {
+        const targetAngle = Math.atan2(dy, dx) * (180 / Math.PI);
+        let angleDiff = targetAngle - currentAngle;
+        while (angleDiff > 180) angleDiff -= 360;
+        while (angleDiff < -180) angleDiff += 360;
+        currentAngle += angleDiff * 0.15; // Smooth rotation interpolation
+      }
+
+      // Camera stays upright (0deg), Rocket rotates (+45deg offset because SVG points top-right)
+      const rotate = isHoveringPhoto ? 0 : currentAngle + 45;
+      const scale = isHoveringPhoto ? 1.2 : 1;
+
+      cursorEl.style.transform = `translate(${cursorX}px, ${cursorY}px) rotate(${rotate}deg) scale(${scale})`;
+      requestAnimationFrame(updateCursor);
+    }
+    updateCursor();
+  }
+
   // --- 1. PRELOADER SEQUENCE ---
   window.addEventListener('load', () => {
     setTimeout(() => {
