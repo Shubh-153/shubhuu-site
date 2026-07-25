@@ -90,9 +90,7 @@
   
   .link-btn {
     display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:8px;
+    flex-direction:column;
     width:100%;
     background:var(--bg-raised);
     border:1px solid var(--line);
@@ -101,16 +99,56 @@
     font-family:var(--sans);
     font-weight:500;
     font-size:1.05rem;
-    transition:transform 0.15s, box-shadow 0.15s, border-color 0.15s, color 0.15s;
+    transition:transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+    overflow: hidden;
   }
   
+  .link-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    transition: color 0.2s;
+  }
+  
+  /* Expanding Thumbnail Wrapper */
+  .link-thumbnail {
+    width: 100%;
+    height: 0;
+    opacity: 0;
+    border-radius: 6px;
+    background: var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ink-soft);
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    transition: height 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease, margin-top 0.3s ease;
+    overflow: hidden;
+  }
+  .link-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
   /* Prevent hover effects for users who prefer reduced motion */
   @media (prefers-reduced-motion: no-preference) {
     .link-btn:hover {
       transform:translateY(-2px);
-      box-shadow:0 4px 12px rgba(0,0,0,0.04);
+      box-shadow:0 6px 16px rgba(0,0,0,0.06);
       border-color:var(--accent);
-      color:var(--accent);
+    }
+    .link-btn:hover .link-header {
+      color: var(--accent);
+    }
+    /* Expand thumbnail on hover */
+    .link-btn:hover .link-thumbnail {
+      height: 180px;
+      opacity: 1;
+      margin-top: 16px;
     }
   }
 
@@ -138,21 +176,88 @@
 </div>
 
 <div class="links-container">
-  <a href="/" class="link-btn">Website & Portfolio</a>
+  
+  <!-- Website -->
+  <a href="/" class="link-btn">
+    <div class="link-header">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+      Website & Portfolio
+    </div>
+    <div class="link-thumbnail">[ Replace with &lt;img src="thumb-web.jpg"&gt; ]</div>
+  </a>
+  
+  <!-- GitHub -->
   <a href="https://github.com/Shubh-153" target="_blank" rel="noopener" class="link-btn">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
-    GitHub
+    <div class="link-header">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+      GitHub
+    </div>
+    <div class="link-thumbnail">[ Replace with &lt;img src="thumb-github.jpg"&gt; ]</div>
   </a>
+
+  <!-- Creative Portfolio -->
   <a href="/creative.html" class="link-btn">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-    Photography & Video
+    <div class="link-header">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+      Photography & Video
+    </div>
+    <div class="link-thumbnail">[ Replace with &lt;img src="thumb-creative.jpg"&gt; ]</div>
   </a>
-  <a href="https://www.linkedin.com/in/shubh153" class="link-btn" target="_blank" rel="noopener">LinkedIn</a>
-  <a href="https://x.com/shubh_153_" class="link-btn" target="_blank" rel="noopener">X (Twitter)</a>
-  <a href="https://www.threads.com/@shubh_153_" class="link-btn" target="_blank" rel="noopener">Threads</a>
-  <a href="https://www.instagram.com/shubh_153_" class="link-btn" target="_blank" rel="noopener">Instagram</a>
-  <a href="https://www.youtube.com/@shubh153" class="link-btn" target="_blank" rel="noopener">YouTube</a>
-  <a href="https://www.snapchat.com/add/shubhhh153" class="link-btn" target="_blank" rel="noopener">Snapchat</a>
+
+  <!-- LinkedIn -->
+  <a href="https://www.linkedin.com/in/shubh153" class="link-btn" target="_blank" rel="noopener">
+    <div class="link-header">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+      LinkedIn
+    </div>
+    <div class="link-thumbnail">[ Replace with &lt;img src="thumb-linkedin.jpg"&gt; ]</div>
+  </a>
+
+  <!-- X / Twitter -->
+  <a href="https://x.com/shubh_153_" class="link-btn" target="_blank" rel="noopener">
+    <div class="link-header">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l11.733 16h4.267l-11.733 -16z"></path><path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"></path></svg>
+      X (Twitter)
+    </div>
+    <div class="link-thumbnail">[ Replace with &lt;img src="thumb-x.jpg"&gt; ]</div>
+  </a>
+
+  <!-- Threads -->
+  <a href="https://www.threads.com/@shubh_153_" class="link-btn" target="_blank" rel="noopener">
+    <div class="link-header">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10v2.5a3.5 3.5 0 0 1-7 0V12a5 5 0 1 0-5 5c2.69 0 4.908-1.554 5.708-3.79"></path></svg>
+      Threads
+    </div>
+    <div class="link-thumbnail">[ Replace with &lt;img src="thumb-threads.jpg"&gt; ]</div>
+  </a>
+
+  <!-- Instagram -->
+  <a href="https://www.instagram.com/shubh_153_" class="link-btn" target="_blank" rel="noopener">
+    <div class="link-header">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+      Instagram
+    </div>
+    <div class="link-thumbnail">[ Replace with &lt;img src="thumb-insta.jpg"&gt; ]</div>
+  </a>
+
+  <!-- YouTube -->
+  <a href="https://www.youtube.com/@shubh153" class="link-btn" target="_blank" rel="noopener">
+    <div class="link-header">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33 2.78 2.78 0 0 0 1.94 2c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg>
+      YouTube
+    </div>
+    <div class="link-thumbnail">[ Replace with &lt;img src="thumb-youtube.jpg"&gt; ]</div>
+  </a>
+
+  <!-- Snapchat -->
+  <a href="https://www.snapchat.com/add/shubhhh153" class="link-btn" target="_blank" rel="noopener">
+    <div class="link-header">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 10h.01"/><path d="M15 10h.01"/><path d="M12 2a8 8 0 0 0-8 8v12l3-3 2.5 2.5L12 19l2.5 2.5L17 19l3 3V10a8 8 0 0 0-8-8z"/></svg>
+      Snapchat
+    </div>
+    <div class="link-thumbnail">[ Replace with &lt;img src="thumb-snap.jpg"&gt; ]</div>
+  </a>
+
 </div>
 
 <div class="footer" style="text-align: center;">
