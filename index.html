@@ -84,7 +84,31 @@
   @media (max-width:600px){ .navlinks{gap:16px;} .navlinks span{display:none;} }
 
   /* HERO */
-  header.hero{padding:96px 0 64px;border-bottom:1px solid var(--line);}
+  header.hero{padding:96px 0 64px;border-bottom:1px solid var(--line);position:relative;overflow:hidden;}
+  .hero-grid{display:flex;align-items:center;justify-content:space-between;gap:20px;}
+  .hero-content{flex:1.2;max-width:600px;position:relative;z-index:2;}
+  .hero-image-container{flex:0.8;display:flex;justify-content:flex-end;position:relative;z-index:1;}
+  
+  .hero-image{
+    max-width:100%;
+    max-height:450px;
+    object-fit:contain;
+    /* Forces it to be black & white */
+    filter: grayscale(100%) contrast(1.2) opacity(0.85);
+    /* Creates the fade-out effect towards the left text */
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 60%);
+    mask-image: linear-gradient(to right, transparent 0%, black 60%);
+  }
+
+  @media (max-width:800px){
+    .hero-grid{flex-direction:column-reverse;align-items:flex-start;}
+    .hero-image-container{width:100%;justify-content:center;margin-bottom:-60px;opacity:0.4;}
+    .hero-image{
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 60%);
+      mask-image: linear-gradient(to bottom, transparent 0%, black 60%);
+    }
+  }
+
   .eyebrow{
     font-family:var(--mono);font-size:0.8rem;color:var(--accent);
     display:flex;align-items:center;gap:8px;margin-bottom:22px;
@@ -248,18 +272,23 @@
 </nav>
 
 <header class="hero">
-  <div class="wrap">
-    <div class="eyebrow">AVAILABLE FOR PROJECTS &amp; INTERNSHIPS</div>
-    <h1>Shubh Gupta builds full-stack apps, AI tooling, and systems that work.</h1>
-    <p class="hero-sub">B.Tech CSE student exploring the space between software development, DevOps, and applied AI — from multi-agent orchestration systems to cybersecurity education content.</p>
-    <div class="shell">
-      <span class="prompt">$</span> whoami<br>
+  <div class="wrap hero-grid">
+    <div class="hero-content">
+      <div class="eyebrow">AVAILABLE FOR PROJECTS &amp; INTERNSHIPS</div>
+      <h1>Shubh Gupta builds full-stack apps, AI tooling, and systems that work.</h1>
+      <p class="hero-sub">B.Tech CSE student exploring the space between software development, DevOps, and applied AI — from multi-agent orchestration systems to cybersecurity education content.</p>
+      <div class="shell">
+        <span class="prompt">$</span> whoami<br>
+      </div>
+      <div class="hero-links">
+        <a class="btn primary" href="#projects">View projects</a>
+        <a class="btn ghost" href="https://github.com/Shubh-153" target="_blank" rel="noopener">GitHub ↗</a>
+        <a class="btn ghost" href="/resume.pdf" target="_blank" rel="noopener">View Resume</a>
+        <a class="btn ghost" href="#contact">Get in touch</a>
+      </div>
     </div>
-    <div class="hero-links">
-      <a class="btn primary" href="#projects">View projects</a>
-      <a class="btn ghost" href="https://github.com/Shubh-153" target="_blank" rel="noopener">GitHub ↗</a>
-      <a class="btn ghost" href="/resume.pdf" target="_blank" rel="noopener">View Resume</a>
-      <a class="btn ghost" href="#contact">Get in touch</a>
+    <div class="hero-image-container">
+      <img src="profile.png" alt="Shubh Gupta" class="hero-image">
     </div>
   </div>
 </header>
