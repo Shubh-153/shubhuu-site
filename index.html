@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script>document.documentElement.classList.add('js');</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Shubh — Software Developer</title>
@@ -172,6 +173,34 @@
   footer p{font-family:var(--mono);font-size:0.78rem;color:var(--graphite);}
 
   a:focus-visible, button:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px;}
+
+  /* --- NEW: DARK THEME --- */
+  body.dark-theme {
+    --bg: #111216;
+    --bg-raised: #1A1D24;
+    --ink: #F7F7F5;
+    --ink-soft: #A09E96;
+    --graphite: #6B6558;
+    --accent: #6B94FA;
+    --accent-soft: #1E283C;
+    --line: #2A2D35;
+  }
+  body, .project, nav, .shell, .blog-empty, .skill-chip, .btn, .contact-value a {
+    transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease;
+  }
+  body.dark-theme nav { background: rgba(17, 18, 22, 0.88); }
+
+  /* --- NEW: ENTRANCE ANIMATIONS --- */
+  .js h1, .js h2, .js .hero-sub, .js .shell, .js .project, .js .skill-group, .js .blog-empty, .js .contact-row {
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.25s ease-out, transform 0.25s ease-out;
+    will-change: opacity, transform;
+  }
+  .js h1.is-visible, .js h2.is-visible, .js .hero-sub.is-visible, .js .shell.is-visible, .js .project.is-visible, .js .skill-group.is-visible, .js .blog-empty.is-visible, .js .contact-row.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
 </style>
 </head>
 <body>
@@ -349,6 +378,45 @@
     <p>shubhuu.in</p>
   </div>
 </footer>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // 1. Text Entrance Animations
+    const animSelectors = 'h1, h2, .hero-sub, .shell, .project, .skill-group, .blog-empty, .contact-row';
+    const fadeElements = document.querySelectorAll(animSelectors);
+    
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const fadeObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { rootMargin: "0px 0px -40px 0px" });
+      
+      fadeElements.forEach(el => fadeObserver.observe(el));
+    } else {
+      fadeElements.forEach(el => el.classList.add('is-visible'));
+    }
+
+    // 2. Theme Transition on Scroll
+    const contactSection = document.getElementById('contact');
+    const themeObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          document.body.classList.add('dark-theme');
+        } else if (entry.boundingClientRect.top > 0) {
+          document.body.classList.remove('dark-theme');
+        }
+      });
+    }, { threshold: 0.25 }); 
+
+    if (contactSection) {
+      themeObserver.observe(contactSection);
+    }
+  });
+</script>
 
 </body>
 </html>
