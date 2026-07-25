@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shubh — Software Developer</title>
+<meta name="description" content="Shubh Gupta — CS student and developer building full-stack apps, AI/ML tools, and DevOps systems.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F7F7F5;
+    --bg-raised:#FFFFFF;
+    --ink:#14161A;
+    --ink-soft:#4A4D52;
+    --graphite:#6B6558;
+    --accent:#2954A6;
+    --accent-soft:#EAF0FA;
+    --line:#DEDDD8;
+    --mono:'IBM Plex Mono', monospace;
+    --sans:'IBM Plex Sans', sans-serif;
+    --display:'Space Grotesk', sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--sans);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none;}
+  ::selection{background:var(--accent-soft);color:var(--accent);}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;}
+    html{scroll-behavior:auto !important;}
+  }
+
+  .wrap{max-width:920px;margin:0 auto;padding:0 28px;}
+
+  /* NAV */
+  nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(247,247,245,0.88);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;}
+  .brand{font-family:var(--display);font-weight:700;font-size:1.05rem;letter-spacing:-0.01em;}
+  .navlinks{display:flex;gap:28px;font-family:var(--mono);font-size:0.82rem;color:var(--ink-soft);}
+  .navlinks a{transition:color .15s;}
+  .navlinks a:hover, .navlinks a:focus-visible{color:var(--accent);}
+  .navlinks a:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:2px;}
+  @media (max-width:600px){ .navlinks{gap:16px;} .navlinks span{display:none;} }
+
+  /* HERO */
+  header.hero{padding:96px 0 64px;border-bottom:1px solid var(--line);}
+  .eyebrow{
+    font-family:var(--mono);font-size:0.8rem;color:var(--accent);
+    display:flex;align-items:center;gap:8px;margin-bottom:22px;
+  }
+  .eyebrow::before{content:"";width:6px;height:6px;background:var(--accent);border-radius:50%;flex-shrink:0;}
+  h1{
+    font-family:var(--display);font-weight:700;
+    font-size:clamp(2.1rem, 5vw, 3.4rem);
+    letter-spacing:-0.02em;line-height:1.08;
+    max-width:14ch;
+  }
+  .hero-sub{
+    margin-top:20px;max-width:52ch;
+    color:var(--ink-soft);font-size:1.05rem;
+  }
+  .shell{
+    margin-top:32px;
+    background:var(--bg-raised);
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:16px 18px;
+    font-family:var(--mono);
+    font-size:0.88rem;
+    color:var(--ink);
+    max-width:fit-content;
+    display:flex;align-items:center;gap:2px;
+  }
+  .shell .prompt{color:var(--accent);margin-right:8px;}
+  .hero-links{margin-top:36px;display:flex;gap:14px;flex-wrap:wrap;}
+  .btn{
+    font-family:var(--mono);font-size:0.85rem;
+    padding:10px 18px;border-radius:6px;border:1px solid var(--line);
+    transition:border-color .15s, background .15s;
+  }
+  .btn.primary{background:var(--ink);color:var(--bg);border-color:var(--ink);}
+  .btn.primary:hover{background:var(--accent);border-color:var(--accent);}
+  .btn.ghost:hover{border-color:var(--accent);color:var(--accent);}
+
+  /* SECTIONS */
+  section{padding:72px 0;border-bottom:1px solid var(--line);}
+  .path{
+    font-family:var(--mono);font-size:0.8rem;color:var(--graphite);
+    margin-bottom:8px;
+  }
+  h2{
+    font-family:var(--display);font-weight:600;
+    font-size:clamp(1.5rem,3vw,1.9rem);letter-spacing:-0.01em;
+    margin-bottom:36px;
+  }
+
+  /* PROJECTS */
+  .projects{display:flex;flex-direction:column;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden;}
+  .project{
+    background:var(--bg-raised);padding:26px 26px;
+    display:grid;grid-template-columns:1fr;gap:10px;
+  }
+  .project-top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;}
+  .project-title{font-family:var(--display);font-weight:600;font-size:1.15rem;}
+  .project-title a{border-bottom:1px solid transparent;}
+  .project-title a:hover{border-bottom-color:var(--accent);color:var(--accent);}
+  .project-desc{color:var(--ink-soft);font-size:0.95rem;max-width:64ch;}
+  .tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;}
+  .tag{
+    font-family:var(--mono);font-size:0.72rem;color:var(--accent);
+    background:var(--accent-soft);padding:4px 9px;border-radius:20px;
+  }
+
+  /* SKILLS */
+  .skill-groups{display:grid;grid-template-columns:repeat(2,1fr);gap:28px 40px;}
+  @media (max-width:600px){.skill-groups{grid-template-columns:1fr;}}
+  .skill-group h3{
+    font-family:var(--mono);font-size:0.8rem;color:var(--graphite);
+    text-transform:uppercase;letter-spacing:0.04em;margin-bottom:12px;
+  }
+  .skill-list{display:flex;flex-wrap:wrap;gap:8px;}
+  .skill-chip{
+    font-size:0.88rem;padding:7px 13px;border:1px solid var(--line);
+    border-radius:6px;background:var(--bg-raised);
+  }
+
+  /* BLOG */
+  .blog-empty{
+    border:1px dashed var(--line);border-radius:10px;
+    padding:40px 30px;text-align:left;
+    background:var(--bg-raised);
+  }
+  .blog-empty p.lead{font-family:var(--display);font-weight:600;font-size:1.15rem;margin-bottom:8px;}
+  .blog-empty p.sub{color:var(--ink-soft);font-size:0.95rem;max-width:56ch;}
+  .blog-empty .path{margin-top:18px;margin-bottom:0;}
+
+  /* CONTACT */
+  .contact-grid{display:flex;flex-direction:column;gap:14px;max-width:480px;}
+  .contact-row{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:14px 0;border-bottom:1px solid var(--line);
+  }
+  .contact-row:last-child{border-bottom:none;}
+  .contact-label{font-family:var(--mono);font-size:0.8rem;color:var(--graphite);}
+  .contact-value{font-size:0.98rem;}
+  .contact-value a{border-bottom:1px solid var(--line);transition:border-color .15s,color .15s;}
+  .contact-value a:hover{color:var(--accent);border-color:var(--accent);}
+
+  footer{padding:32px 0;}
+  footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
+  footer p{font-family:var(--mono);font-size:0.78rem;color:var(--graphite);}
+
+  a:focus-visible, button:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px;}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="brand">shubh<span style="color:var(--accent)">.</span></div>
+    <div class="navlinks">
+      <a href="#projects"><span>~/</span>projects</a>
+      <a href="#skills"><span>~/</span>skills</a>
+      <a href="#blog"><span>~/</span>blog</a>
+      <a href="#contact"><span>~/</span>contact</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">AVAILABLE FOR PROJECTS &amp; INTERNSHIPS</div>
+    <h1>Shubh Gupta builds full-stack apps, AI tooling, and systems that work.</h1>
+    <p class="hero-sub">B.Tech CSE student exploring the space between software development, DevOps, and applied AI — from multi-agent orchestration systems to cybersecurity education content.</p>
+    <div class="shell">
+      <span class="prompt">$</span> whoami<br>
+    </div>
+    <div class="hero-links">
+      <a class="btn primary" href="#projects">View projects</a>
+      <a class="btn ghost" href="https://github.com/Shubh-153" target="_blank" rel="noopener">GitHub ↗</a>
+      <a class="btn ghost" href="#contact">Get in touch</a>
+    </div>
+  </div>
+</header>
+
+<section id="projects">
+  <div class="wrap">
+    <p class="path">~/projects</p>
+    <h2>Things I've built</h2>
+    <div class="projects">
+
+      <div class="project">
+        <div class="project-top">
+          <div class="project-title"><a href="https://github.com/Shubh-153" target="_blank" rel="noopener">Multi-Agent Build Orchestrator</a></div>
+        </div>
+        <p class="project-desc">A Python system that coordinates Claude Code, Gemini CLI, local Qwen3, and GitHub Copilot CLI to autonomously generate full-stack apps, with a swarm architecture and a Telegram-accessible daemon.</p>
+        <div class="tags"><span class="tag">Python</span><span class="tag">Flask</span><span class="tag">Ollama</span><span class="tag">Async</span></div>
+      </div>
+
+      <div class="project">
+        <div class="project-top">
+          <div class="project-title">Gesture Power FX</div>
+        </div>
+        <p class="project-desc">A webcam-based superhero energy effects app that reads hand gestures in real time and renders cinematic particle effects over live video.</p>
+        <div class="tags"><span class="tag">React 18</span><span class="tag">TypeScript</span><span class="tag">Three.js</span><span class="tag">MediaPipe</span><span class="tag">Tone.js</span></div>
+      </div>
+
+      <div class="project">
+        <div class="project-top">
+          <div class="project-title"><a href="https://github.com/Shubh-153" target="_blank" rel="noopener">VibChat</a></div>
+        </div>
+        <p class="project-desc">A mental health-focused AI chat companion designed around supportive, low-pressure conversation.</p>
+        <div class="tags"><span class="tag">AI/ML</span><span class="tag">Chatbot</span></div>
+      </div>
+
+      <div class="project">
+        <div class="project-top">
+          <div class="project-title"><a href="https://github.com/Shubh-153" target="_blank" rel="noopener">ASCII Art Studio</a></div>
+        </div>
+        <p class="project-desc">A single-file web app that converts images into ASCII art across six modes, including Braille and Matrix-style rendering.</p>
+        <div class="tags"><span class="tag">JavaScript</span><span class="tag">Canvas</span></div>
+      </div>
+
+      <div class="project">
+        <div class="project-top">
+          <div class="project-title">WNS CyberSmart Program Deck</div>
+        </div>
+        <p class="project-desc">A 41-slide cybersecurity awareness presentation for students, built with a custom pptxgenjs and Node.js pipeline for gradient backgrounds and iconography.</p>
+        <div class="tags"><span class="tag">pptxgenjs</span><span class="tag">Python PIL</span><span class="tag">Node.js</span></div>
+      </div>
+
+      <div class="project">
+        <div class="project-top">
+          <div class="project-title"><a href="https://github.com/Shubh-153" target="_blank" rel="noopener">Resume Roaster</a></div>
+        </div>
+        <p class="project-desc">A web app that gives blunt, constructive feedback on resumes.</p>
+        <div class="tags"><span class="tag">JavaScript</span><span class="tag">AI/ML</span></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap">
+    <p class="path">~/skills</p>
+    <h2>What I work with</h2>
+    <div class="skill-groups">
+      <div class="skill-group">
+        <h3>Languages</h3>
+        <div class="skill-list">
+          <span class="skill-chip">Python</span>
+          <span class="skill-chip">C</span>
+          <span class="skill-chip">C++</span>
+          <span class="skill-chip">JavaScript</span>
+          <span class="skill-chip">TypeScript</span>
+          <span class="skill-chip">SQL</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h3>Frontend</h3>
+        <div class="skill-list">
+          <span class="skill-chip">React</span>
+          <span class="skill-chip">Vite</span>
+          <span class="skill-chip">Three.js</span>
+          <span class="skill-chip">HTML/CSS</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h3>Backend &amp; DevOps</h3>
+        <div class="skill-list">
+          <span class="skill-chip">Flask</span>
+          <span class="skill-chip">Node.js</span>
+          <span class="skill-chip">Git &amp; GitHub Actions</span>
+          <span class="skill-chip">Docker</span>
+          <span class="skill-chip">Linux / Bash</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h3>AI / ML Tooling</h3>
+        <div class="skill-list">
+          <span class="skill-chip">Claude Code</span>
+          <span class="skill-chip">Ollama</span>
+          <span class="skill-chip">MCP Servers</span>
+          <span class="skill-chip">Prompt Orchestration</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="blog">
+  <div class="wrap">
+    <p class="path">~/blog</p>
+    <h2>Writing</h2>
+    <div class="blog-empty">
+      <p class="lead">First post is in progress.</p>
+      <p class="sub">Notes on building with AI dev tools, DevOps as I learn it, and whatever I'm shipping that week. Check back soon — or get in touch if you want to know when it's live.</p>
+    </div>
+  </div>
+</section>
+
+<section id="contact" style="border-bottom:none;">
+  <div class="wrap">
+    <p class="path">~/contact</p>
+    <h2>Get in touch</h2>
+    <div class="contact-grid">
+      <div class="contact-row">
+        <span class="contact-label">EMAIL</span>
+        <span class="contact-value"><a href="mailto:hello@shubhuu.in">hello@shubhuu.in</a></span>
+      </div>
+      <div class="contact-row">
+        <span class="contact-label">GITHUB</span>
+        <span class="contact-value"><a href="https://github.com/Shubh-153" target="_blank" rel="noopener">github.com/Shubh-153</a></span>
+      </div>
+      <div class="contact-row">
+        <span class="contact-label">LOCATION</span>
+        <span class="contact-value">Prayagraj, India</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>&copy; 2026 Shubh Gupta. Built by hand.</p>
+    <p>shubhuu.in</p>
+  </div>
+</footer>
+
+</body>
+</html>
