@@ -11,16 +11,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    /* Locked to Dark Theme for a premium gallery aesthetic */
-    --bg: #111216;
-    --bg-raised: #1A1D24;
-    --ink: #F7F7F5;
-    --ink-soft: #A09E96;
-    --graphite: #6B6558;
-    --accent: #6B94FA;
-    --accent-soft: #1E283C;
-    --line: #2A2D35;
-    --shadow: rgba(0,0,0,0.4);
+    --bg: #070708;
+    --ink: #FFFFFF;
+    --ink-soft: #8A8D93;
+    --accent: #FFFFFF;
     --mono: 'IBM Plex Mono', monospace;
     --sans: 'IBM Plex Sans', sans-serif;
     --display: 'Space Grotesk', sans-serif;
@@ -32,179 +26,332 @@
     font-family: var(--sans);
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
-    padding: 0 28px;
+    overflow-x: hidden;
   }
-  a { color: inherit; text-decoration: none; }
-  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
-  ::selection { background: var(--accent-soft); color: var(--accent); }
+  
+  /* PRELOADER */
+  #preloader {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: #070708; z-index: 9999;
+    display: flex; justify-content: center; align-items: center;
+    transition: opacity 0.8s ease, visibility 0.8s;
+  }
+  #preloader.hidden { opacity: 0; visibility: hidden; }
+  .loader-text {
+    font-family: var(--mono); color: var(--ink-soft); font-size: 0.85rem; letter-spacing: 0.1em;
+    animation: pulse 1.5s infinite;
+  }
+  @keyframes pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+
+  /* CANVAS BACKGROUND */
+  #galaxy {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    z-index: -1; pointer-events: none; opacity: 0.5;
+  }
 
   /* NAV */
   nav {
-    padding: 32px 0;
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    padding: 40px;
+    display: flex; justify-content: space-between; align-items: center;
+    position: relative; z-index: 10;
   }
-  .brand { font-family: var(--display); font-weight: 700; font-size: 1.05rem; letter-spacing: -0.01em; }
-  .back-link { font-family: var(--mono); font-size: 0.85rem; color: var(--ink-soft); transition: color 0.2s; border-bottom: 1px solid transparent; }
-  .back-link:hover { color: var(--accent); border-bottom-color: var(--accent); }
+  .brand { font-family: var(--display); font-weight: 700; font-size: 1.2rem; color: #FFF; text-decoration: none;}
+  .magnetic-btn {
+    display: inline-block;
+    padding: 12px 28px;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 40px;
+    color: #FFF; text-decoration: none; font-family: var(--mono); font-size: 0.85rem;
+    transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1), background 0.3s;
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  }
+  .magnetic-btn:hover { background: rgba(255,255,255,0.08); }
+
+  /* TEXT MASKING (Slide-up) */
+  .mask-wrap { overflow: hidden; display: inline-block; vertical-align: top; }
+  .mask-text { display: inline-block; transform: translateY(100%); transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1); }
+  .is-visible .mask-text { transform: translateY(0); }
 
   /* HEADER */
   header {
-    max-width: 1200px;
-    margin: 64px auto 64px;
+    padding: 8vh 40px 12vh;
     text-align: center;
+    position: relative; z-index: 10;
   }
-  h1 {
-    font-family: var(--display);
-    font-size: clamp(2rem, 4vw, 3rem);
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    margin-bottom: 12px;
-  }
-  p.sub {
-    color: var(--ink-soft);
-    font-size: 1.05rem;
-    max-width: 500px;
-    margin: 0 auto;
-  }
+  h1 { font-family: var(--display); font-size: clamp(3rem, 8vw, 6.5rem); font-weight: 700; line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 24px; text-transform: uppercase; }
+  p.sub { color: var(--ink-soft); font-size: 1.1rem; max-width: 500px; margin: 0 auto; font-family: var(--sans); }
 
-  /* GALLERY (Masonry layout using CSS Columns) */
+  /* EDITORIAL GALLERY GRID */
   .gallery {
-    max-width: 1200px;
-    margin: 0 auto 100px;
-    column-count: 3;
-    column-gap: 24px;
+    max-width: 1400px; margin: 0 auto 120px; padding: 0 40px;
+    display: grid; grid-template-columns: repeat(12, 1fr); gap: 40px;
   }
-  @media (max-width: 900px) { .gallery { column-count: 2; } }
-  @media (max-width: 600px) { .gallery { column-count: 1; } }
-
   .gallery-item {
-    break-inside: avoid;
-    margin-bottom: 24px;
-    background: var(--bg-raised);
-    border: 1px solid var(--line);
-    border-radius: 10px;
-    overflow: hidden;
+    position: relative; z-index: 10;
+    /* 3D setup */
+    perspective: 1200px;
+    transform-style: preserve-3d;
+  }
+  
+  /* Asymmetric Layout */
+  .item-1 { grid-column: 1 / 9; }
+  .item-2 { grid-column: 9 / 13; margin-top: 120px; }
+  .item-3 { grid-column: 2 / 6; margin-top: -60px; }
+  .item-4 { grid-column: 7 / 12; margin-top: 80px; }
+  
+  @media (max-width: 900px) {
+    .gallery { display: flex; flex-direction: column; gap: 80px; }
+    .item-2, .item-3, .item-4 { margin-top: 0; }
+  }
+
+  .card-inner {
     position: relative;
-    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    border-radius: 6px; overflow: hidden;
+    transition: transform 0.1s linear; /* Responsive to mouse */
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.08);
   }
-  @media (prefers-reduced-motion: no-preference) {
-    .gallery-item:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 32px var(--shadow);
-      border-color: var(--accent);
-    }
+  .card-inner img, .card-inner iframe {
+    width: 100%; display: block; border: none; filter: grayscale(80%); transition: filter 0.6s ease;
   }
+  .gallery-item:hover .card-inner img { filter: grayscale(0%); }
   
-  .gallery-item img, .gallery-item iframe {
-    width: 100%;
-    display: block;
-    border: none;
-    background-color: var(--line);
-  }
-  .gallery-item iframe {
-    aspect-ratio: 16 / 9;
-  }
-  
+  /* Glassmorphic Caption */
   .caption {
-    padding: 14px 18px;
-    font-size: 0.9rem;
-    color: var(--ink-soft);
-    font-family: var(--sans);
+    position: absolute; bottom: 24px; left: 24px; right: 24px;
+    background: rgba(10, 10, 12, 0.4); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.08);
+    padding: 18px 24px; border-radius: 4px;
+    display: flex; justify-content: space-between; align-items: flex-end;
   }
-
-  /* ENTRANCE ANIMATIONS */
-  .js .gallery-item {
-    opacity: 0;
-    transform: translateY(16px);
-    transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+  .caption-title { font-family: var(--sans); font-weight: 500; font-size: 1.05rem; }
+  .caption-num { font-family: var(--mono); color: var(--ink-soft); font-size: 0.8rem; letter-spacing: 0.05em; }
+  
+  /* Large Numeric Hierarchy */
+  .bg-number {
+    position: absolute; top: -50px; left: -30px;
+    font-family: var(--display); font-size: 10rem; font-weight: 700;
+    color: rgba(255,255,255,0.04); z-index: -1; pointer-events: none;
+    line-height: 1; letter-spacing: -0.05em;
   }
-  .js .gallery-item.is-visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  @media (prefers-reduced-motion: reduce){
-    .js .gallery-item { opacity: 1; transform: none; transition: none !important; }
-  }
-
 </style>
 </head>
 <body>
 
+<!-- Preloader Sequence -->
+<div id="preloader"><div class="loader-text">[ INITIALIZING CONSTELLATION ]</div></div>
+
+<!-- Interactive Particle WebGL/Canvas -->
+<canvas id="galaxy"></canvas>
+
 <nav>
-  <a href="/" class="brand">shubh<span style="color:var(--accent)">.</span></a>
-  <a href="/" class="back-link">← Back to Code</a>
+  <a href="/" class="brand">shubh.</a>
+  <a href="/" class="magnetic-btn">[ Return to Code ]</a>
 </nav>
 
-<header>
-  <h1>Creative</h1>
-  <p class="sub">A collection of my photography and video editing projects.</p>
+<header class="is-visible">
+  <h1>
+    <div class="mask-wrap"><span class="mask-text" style="transition-delay: 0.1s">Visual</span></div><br>
+    <div class="mask-wrap"><span class="mask-text" style="transition-delay: 0.2s">Exploration</span></div>
+  </h1>
+  <div class="mask-wrap">
+    <p class="sub mask-text" style="transition-delay: 0.3s">A digital gallery of photography, cinematic cuts, and visual design experiments.</p>
+  </div>
 </header>
 
 <div class="gallery">
   
-  <!-- Video Example -->
-  <div class="gallery-item">
-    <!-- Replace the src with your actual YouTube embed link -->
-    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ?controls=1" title="YouTube video player" allowfullscreen></iframe>
-    <div class="caption">Cinematic Reel 2026</div>
+  <!-- Item 1 (Hero Video) -->
+  <div class="gallery-item item-1 tilt-card">
+    <div class="bg-number">01</div>
+    <div class="card-inner">
+      <!-- Replace src with your YouTube embed link -->
+      <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ?controls=1" title="Cinematic Reel" style="aspect-ratio: 16/9"></iframe>
+      <div class="caption">
+        <div class="caption-title">Cinematic Reel 2026</div>
+        <div class="caption-num">// VIDEO</div>
+      </div>
+    </div>
   </div>
 
-  <!-- Image Example (Vertical) -->
-  <div class="gallery-item">
-    <!-- Replace src with your image file name -->
-    <div style="width: 100%; padding-bottom: 130%; display: flex; align-items: center; justify-content: center; color: var(--graphite); font-family: var(--mono); font-size: 0.8rem;">[ Replace with &lt;img src="photo1.jpg"&gt; ]</div>
-    <div class="caption">Street Photography - Mumbai</div>
+  <!-- Item 2 (Vertical Image) -->
+  <div class="gallery-item item-2 tilt-card">
+    <div class="bg-number">02</div>
+    <div class="card-inner">
+      <div style="width: 100%; padding-bottom: 130%; display: flex; align-items: center; justify-content: center; color: var(--ink-soft); font-family: var(--mono); font-size: 0.8rem;">[ Replace with &lt;img src="photo1.jpg"&gt; ]</div>
+      <div class="caption">
+        <div class="caption-title">Urban Geometry</div>
+        <div class="caption-num">// PHOTO</div>
+      </div>
+    </div>
   </div>
 
-  <!-- Image Example (Horizontal) -->
-  <div class="gallery-item">
-    <!-- Replace src with your image file name -->
-    <div style="width: 100%; padding-bottom: 66%; display: flex; align-items: center; justify-content: center; color: var(--graphite); font-family: var(--mono); font-size: 0.8rem;">[ Replace with &lt;img src="photo2.jpg"&gt; ]</div>
-    <div class="caption">Landscape - Himalayas</div>
+  <!-- Item 3 (Square Image) -->
+  <div class="gallery-item item-3 tilt-card">
+    <div class="bg-number">03</div>
+    <div class="card-inner">
+      <div style="width: 100%; padding-bottom: 100%; display: flex; align-items: center; justify-content: center; color: var(--ink-soft); font-family: var(--mono); font-size: 0.8rem;">[ Replace with &lt;img src="photo2.jpg"&gt; ]</div>
+      <div class="caption">
+        <div class="caption-title">Midnight Tokyo</div>
+        <div class="caption-num">// PHOTO</div>
+      </div>
+    </div>
   </div>
-  
-  <!-- Image Example (Square) -->
-  <div class="gallery-item">
-    <!-- Replace src with your image file name -->
-    <div style="width: 100%; padding-bottom: 100%; display: flex; align-items: center; justify-content: center; color: var(--graphite); font-family: var(--mono); font-size: 0.8rem;">[ Replace with &lt;img src="photo3.jpg"&gt; ]</div>
-    <div class="caption">Portrait Session</div>
+
+  <!-- Item 4 (Horizontal Image) -->
+  <div class="gallery-item item-4 tilt-card">
+    <div class="bg-number">04</div>
+    <div class="card-inner">
+      <div style="width: 100%; padding-bottom: 70%; display: flex; align-items: center; justify-content: center; color: var(--ink-soft); font-family: var(--mono); font-size: 0.8rem;">[ Replace with &lt;img src="photo3.jpg"&gt; ]</div>
+      <div class="caption">
+        <div class="caption-title">Portrait Study</div>
+        <div class="caption-num">// PHOTO</div>
+      </div>
+    </div>
   </div>
 
 </div>
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      let staggerDelay = 0;
-      let staggerTimeout;
-      const observer = new IntersectionObserver((entries, obs) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            if (staggerDelay > 0) {
-              entry.target.style.transitionDelay = `${staggerDelay}ms, ${staggerDelay}ms`;
-            }
-            entry.target.classList.add('is-visible');
-            
-            const delaySnapshot = staggerDelay;
-            setTimeout(() => { entry.target.style.transitionDelay = ''; }, delaySnapshot + 400);
-            
-            staggerDelay += 75; // Stagger entrance of photos
-            obs.unobserve(entry.target);
-          }
-        });
-        clearTimeout(staggerTimeout);
-        staggerTimeout = setTimeout(() => { staggerDelay = 0; }, 100);
-      }, { rootMargin: "0px 0px -20px 0px" });
-      
-      document.querySelectorAll('.gallery-item').forEach(el => observer.observe(el));
-    } else {
-      document.querySelectorAll('.gallery-item').forEach(el => el.classList.add('is-visible'));
-    }
+  // --- 1. PRELOADER SEQUENCE ---
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      document.getElementById('preloader').classList.add('hidden');
+    }, 600); // Artificial delay to ensure canvas initializes smoothly
   });
+
+  // --- 2. MAGNETIC HOVER BUTTONS ---
+  const magneticBtns = document.querySelectorAll('.magnetic-btn');
+  magneticBtns.forEach(btn => {
+    btn.addEventListener('mousemove', (e) => {
+      const rect = btn.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width / 2;
+      const y = e.clientY - rect.top - rect.height / 2;
+      // Magnet pull: move button 30% of the distance toward mouse
+      btn.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+    });
+    btn.addEventListener('mouseleave', () => {
+      btn.style.transform = `translate(0px, 0px)`;
+    });
+  });
+
+  // --- 3. 3D TILT & MICRO-PARALLAX ON CARDS ---
+  const tiltCards = document.querySelectorAll('.tilt-card');
+  tiltCards.forEach(card => {
+    const inner = card.querySelector('.card-inner');
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      
+      // Calculate rotation (max tilt 8 degrees)
+      const rotateX = ((y - centerY) / centerY) * -8;
+      const rotateY = ((x - centerX) / centerX) * 8;
+      
+      inner.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    });
+    card.addEventListener('mouseleave', () => {
+      inner.style.transform = `rotateX(0deg) rotateY(0deg)`;
+    });
+  });
+
+  // --- 4. INTERACTIVE GALAXY CONSTELLATION CANVAS ---
+  const canvas = document.getElementById('galaxy');
+  const ctx = canvas.getContext('2d');
+  let width, height;
+  let particles = [];
+  let mouse = { x: null, y: null };
+
+  function initCanvas() {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+    particles = [];
+    const particleCount = Math.floor((width * height) / 12000); // Responsive density
+    for(let i=0; i<particleCount; i++) {
+      particles.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: (Math.random() - 0.5) * 0.6,
+        vy: (Math.random() - 0.5) * 0.6,
+        radius: Math.random() * 1.5 + 0.5
+      });
+    }
+  }
+
+  window.addEventListener('resize', initCanvas);
+  
+  // Track mouse coordinates for constellation interactions
+  window.addEventListener('mousemove', (e) => {
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+  });
+  window.addEventListener('mouseout', () => {
+    mouse.x = null;
+    mouse.y = null;
+  });
+
+  function drawCanvas() {
+    ctx.clearRect(0, 0, width, height);
+    
+    particles.forEach((p, index) => {
+      p.x += p.vx;
+      p.y += p.vy;
+      
+      // Bounce off viewport edges
+      if(p.x < 0 || p.x > width) p.vx *= -1;
+      if(p.y < 0 || p.y > height) p.vy *= -1;
+
+      // Draw particle dot
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+      ctx.fill();
+
+      // Connect particle to mouse cursor
+      if (mouse.x != null && mouse.y != null) {
+        const dx = mouse.x - p.x;
+        const dy = mouse.y - p.y;
+        const distance = Math.sqrt(dx*dx + dy*dy);
+        if (distance < 180) {
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(mouse.x, mouse.y);
+          ctx.strokeStyle = `rgba(255, 255, 255, ${0.8 * (1 - distance/180)})`;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+
+      // Connect particle to other particles
+      for(let j = index + 1; j < particles.length; j++) {
+        const p2 = particles[j];
+        const dx = p.x - p2.x;
+        const dy = p.y - p2.y;
+        const distance = Math.sqrt(dx*dx + dy*dy);
+        if(distance < 120) {
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(p2.x, p2.y);
+          ctx.strokeStyle = `rgba(255, 255, 255, ${0.15 * (1 - distance/120)})`;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+    });
+    requestAnimationFrame(drawCanvas);
+  }
+
+  initCanvas();
+  drawCanvas();
+
+  // Disable all heavy JS effects for reduced motion users
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    canvas.style.display = 'none'; // hide canvas entirely
+    tiltCards.forEach(card => card.replaceWith(card.cloneNode(true))); // strip tilt listeners
+    magneticBtns.forEach(btn => btn.replaceWith(btn.cloneNode(true))); // strip magnetic listeners
+  }
 </script>
 
 </body>
