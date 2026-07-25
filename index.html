@@ -83,7 +83,13 @@
   }
   .navlinks a:hover, .navlinks a:focus-visible{color:var(--accent);}
   .navlinks a:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:2px;}
-  @media (max-width:600px){ .navlinks{gap:16px;} .navlinks span{display:none;} }
+  @media (max-width:700px){ 
+    nav .wrap { flex-direction: column; height: auto; padding: 14px 28px; gap: 12px; align-items: flex-start; }
+    .navlinks { width: 100%; overflow-x: auto; padding-bottom: 4px; justify-content: flex-start; gap: 18px; white-space: nowrap; -webkit-overflow-scrolling: touch; }
+    .navlinks::-webkit-scrollbar { display: none; }
+    .navlinks { -ms-overflow-style: none; scrollbar-width: none; }
+    .navlinks span{display:none;} 
+  }
 
   /* HERO */
   header.hero{padding:96px 0 64px;border-bottom:1px solid var(--line);position:relative;overflow:hidden;}
