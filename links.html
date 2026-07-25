@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Links | Shubh Gupta</title>
+<meta name="description" content="All my links in one place.">
+<meta property="og:title" content="Links | Shubh Gupta">
+<meta property="og:image" content="https://shubhuu.in/og-image.jpg">
+<meta property="og:url" content="https://shubhuu.in/links">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F7F7F5;
+    --bg-raised:#FFFFFF;
+    --ink:#14161A;
+    --ink-soft:#4A4D52;
+    --graphite:#6B6558;
+    --accent:#2954A6;
+    --accent-soft:#EAF0FA;
+    --line:#DEDDD8;
+    --mono:'IBM Plex Mono', monospace;
+    --sans:'IBM Plex Sans', sans-serif;
+    --display:'Space Grotesk', sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--sans);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    min-height:100vh;
+    padding:40px 20px;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;}
+  }
+  a{color:inherit;text-decoration:none;}
+  a:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px;}
+  ::selection{background:var(--accent-soft);color:var(--accent);}
+
+  .profile {
+    text-align:center;
+    margin-bottom:32px;
+  }
+  .avatar {
+    width:90px;
+    height:90px;
+    border-radius:50%;
+    background:var(--ink);
+    color:var(--bg);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:var(--display);
+    font-size:2.4rem;
+    font-weight:700;
+    margin:0 auto 16px;
+  }
+  .name {
+    font-family:var(--display);
+    font-size:1.5rem;
+    font-weight:700;
+    letter-spacing:-0.02em;
+  }
+  .bio {
+    color:var(--ink-soft);
+    font-size:0.95rem;
+    margin-top:8px;
+    max-width:300px;
+    margin-left:auto;
+    margin-right:auto;
+  }
+  
+  .links-container {
+    width:100%;
+    max-width:540px;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+  }
+  
+  .link-btn {
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:100%;
+    background:var(--bg-raised);
+    border:1px solid var(--line);
+    padding:16px 20px;
+    border-radius:10px;
+    font-family:var(--sans);
+    font-weight:500;
+    font-size:1.05rem;
+    transition:transform 0.15s, box-shadow 0.15s, border-color 0.15s, color 0.15s;
+  }
+  
+  /* Prevent hover effects for users who prefer reduced motion */
+  @media (prefers-reduced-motion: no-preference) {
+    .link-btn:hover {
+      transform:translateY(-2px);
+      box-shadow:0 4px 12px rgba(0,0,0,0.04);
+      border-color:var(--accent);
+      color:var(--accent);
+    }
+  }
+
+  .footer {
+    margin-top:auto;
+    padding-top:40px;
+    font-family:var(--mono);
+    font-size:0.75rem;
+    color:var(--graphite);
+  }
+  .footer a {
+    text-decoration:underline;
+  }
+  .footer a:hover {
+    color:var(--accent);
+  }
+</style>
+</head>
+<body>
+
+<div class="profile">
+  <div class="avatar">S</div>
+  <h1 class="name">@shubh_153</h1>
+  <p class="bio">Currently building: Life Quest<br>[a gamified to-do web app]</p>
+</div>
+
+<div class="links-container">
+  <a href="/" class="link-btn">Website & Portfolio</a>
+  <a href="https://github.com/Shubh-153" class="link-btn" target="_blank" rel="noopener">GitHub</a>
+  <a href="https://www.linkedin.com/in/shubh153" class="link-btn" target="_blank" rel="noopener">LinkedIn</a>
+  <a href="https://x.com/shubh_153_" class="link-btn" target="_blank" rel="noopener">X (Twitter)</a>
+  <a href="https://www.threads.com/@shubh_153_" class="link-btn" target="_blank" rel="noopener">Threads</a>
+  <a href="https://www.instagram.com/shubh_153_" class="link-btn" target="_blank" rel="noopener">Instagram</a>
+  <a href="https://www.youtube.com/@shubh153" class="link-btn" target="_blank" rel="noopener">YouTube</a>
+  <a href="https://www.snapchat.com/add/shubhhh153" class="link-btn" target="_blank" rel="noopener">Snapchat</a>
+</div>
+
+<div class="footer">
+  <a href="/">shubhuu.in</a>
+</div>
+
+</body>
+</html>
