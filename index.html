@@ -50,6 +50,8 @@
   @media (prefers-reduced-motion: reduce){
     *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;}
     html{scroll-behavior:auto !important;}
+    .hero-image { animation: none !important; opacity: 1 !important; }
+    .slide-2, .slide-3 { display: none !important; }
   }
 
   .wrap{max-width:920px;margin:0 auto;padding:0 28px;}
@@ -98,6 +100,20 @@
     /* Creates the fade-out effect towards the left text */
     -webkit-mask-image: linear-gradient(to right, transparent 0%, black 60%);
     mask-image: linear-gradient(to right, transparent 0%, black 60%);
+    opacity: 0;
+    animation: heroSlideshow 15s infinite;
+  }
+  
+  .slide-1 { position: relative; animation-delay: 0s; }
+  .slide-2 { position: absolute; top: 0; right: 0; width: 100%; height: 100%; animation-delay: 5s; }
+  .slide-3 { position: absolute; top: 0; right: 0; width: 100%; height: 100%; animation-delay: 10s; }
+
+  @keyframes heroSlideshow {
+    0% { opacity: 0; }
+    6% { opacity: 1; }
+    33% { opacity: 1; }
+    39% { opacity: 0; }
+    100% { opacity: 0; }
   }
 
   @media (max-width:800px){
@@ -288,7 +304,9 @@
       </div>
     </div>
     <div class="hero-image-container">
-      <img src="profile.png" alt="Shubh Gupta" class="hero-image">
+      <img src="profile1.png" alt="Shubh Gupta" class="hero-image slide-1">
+      <img src="profile2.png" alt="" class="hero-image slide-2" aria-hidden="true">
+      <img src="profile3.png" alt="" class="hero-image slide-3" aria-hidden="true">
     </div>
   </div>
 </header>
