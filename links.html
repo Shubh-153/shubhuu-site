@@ -52,58 +52,43 @@
   a:focus-visible{outline:2px solid var(--ink);outline-offset:3px;border-radius:6px;}
   ::selection{background:var(--glass-hover);color:var(--ink);}
 
-  /* BACKGROUND ORBS */
-  .orb {
+  /* BACKGROUND GLOW */
+  #bg-glow {
     position: fixed;
-    border-radius: 50%;
-    filter: blur(80px);
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-image: url('thumbnail.png');
+    background-size: cover;
+    background-position: center;
+    filter: blur(80px) saturate(250%) contrast(1.2);
+    transform: scale(1.1);
+    z-index: -2;
+    opacity: 0.7;
+  }
+  .bg-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(135deg, rgba(225, 48, 108, 0.2) 0%, rgba(41, 84, 166, 0.2) 100%);
     z-index: -1;
-    opacity: 0.5;
-    animation: float 20s infinite ease-in-out alternate;
-  }
-  .orb-1 {
-    width: 300px; height: 300px;
-    background: rgba(41, 84, 166, 0.6);
-    top: 10%; left: -10%;
-  }
-  .orb-2 {
-    width: 400px; height: 400px;
-    background: rgba(225, 48, 108, 0.4);
-    bottom: 20%; right: -10%;
-    animation-delay: -5s;
-  }
-  .orb-3 {
-    width: 250px; height: 250px;
-    background: rgba(255, 252, 0, 0.2);
-    top: 50%; left: 40%;
-    animation-delay: -10s;
-  }
-  @keyframes float {
-    0% { transform: translate(0, 0) scale(1); }
-    50% { transform: translate(50px, -50px) scale(1.1); }
-    100% { transform: translate(-30px, 30px) scale(0.9); }
   }
 
-  /* PROFILE */
+  /* PROFILE & HERO IMAGE */
+  .hero-profile-image {
+    width: 100vw;
+    max-width: 600px;
+    height: 300px;
+    object-fit: cover;
+    -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+    margin: -40px auto 16px; /* pull it up to the top edge since body has padding 40px */
+    display: block;
+    z-index: 0;
+  }
   .profile {
     text-align:center;
     margin-bottom:24px;
     z-index: 1;
-  }
-  .avatar {
-    width:90px;
-    height:90px;
-    border-radius:50%;
-    background:var(--ink);
-    color:var(--bg);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-family:var(--display);
-    font-size:2.4rem;
-    font-weight:700;
-    margin:0 auto 16px;
-    border: 1px solid var(--line);
+    position: relative;
+    margin-top: -80px; /* pull the text up into the faded area */
   }
   .name {
     font-family:var(--display);
@@ -413,13 +398,14 @@
 </head>
 <body>
 
-<!-- Background Orbs -->
-<div class="orb orb-1"></div>
-<div class="orb orb-2"></div>
-<div class="orb orb-3"></div>
+<!-- Blurred Glowing Background -->
+<div id="bg-glow"></div>
+<div class="bg-overlay"></div>
+
+<!-- Hero Faded Profile Image -->
+<img src="profile2.png" alt="Shubh Gupta" class="hero-profile-image">
 
 <div class="profile">
-  <div class="avatar"><img src="profile2.png" alt="Shubh Gupta" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;"></div>
   <h1 class="name">@shubh_153</h1>
   <p class="bio">Currently building: Life Quest<br>[a gamified to-do web app]</p>
 </div>
