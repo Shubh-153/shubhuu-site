@@ -394,12 +394,6 @@
         const galleryItem = card.closest('.gallery-item');
         galleryItem.classList.add('is-playing');
         card.style.transform = 'rotateX(0deg) rotateY(0deg)'; // Reset tilt flat
-        
-        // Force YouTube iframe to autoplay so the user doesn't have to click twice
-        const src = iframe.getAttribute('src');
-        if(!src.includes('autoplay=1')) {
-           iframe.setAttribute('src', src + (src.includes('?') ? '&' : '?') + 'autoplay=1');
-        }
       });
     }
   });
