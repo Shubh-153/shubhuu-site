@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Building a Minimalist Portfolio | Shubh Gupta</title>
+<meta name="description" content="A deep dive into why I chose to avoid heavy JavaScript frameworks for my personal site.">
+<meta property="og:title" content="Building a Minimalist Portfolio | Shubh Gupta">
+<meta property="og:description" content="A deep dive into why I chose to avoid heavy JavaScript frameworks for my personal site.">
+<meta property="og:image" content="https://shubhuu.in/thumbnail.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://shubhuu.in/thumbnail.png">
+<meta property="og:url" content="https://shubhuu.in/article.html">
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F7F7F5;
+    --bg-raised:#FFFFFF;
+    --ink:#14161A;
+    --ink-soft:#4A4D52;
+    --graphite:#6B6558;
+    --accent:#2954A6;
+    --accent-soft:#EAF0FA;
+    --line:#DEDDD8;
+    --mono:'IBM Plex Mono', monospace;
+    --sans:'IBM Plex Sans', sans-serif;
+    --display:'Space Grotesk', sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--sans);
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none;}
+  a:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px;}
+  ::selection{background:var(--accent-soft);color:var(--accent);}
+
+  .wrap{max-width:920px;margin:0 auto;padding:0 28px;}
+
+  nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(247,247,245,0.88);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;}
+  .brand{font-family:var(--display);font-weight:700;font-size:1.05rem;letter-spacing:-0.01em;}
+  .navlinks{display:flex;gap:28px;font-family:var(--mono);font-size:0.82rem;color:var(--ink-soft);}
+  .navlinks a { transition: color .2s ease; position: relative; padding-bottom: 2px; }
+  .navlinks a::after {
+    content: ''; position: absolute; width: 0; height: 1.5px;
+    bottom: 0; left: 50%; background-color: var(--accent);
+    transition: width 0.2s ease, left 0.2s ease;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .navlinks a:hover::after, .navlinks a:focus-visible::after { width: 100%; left: 0; }
+  }
+  .navlinks a:hover, .navlinks a:focus-visible{color:var(--accent);}
+  @media (max-width:700px){ 
+    nav .wrap { flex-direction: column; height: auto; padding: 14px 28px; gap: 12px; align-items: flex-start; }
+    .navlinks { width: 100%; overflow-x: auto; padding-bottom: 4px; justify-content: flex-start; gap: 18px; white-space: nowrap; -webkit-overflow-scrolling: touch; }
+    .navlinks::-webkit-scrollbar { display: none; }
+    .navlinks { -ms-overflow-style: none; scrollbar-width: none; }
+    .navlinks span{display:none;} 
+  }
+
+  /* Article specific styles */
+  .article-wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 80px 28px;
+  }
+  .article-header { margin-bottom: 64px; }
+  .article-meta { font-family: var(--mono); font-size: 0.85rem; color: var(--ink-soft); margin-bottom: 24px; }
+  .article-title {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 3rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+    color: var(--ink);
+  }
+  .article-content h2 {
+    font-family: var(--display); font-weight: 600; font-size: 1.6rem;
+    margin-top: 48px; margin-bottom: 16px; color: var(--ink);
+  }
+  .article-content h3 {
+    font-family: var(--display); font-weight: 600; font-size: 1.25rem;
+    margin-top: 32px; margin-bottom: 12px; color: var(--ink);
+  }
+  .article-content p {
+    margin-bottom: 24px;
+    font-size: 1.05rem; color: var(--ink-soft);
+  }
+  .article-content ul, .article-content ol { margin-bottom: 24px; margin-left: 24px; color: var(--ink-soft); font-size: 1.05rem; }
+  .article-content li { margin-bottom: 8px; }
+  .article-content img { max-width: 100%; border-radius: 8px; margin-bottom: 24px; }
+  .article-content code {
+    font-family: var(--mono); font-size: 0.85rem;
+    background: var(--bg-raised); border: 1px solid var(--line);
+    padding: 2px 6px; border-radius: 4px;
+  }
+  .article-content pre {
+    background: var(--bg-raised); border: 1px solid var(--line);
+    padding: 24px; border-radius: 8px; margin-bottom: 24px;
+    overflow-x: auto;
+  }
+  .article-content pre code { background: none; border: none; padding: 0; }
+  .article-content blockquote {
+    border-left: 4px solid var(--accent); padding-left: 20px;
+    margin-left: 0; margin-bottom: 24px;
+    font-style: italic; color: var(--graphite);
+  }
+
+  .back-link {
+    display: inline-block;
+    font-family: var(--mono); font-size: 0.9rem; color: var(--accent);
+    margin-bottom: 40px; text-decoration: none;
+    border-bottom: 1px solid transparent; transition: border-color 0.2s;
+  }
+  .back-link:hover { border-bottom-color: var(--accent); }
+
+  footer{padding:32px 0; border-top:1px solid var(--line);}
+  footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
+  footer p{font-family:var(--mono);font-size:0.78rem;color:var(--graphite);}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a href="/index.html" class="brand">shubh<span style="color:var(--accent)">.</span></a>
+    <div class="navlinks">
+      <a href="/index.html#projects"><span>~/</span>projects</a>
+      <a href="/index.html#skills"><span>~/</span>skills</a>
+      <a href="/links.html"><span>~/</span>links</a>
+      <a href="/academics.html"><span>~/</span>academics</a>
+    </div>
+  </div>
+</nav>
+
+<div class="article-wrap">
+  <a href="/blogs.html" class="back-link">← Back to blogs</a>
+  
+  <div class="article-header">
+    <div class="article-meta">July 25, 2026 • Web Development</div>
+    <h1 class="article-title">Building a Minimalist Portfolio with Pure HTML & CSS</h1>
+  </div>
+
+  <div class="article-content">
+    <p>When I set out to build my personal portfolio, I had a choice to make. Should I use React? Next.js? Vue? It's incredibly tempting to reach for a heavy JavaScript framework because that's what we're used to doing for complex web applications.</p>
+    
+    <p>But for a static portfolio, I realized that shipping megabytes of JavaScript just to render text and images is overkill. I wanted a site that loaded in milliseconds, not seconds.</p>
+
+    <h2>The Case for Vanilla</h2>
+    <p>By relying entirely on HTML and CSS (and just a sprinkle of vanilla JavaScript for interactions like the creative gallery's 3D tilt effects), I achieved several things:</p>
+    <ul>
+      <li><strong>Lightning Fast Load Times:</strong> Without a heavy virtual DOM to parse and execute, the browser can render the page immediately.</li>
+      <li><strong>No Build Tools Required:</strong> There's no <code>npm run build</code> step. The code I write is exactly the code that runs in the browser.</li>
+      <li><strong>Ultimate Customization:</strong> I'm not fighting against a UI library's predefined constraints. Every pixel is intentional.</li>
+    </ul>
+
+    <blockquote>"Perfection is achieved, not when there is nothing more to add, but when there is nothing left to take away."</blockquote>
+
+    <h2>Design Aesthetics</h2>
+    <p>I went for a terminal-inspired aesthetic, using <code>var(--mono)</code> fonts for paths like <code>~/blog</code> to give it an IDE feel. But I didn't want it to feel too raw, so I added glassmorphic navigation bars and smooth CSS transitions on hover states to give it a premium, modern polish.</p>
+
+    <h3>Conclusion</h3>
+    <p>Sometimes the best tool for the job is the simplest one. Building this site with pure fundamentals was a refreshing reminder of how powerful the web platform is right out of the box.</p>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <p>&copy; 2026 Shubh Gupta.</p>
+    <p><a href="/creative.html" style="color:var(--accent);text-decoration:underline;text-underline-offset:2px;">Creative Portfolio</a> &nbsp;|&nbsp; <a href="/links.html" style="color:var(--accent);text-decoration:underline;text-underline-offset:2px;">All Links</a> &nbsp;|&nbsp; <a href="/" style="text-decoration:underline;text-underline-offset:2px;">shubhuu.in</a></p>
+  </div>
+</footer>
+
+</body>
+</html>
