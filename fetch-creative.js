@@ -32,7 +32,7 @@ async function buildCreative() {
       const bgNumber = itemNumber.toString().padStart(2, '0');
       const layoutClass = layoutClasses[index % layoutClasses.length];
       
-      const title = item.context && item.context.custom && item.context.custom.caption ? item.context.custom.caption : (item.filename || 'Creative');
+      const title = item.context && item.context.custom && (item.context.custom.caption || item.context.custom.captionn) ? (item.context.custom.caption || item.context.custom.captionn) : (item.filename || 'Creative');
       const typeLabel = item.resource_type === 'video' ? '// VIDEO' : '// PHOTO';
       
       let mediaHtml = '';
