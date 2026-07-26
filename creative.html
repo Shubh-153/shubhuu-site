@@ -224,7 +224,7 @@
     <div class="card-inner video-card">
       <div class="video-overlay"></div>
       <!-- Replace src with your YouTube embed link -->
-      <iframe width="560" height="315" src="https://www.youtube.com/embed/HOGbLyHH1sg?si=fK7ES6YuQ3ZaGB2U&amp;start=6" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style="aspect-ratio: 16/9; position: relative; z-index: 1;"></iframe>
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/HOGbLyHH1sg?si=fK7ES6YuQ3ZaGB2U&amp;start=6&amp;enablejsapi=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style="aspect-ratio: 16/9; position: relative; z-index: 1;"></iframe>
       <div class="caption">
         <div class="caption-title">Cinematic Reel 2026</div>
         <div class="caption-num">// VIDEO</div>
@@ -394,6 +394,9 @@
         const galleryItem = card.closest('.gallery-item');
         galleryItem.classList.add('is-playing');
         card.style.transform = 'rotateX(0deg) rotateY(0deg)'; // Reset tilt flat
+        
+        // Magically play the YouTube video on the first click using the JS API
+        iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'playVideo', args: [] }), '*');
       });
     }
   });
