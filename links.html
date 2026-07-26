@@ -120,8 +120,8 @@
     display:flex;
     flex-direction:column;
     width:100%;
-    background: var(--glass-bg);
-    border: 1px solid var(--line);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+    border: none;
     padding: 18px 24px;
     border-radius: 40px; /* Pill shape */
     font-family:var(--sans);
@@ -129,8 +129,12 @@
     font-size:1.05rem;
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     overflow: hidden;
-    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    /* backdrop-filter is handled by liquidGlass */
+    box-shadow:
+      0 12px 32px rgba(0, 0, 0, 0.3),
+      inset 0 1px 1px rgba(255, 255, 255, 0.5),
+      inset 0 -4px 10px rgba(255, 255, 255, 0.05),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.15);
   }
   
   .link-header {
@@ -167,10 +171,14 @@
 
   @media (prefers-reduced-motion: no-preference) {
     .link-btn:hover {
-      background: var(--glass-hover);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04));
       border-radius: 20px; /* Morph to rounded rect to fit thumbnail */
       transform:translateY(-2px);
-      box-shadow:0 12px 24px rgba(0,0,0,0.3);
+      box-shadow:
+        0 16px 40px rgba(0, 0, 0, 0.4),
+        inset 0 1px 1px rgba(255, 255, 255, 0.6),
+        inset 0 -8px 20px rgba(255, 255, 255, 0.08),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.2);
     }
     .link-btn:hover .link-thumbnail {
       height: 180px;
@@ -202,21 +210,28 @@
     width: 44px;
     height: 44px;
     border-radius: 50%;
-    background: var(--glass-bg);
-    border: 1px solid var(--line);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.02));
+    border: none;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     z-index: 100;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    transition: transform 0.2s, background 0.2s;
-    backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    box-shadow:
+      0 4px 12px rgba(0,0,0,0.2),
+      inset 0 1px 1px rgba(255, 255, 255, 0.5),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+    transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
+    /* backdrop-filter is handled by liquidGlass */
     color: var(--ink);
   }
   .global-share:hover {
     transform: scale(1.05);
-    background: var(--glass-hover);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+    box-shadow:
+      0 8px 24px rgba(0,0,0,0.3),
+      inset 0 1px 1px rgba(255, 255, 255, 0.6),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.2);
   }
 
   .link-share-btn {
@@ -653,6 +668,26 @@
       toast.classList.remove('show');
     }, 3000);
   }
+</script>
+
+<script src="liquid-glass.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.link-btn, .global-share').forEach(btn => {
+      const glass = liquidGlass(btn, {
+        scale: -112,
+        chroma: 6,
+        blur: 10,
+        saturate: 1.5
+      });
+      // Refresh refraction map after hover transitions finish
+      btn.addEventListener('transitionend', (e) => {
+        if (e.propertyName === 'height' || e.propertyName === 'margin-top' || e.propertyName === 'border-radius') {
+          glass.refresh();
+        }
+      });
+    });
+  });
 </script>
 </body>
 </html>
