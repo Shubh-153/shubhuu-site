@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Scaling Real-time Collaborative Tools | Shubh Gupta</title>
-<meta name="description" content="A deep dive into the engineering challenges of building conflict-free replicated data types for high-performance web editors.">
-<meta property="og:title" content="Scaling Real-time Collaborative Tools | Shubh Gupta">
-<meta property="og:description" content="A deep dive into the engineering challenges of building conflict-free replicated data types for high-performance web editors.">
+<title>Integrating LLMs into Traditional Web Apps | Shubh Gupta</title>
+<meta name="description" content="Exploring the challenges and successes of adding generative AI capabilities to my recent hackathon projects.">
+<meta property="og:title" content="Integrating LLMs into Traditional Web Apps | Shubh Gupta">
+<meta property="og:description" content="Exploring the challenges and successes of adding generative AI capabilities to my recent hackathon projects.">
 <meta property="og:image" content="https://shubhuu.in/thumbnail.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://shubhuu.in/thumbnail.png">
@@ -151,20 +151,20 @@
   <a href="/blogs.html" class="back-link">← Back to blogs</a>
   
   <div class="article-header">
-    <div class="article-meta">July 22, 2026 • Systems Engineering</div>
-    <h1 class="article-title">Scaling Real-time Collaborative Tools</h1>
+    <div class="article-meta">June 14, 2026 • AI / ML</div>
+    <h1 class="article-title">Integrating LLMs into Traditional Web Apps</h1>
   </div>
 
   <div class="article-content">
-    <p>Building applications that allow multiple users to edit content simultaneously introduces complex synchronization problems. In my latest project, I explored how CRDTs (Conflict-free Replicated Data Types) ensure consistency without a central locking mechanism.</p>
+    <p>Generative AI is changing the way we build software. During my recent hackathon project where we built a mental health chat-bot, I had to figure out how to bridge the gap between traditional REST APIs and streaming LLM responses.</p>
     
-    <h2>The Challenge of State</h2>
-    <p>The primary hurdle is network latency and intermittent disconnections. When two users make edits to the same paragraph, the state must eventually converge to the same representation across all clients.</p>
+    <h2>The Architecture</h2>
+    <p>Integrating the Gemini API wasn't just a plug-and-play operation. It required rethinking our state management and how we handle asynchronous data streams on the frontend.</p>
 
-    <blockquote>"Consistency is a choice, not a guarantee in distributed systems."</blockquote>
+    <blockquote>"AI shouldn't feel bolted on; it should feel like a native feature of your application."</blockquote>
 
-    <h3>Implementing CRDTs</h3>
-    <p>By using a sequence CRDT, I was able to track operations rather than just state snapshots. This allowed the frontend to resolve merge conflicts gracefully, providing a seamless user experience even on slower connections.</p>
+    <h3>Lessons Learned</h3>
+    <p>The biggest takeaway was learning how to write effective system prompts that consistently return structured JSON, allowing our app to programmatically react to the AI's intent.</p>
   </div>
 </div>
 
