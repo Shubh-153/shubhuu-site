@@ -67,8 +67,15 @@
   .bg-overlay {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: linear-gradient(135deg, rgba(225, 48, 108, 0.2) 0%, rgba(41, 84, 166, 0.2) 100%);
+    background: linear-gradient(135deg, rgba(225, 48, 108, 0.2), rgba(41, 84, 166, 0.2), rgba(131, 58, 180, 0.2), rgba(253, 29, 29, 0.2));
+    background-size: 400% 400%;
+    animation: gradientMove 15s ease infinite;
     z-index: -1;
+  }
+  @keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
   }
 
   /* PROFILE & HERO IMAGE */
