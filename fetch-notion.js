@@ -16,9 +16,20 @@ async function buildSite() {
   }
 
   console.log("Fetching database from Notion...");
-  const response = await notion.databases.query({
-    database_id: databaseId,
+  const fetchResponse = await fetch(`https://api.notion.com/v1/databases/${databaseId}/query`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${process.env.NOTION_API_KEY}`,
+      'Notion-Version': '2022-06-28',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({})
   });
+  
+  if (!fetchResponse.ok) {
+    throw new Error(`Failed to fetch database: ${fetchResponse.statusText}`);
+  }
+  const response = await fetchResponse.json();
 
   const blogs = [];
 
