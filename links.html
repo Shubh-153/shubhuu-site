@@ -112,6 +112,7 @@
     gap: 10px;
     width: 100%;
     transition: color 0.3s ease;
+    position: relative;
   }
   
   /* Expanding Thumbnail Wrapper */
@@ -168,6 +169,179 @@
   }
   .footer a:hover {
     color:var(--accent);
+  }
+
+  /* --- SHARE FEATURES --- */
+  .global-share {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--bg-raised);
+    border: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 100;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .global-share:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+  }
+
+  .link-share-btn {
+    position: absolute;
+    right: 0;
+    padding: 8px;
+    border-radius: 50%;
+    background: transparent;
+    border: none;
+    color: currentColor;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.6;
+    transition: opacity 0.2s, background 0.2s;
+  }
+  .link-share-btn:hover {
+    opacity: 1;
+    background: rgba(0,0,0,0.05);
+  }
+
+  /* MODAL */
+  .modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(20, 22, 26, 0.4);
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s;
+  }
+  .modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+  }
+  .modal-content {
+    background: var(--bg-raised);
+    width: 90%;
+    max-width: 360px;
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    transform: translateY(20px) scale(0.95);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .modal-overlay.active .modal-content {
+    transform: translateY(0) scale(1);
+  }
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  .modal-title {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 1.1rem;
+  }
+  .close-modal {
+    background: none; border: none; cursor: pointer; color: var(--ink-soft);
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .preview-card {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .preview-icon {
+    width: 48px; height: 48px;
+    border-radius: 10px;
+    background: var(--ink);
+    color: var(--bg-raised);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .preview-info {
+    overflow: hidden;
+  }
+  .preview-info h3 {
+    font-size: 1rem; font-weight: 600; margin-bottom: 2px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .preview-info p {
+    font-size: 0.8rem; color: var(--ink-soft);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px;
+  }
+
+  .share-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    text-align: center;
+  }
+  .share-option {
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    font-size: 0.75rem; color: var(--ink-soft); cursor: pointer;
+    background: none; border: none; font-family: var(--sans);
+  }
+  .share-icon-circle {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--ink);
+    transition: transform 0.2s, background 0.2s, border-color 0.2s, color 0.2s;
+  }
+  .share-option:hover .share-icon-circle {
+    transform: translateY(-2px);
+    background: var(--accent-soft);
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--ink);
+    color: var(--bg-raised);
+    padding: 12px 24px;
+    border-radius: 30px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 1000;
+  }
+  .toast.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
   }
 </style>
 </head>
@@ -268,6 +442,149 @@
   <p>&copy; 2026 Shubh Gupta.</p>
   <p style="margin-top: 6px;"><a href="/creative.html">Creative Portfolio</a> &nbsp;|&nbsp; <a href="/">shubhuu.in</a></p>
 </div>
+
+<!-- Global Share Button -->
+<button class="global-share" aria-label="Share Page" onclick="shareGlobal()">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+</button>
+
+<!-- Share Modal -->
+<div class="modal-overlay" id="shareModal" onclick="closeShareModal(event)">
+  <div class="modal-content" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <div class="modal-title">Share Link</div>
+      <button class="close-modal" onclick="closeShareModal()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+    
+    <div class="preview-card">
+      <div class="preview-icon" id="previewIcon"></div>
+      <div class="preview-info">
+        <h3 id="previewTitle">Title</h3>
+        <p id="previewUrl">url</p>
+      </div>
+    </div>
+    
+    <div class="share-grid">
+      <button class="share-option" onclick="shareTo('whatsapp')">
+        <div class="share-icon-circle">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+        </div>
+        WhatsApp
+      </button>
+      <button class="share-option" onclick="shareTo('x')">
+        <div class="share-icon-circle">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l11.733 16h4.267l-11.733 -16z"></path><path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"></path></svg>
+        </div>
+        X
+      </button>
+      <button class="share-option" onclick="shareTo('linkedin')">
+        <div class="share-icon-circle">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+        </div>
+        LinkedIn
+      </button>
+      <button class="share-option" onclick="copyModalLink()">
+        <div class="share-icon-circle">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+        </div>
+        Copy
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">Link Copied!</div>
+
+<script>
+  let currentShareUrl = '';
+
+  // 1. Inject individual share buttons
+  document.querySelectorAll('.link-btn').forEach(btn => {
+    const shareBtn = document.createElement('button');
+    shareBtn.className = 'link-share-btn';
+    shareBtn.setAttribute('aria-label', 'Share this link');
+    shareBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>';
+    
+    const header = btn.querySelector('.link-header');
+    header.appendChild(shareBtn);
+
+    shareBtn.addEventListener('click', (e) => {
+      e.preventDefault(); 
+      e.stopPropagation(); 
+      
+      let rawUrl = btn.getAttribute('href');
+      if (rawUrl.startsWith('/')) rawUrl = 'https://shubhuu.in' + rawUrl;
+      
+      let title = header.innerText.trim();
+      let iconHTML = header.querySelector('svg').outerHTML;
+      
+      openShareModal(title, rawUrl, iconHTML);
+    });
+  });
+
+  // 2. Modal Logic
+  const modal = document.getElementById('shareModal');
+  function openShareModal(title, url, iconHtml) {
+    currentShareUrl = url;
+    document.getElementById('previewTitle').innerText = title;
+    document.getElementById('previewUrl').innerText = url;
+    document.getElementById('previewIcon').innerHTML = iconHtml;
+    modal.classList.add('active');
+  }
+  function closeShareModal(e) {
+    if(e && e.target !== modal && !e.target.closest('.close-modal')) return;
+    modal.classList.remove('active');
+  }
+
+  // 3. Share actions
+  function shareTo(platform) {
+    let shareUrl = '';
+    const encodedUrl = encodeURIComponent(currentShareUrl);
+    if (platform === 'whatsapp') {
+      shareUrl = `https://api.whatsapp.com/send?text=${encodedUrl}`;
+    } else if (platform === 'x') {
+      shareUrl = `https://twitter.com/intent/tweet?url=${encodedUrl}`;
+    } else if (platform === 'linkedin') {
+      shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`;
+    }
+    if (shareUrl) window.open(shareUrl, '_blank');
+    closeShareModal();
+  }
+
+  function copyModalLink() {
+    navigator.clipboard.writeText(currentShareUrl).then(() => {
+      showToast();
+      closeShareModal();
+    });
+  }
+
+  // 4. Global Share Page
+  function shareGlobal() {
+    const shareData = {
+      title: 'Shubh Gupta | Links',
+      text: 'Check out all my links!',
+      url: 'https://shubhuu.in/links.html'
+    };
+    if (navigator.share) {
+      navigator.share(shareData).catch(console.error);
+    } else {
+      navigator.clipboard.writeText(shareData.url).then(() => {
+        showToast();
+      });
+    }
+  }
+
+  // 5. Toast logic
+  function showToast() {
+    const toast = document.getElementById('toast');
+    toast.classList.add('show');
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 3000);
+  }
+</script>
 
 </body>
 </html>
