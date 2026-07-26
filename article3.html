@@ -42,6 +42,21 @@
   a:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px;}
   ::selection{background:var(--accent-soft);color:var(--accent);}
 
+  /* --- DARK THEME --- */
+  body.dark-theme {
+    --bg: #111216;
+    --bg-raised: #1A1D24;
+    --ink: #F7F7F5;
+    --ink-soft: #A09E96;
+    --graphite: #6B6558;
+    --accent: #6B94FA;
+    --accent-soft: #1E283C;
+    --line: #2A2D35;
+  }
+  body, .article-content code, .article-content pre {
+    transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease;
+  }
+
   .wrap{max-width:920px;margin:0 auto;padding:0 28px;}
 
   nav{
@@ -155,9 +170,14 @@
 </head>
 <body>
 
-<div class="wrap" style="padding-top: 40px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
-  <a href="/index.html" class="brand" style="font-family: var(--display); font-weight: 700; font-size: 1.05rem; letter-spacing: -0.01em;">shubh<span style="color:var(--accent)">.</span></a>
-  <div style="display: flex; gap: 16px; font-family: var(--mono); font-size: 0.85rem; color: var(--ink-soft);">
+<div class="wrap" style="padding-top: 40px; display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px;">
+  <div style="display: flex; flex-direction: column; gap: 8px;">
+    <a href="/index.html" class="brand" style="font-family: var(--display); font-weight: 700; font-size: 1.05rem; letter-spacing: -0.01em;">shubh<span style="color:var(--accent)">.</span></a>
+  </div>
+  <div style="display: flex; align-items: center; gap: 16px; font-family: var(--mono); font-size: 0.85rem; color: var(--ink-soft);">
+    <button id="theme-toggle" style="background: none; border: none; cursor: pointer; color: var(--ink-soft); display: flex; align-items: center; justify-content: center; transition: color 0.2s;" aria-label="Toggle Dark Mode" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color=''">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    </button>
     <a href="/links.html" style="display: flex; align-items: center; gap: 6px; transition: color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color=''">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg> Links
     </a>
@@ -198,6 +218,22 @@
     <p><a href="/creative.html" style="color:var(--accent);text-decoration:underline;text-underline-offset:2px;">Creative Portfolio</a> &nbsp;|&nbsp; <a href="/links.html" style="color:var(--accent);text-decoration:underline;text-underline-offset:2px;">All Links</a> &nbsp;|&nbsp; <a href="/" style="text-decoration:underline;text-underline-offset:2px;">shubhuu.in</a></p>
   </div>
 </footer>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const themeToggle = document.getElementById('theme-toggle');
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.body.classList.add('dark-theme');
+    }
+    if (themeToggle) {
+      themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-theme');
+        localStorage.setItem('theme', document.body.classList.contains('dark-theme') ? 'dark' : 'light');
+      });
+    }
+  });
+</script>
 
 </body>
 </html>
