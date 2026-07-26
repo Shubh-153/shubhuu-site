@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How to Use Claude Code for Free: The Ultimate Setup Guide | Shubh Gupta</title>
+<meta name="description" content="A deep dive into why I chose to avoid heavy JavaScript frameworks for my personal site.">
+<meta property="og:title" content="Building a Minimalist Portfolio | Shubh Gupta">
+<meta property="og:description" content="A deep dive into why I chose to avoid heavy JavaScript frameworks for my personal site.">
+<meta property="og:image" content="https://shubhuu.in/thumbnail.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://shubhuu.in/thumbnail.png">
+<meta property="og:url" content="https://shubhuu.in/article.html">
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F7F7F5;
+    --bg-raised:#FFFFFF;
+    --ink:#14161A;
+    --ink-soft:#4A4D52;
+    --graphite:#6B6558;
+    --accent:#2954A6;
+    --accent-soft:#EAF0FA;
+    --line:#DEDDD8;
+    --mono:'IBM Plex Mono', monospace;
+    --sans:'IBM Plex Sans', sans-serif;
+    --display:'Space Grotesk', sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--sans);
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none;}
+  a:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px;}
+  ::selection{background:var(--accent-soft);color:var(--accent);}
+
+  .wrap{max-width:920px;margin:0 auto;padding:0 28px;}
+
+  nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(247,247,245,0.88);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;}
+  .brand{font-family:var(--display);font-weight:700;font-size:1.05rem;letter-spacing:-0.01em;}
+  .navlinks{display:flex;gap:28px;font-family:var(--mono);font-size:0.82rem;color:var(--ink-soft);}
+  .navlinks a { transition: color .2s ease; position: relative; padding-bottom: 2px; }
+  .navlinks a::after {
+    content: ''; position: absolute; width: 0; height: 1.5px;
+    bottom: 0; left: 50%; background-color: var(--accent);
+    transition: width 0.2s ease, left 0.2s ease;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .navlinks a:hover::after, .navlinks a:focus-visible::after { width: 100%; left: 0; }
+  }
+  .navlinks a:hover, .navlinks a:focus-visible{color:var(--accent);}
+  @media (max-width:700px){ 
+    nav .wrap { flex-direction: column; height: auto; padding: 14px 28px; gap: 12px; align-items: flex-start; }
+    .navlinks { width: 100%; overflow-x: auto; padding-bottom: 4px; justify-content: flex-start; gap: 18px; white-space: nowrap; -webkit-overflow-scrolling: touch; }
+    .navlinks::-webkit-scrollbar { display: none; }
+    .navlinks { -ms-overflow-style: none; scrollbar-width: none; }
+    .navlinks span{display:none;} 
+  }
+
+  /* Article specific styles */
+  .article-wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 80px 28px;
+  }
+  .article-header { margin-bottom: 64px; }
+  .article-meta { font-family: var(--mono); font-size: 0.85rem; color: var(--ink-soft); margin-bottom: 24px; }
+  .article-title {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 3rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+    color: var(--ink);
+  }
+  .article-content h2 {
+    font-family: var(--display); font-weight: 600; font-size: 1.6rem;
+    margin-top: 48px; margin-bottom: 16px; color: var(--ink);
+  }
+  .article-content h3 {
+    font-family: var(--display); font-weight: 600; font-size: 1.25rem;
+    margin-top: 32px; margin-bottom: 12px; color: var(--ink);
+  }
+  .article-content p {
+    margin-bottom: 24px;
+    font-size: 1.05rem; color: var(--ink-soft);
+  }
+  .article-content ul, .article-content ol { margin-bottom: 24px; margin-left: 24px; color: var(--ink-soft); font-size: 1.05rem; }
+  .article-content li { margin-bottom: 8px; }
+  .article-content img { max-width: 100%; border-radius: 8px; margin-bottom: 24px; }
+  .article-content code {
+    font-family: var(--mono); font-size: 0.85rem;
+    background: var(--bg-raised); border: 1px solid var(--line);
+    padding: 2px 6px; border-radius: 4px;
+  }
+  .article-content pre {
+    background: var(--bg-raised); border: 1px solid var(--line);
+    padding: 24px; border-radius: 8px; margin-bottom: 24px;
+    overflow-x: auto;
+  }
+  .article-content pre code { background: none; border: none; padding: 0; }
+  .article-content blockquote {
+    border-left: 4px solid var(--accent); padding-left: 20px;
+    margin-left: 0; margin-bottom: 24px;
+    font-style: italic; color: var(--graphite);
+  }
+
+  .back-link {
+    display: inline-block;
+    font-family: var(--mono); font-size: 0.9rem; color: var(--accent);
+    margin-bottom: 40px; text-decoration: none;
+    border-bottom: 1px solid transparent; transition: border-color 0.2s;
+  }
+  .back-link:hover { border-bottom-color: var(--accent); }
+
+  footer{padding:32px 0; border-top:1px solid var(--line);}
+  footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
+  footer p{font-family:var(--mono);font-size:0.78rem;color:var(--graphite);}
+</style>
+
+<!-- PostHog Analytics -->
+<script>
+    !function(t,e){var o,n,p,r;e.__SV||(window.posthog && window.posthog.__loaded)||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="Ji Yi init fn mn Hr pn bn cn capture calculateEventProperties Sn register register_once register_for_session unregister unregister_for_session Tn getFeatureFlag getFeatureFlagPayload getFeatureFlagResult getAllFeatureFlags isFeatureEnabled reloadFeatureFlags updateFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSurveysLoaded onSessionId getSurveys getActiveMatchingSurveys renderSurvey displaySurvey cancelPendingSurvey canRenderSurvey canRenderSurveyAsync Mn identify setPersonProperties unsetPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset shutdown setIdentity clearIdentity get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException addExceptionStep captureLog startExceptionAutocapture stopExceptionAutocapture loadToolbar get_property getSessionProperty Cn xn createPersonProfile setInternalOrTestUser In hn Pn opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing get_explicit_consent_status is_capturing clear_opt_in_out_capturing debug Ur Rt getPageViewId captureTraceFeedback captureTraceMetric an".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+    posthog.init('phc_Csxr2shhxpQgnxkXGfEiYMdk3QNbG6KdU7ghdajiDxwK', {
+        api_host: 'https://us.i.posthog.com',
+        defaults: '2026-05-30',
+        person_profiles: 'identified_only',
+    })
+</script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-WT7SWY7306"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-WT7SWY7306');
+</script>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a href="/index.html" class="brand">shubh<span style="color:var(--accent)">.</span></a>
+    <div class="navlinks">
+      <a href="/index.html#projects"><span>~/</span>projects</a>
+      <a href="/index.html#skills"><span>~/</span>skills</a>
+      <a href="/links.html"><span>~/</span>links</a>
+      <a href="/academics.html"><span>~/</span>academics</a>
+    </div>
+  </div>
+</nav>
+
+<div class="article-wrap">
+  <a href="/blogs.html" class="back-link">← Back to blogs</a>
+  
+  <div class="article-header">
+    <div class="article-meta">July 26, 2026 • Blog</div>
+    <h1 class="article-title">How to Use Claude Code for Free: The Ultimate Setup Guide</h1>
+  </div>
+
+  <div class="article-content">
+    <!-- ARTICLE_CONTENT_START -->
+<h1>How to Use Claude Code for Free: The Ultimate Setup Guide</h1>
+<p>If you&#39;ve been wanting to build with <strong>Claude Code</strong>, <strong>Codex CLI</strong>, or <strong>Antigravity</strong> without paying steep API fees or hitting strict usage limits, this guide breaks down the complete workflow step-by-step.</p>
+<p>Based on DevZoneX&#39;s tutorial, <a href="https://youtu.be/tS2kW3glowc">The ONLY Setup Guide You&#39;ll Need — Claude Code, Codex &amp; Antigravity FREE</a> [<a href="https://www.google.com/search?q=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DtS2kW3glowc%26t%3D0">00:00</a>], this method routes your requests through a local <strong>Smart AI Gateway</strong> (<code>9-Router</code>). By stacking multiple free provider tiers into a priority fallback chain, your setup automatically switches to the next available provider whenever one runs out of credits [<a href="https://www.google.com/search?q=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DtS2kW3glowc%26t%3D80">01:20</a>].</p>
+<h2>How the Free Gateway Architecture Works</h2>
+<p>Instead of connecting Claude Code directly to a single paid Anthropic API key, you route your requests through <code>9-Router</code>:</p>
+<ol>
+<li><strong>Smart AI Gateway (<strong><strong><code>9-Router</code></strong></strong>):</strong> Runs locally on your machine and presents an OpenAI or Anthropic-compatible API endpoint.</li>
+<li><strong>Multi-Provider Connections:</strong> Connects free tiers from Kero AI (AWS Builder ID), Google AI Studio / Gemini CLI, OpenCode, Nvidia NIM, Aerolink, and OpenRouter [<a href="https://www.google.com/search?q=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DtS2kW3glowc%26t%3D522">08:42</a>].</li>
+<li><strong>Smart Combo &amp; Auto-Fallback:</strong> If your top priority model (e.g., Claude Opus 4.8 or Sonnet 4.5) hits a rate limit, the gateway instantly reroutes the prompt to GPT 5.5, Gemini 2.5 Pro, or DeepSeek V4 Flash without interrupting your terminal session [<a href="https://www.google.com/search?q=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DtS2kW3glowc%26t%3D96">01:36</a>].</li>
+</ol>
+<h2>Phase 1: Prerequisites &amp; Tool Installation</h2>
+<p>Before setting up the gateway, make sure your system has the required developer tools installed [<a href="https://www.google.com/search?q=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DtS2kW3glowc%26t%3D144">02:24</a>]:</p>
+<ul>
+<li><strong>Node.js</strong> (<code>&gt;= v18</code>) &amp; <strong>Git</strong> [<a href="https://www.google.com/search?q=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DtS2kW3glowc%26t%3D166">02:46</a>]</li>
+<li><strong>Python</strong> (<code>&gt;= 3.10</code>) [<a href="https://www.google.com/search?q=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DtS2kW3glowc%26t%3D258">04:18</a>]</li>
+<li><strong>VS Code</strong> or your preferred IDE [<a href="https://www.google.com/search?q=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DtS2kW3glowc%26t%3D292">04:52</a>]</li>
+<li><strong>Claude Code CLI</strong> &amp; <strong>Claude Desktop App</strong> [<a href="https://www.google.com/search?q=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DtS2kW3glowc%26t%3D304">05:04</a>]</li>
+<li><strong>Codex CLI</strong> &amp; <strong>Antigravity</strong> <em>(Optional, if you want full multi-tool support)</em> [<a href="https://www.google.com/search?q=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DtS2kW3glowc%26t%3D344">05:44</a>]</li>
+</ul>
+<h2>Phase 2: Installing &amp; Launching 9-Router</h2>
+<p><code>9-Router</code> is the local gateway software that manages your AI API connections and fallbacks [<a href="https://www.google.com/search?q=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DtS2kW3glowc%26t%3D406">06:46</a>].</p>
+<ol>
+<li><p>Open your terminal (PowerShell for Windows or Terminal for macOS) and install <code>9-Router</code> [<a href="https://www.google.com/search?q=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DtS2kW3glowc%26t%3D450">07:30</a>]:Bash</p>
+<h1></h1>
+<pre><code class="language-plain">npx 9-router
+</code></pre>
+</li>
+<li><p>Launch the gateway interface [<a href="https://www.google.com/search?q=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DtS2kW3glowc%26t%3D490">08:10</a>]:Bash</p>
+<h1></h1>
+<pre><code class="language-plain">9router
+</code></pre>
+</li>
+<li><p>A browser window will automatically open at your local gateway dashboard. Log in using the default dashboard credentials [<a href="https://www.google.com/search?q=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DtS2kW3glowc%26t%3D504">08:24</a>].</p>
+</li>
+</ol>
+<h2>Phase 3: Connecting Free AI Providers</h2>
+<p>Inside the <code>9-Router</code> dashboard, navigate to the <strong>Providers</strong> tab and connect as many free accounts as possible [<a href="https://www.google.com/search?q=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DtS2kW3glowc%26t%3D522">08:42</a>]:</p>
+<ul>
+<li><strong>Kero AI (AWS Builder ID):</strong> Click <em>Add Connection</em> $\rightarrow$ <em>AWS Builder ID</em> [<a href="https://www.google.com/search?q=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DtS2kW3glowc%26t%3D548">09:08</a>]. Sign in with Google to get 50 free credits per account. Clear your browser cookies for AWS (<code>chrome://settings/content/all</code>) between sign-ins to link multiple Gmail accounts [<a href="https://www.google.com/search?q=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DtS2kW3glowc%26t%3D604">10:04</a>].</li>
+<li><strong>Google AI Studio / Gemini CLI:</strong> Add your free API key from Google AI Studio or connect via Gemini CLI OAuth to access Gemini 2.5 Pro and Flash models [<a href="https://www.google.com/search?q=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DtS2kW3glowc%26t%3D953">15:53</a>].</li>
+<li><strong>OpenCode &amp; Nvidia NIM:</strong> Add connections to get free access to DeepSeek V4 Flash, Qwen 3 Coder, and GLM models [<a href="https://www.google.com/search?q=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DtS2kW3glowc%26t%3D891">14:51</a>].</li>
+<li><strong>OpenAI/Anthropic Compatible Providers (Aerolink &amp; Free Models):</strong> Add custom endpoints for Claude Opus 4.8 / Sonnet 4.5 and GPT 5.5 [<a href="https://www.google.com/search?q=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DtS2kW3glowc%26t%3D1623">27:03</a>].</li>
+</ul>
+<h2>Phase 4: Creating Your Smart Fallback &quot;Combo&quot;</h2>
+<p>To prevent downtime, group your connected models into a single fallback sequence [<a href="https://www.google.com/search?q=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DtS2kW3glowc%26t%3D2118">35:18</a>]:</p>
+<ol>
+<li>Go to <strong>Combos</strong> $\rightarrow$ <strong>Create Combo</strong>.</li>
+<li><strong>Crucial Naming Rule:</strong> Name the combo <code>claude-opus-free</code> [<a href="https://www.google.com/search?q=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DtS2kW3glowc%26t%3D2128">35:28</a>]. <em>(Claude Desktop requires this exact naming convention to validate the model response).</em></li>
+<li><strong>Set Model Priority (Top to Bottom):</strong><ul>
+<li><strong>Priority 1:</strong> Claude Opus 4.8 / Claude Sonnet 4.5 (via Aerolink or Kero AI) [<a href="https://www.google.com/search?q=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DtS2kW3glowc%26t%3D2163">36:03</a>]</li>
+<li><strong>Priority 2:</strong> GPT 5.5 (via Free Models endpoint) [<a href="https://www.google.com/search?q=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DtS2kW3glowc%26t%3D2188">36:28</a>]</li>
+<li><strong>Priority 3:</strong> Gemini 2.5 Pro (via Gemini CLI) [<a href="https://www.google.com/search?q=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DtS2kW3glowc%26t%3D2196">36:36</a>]</li>
+<li><strong>Priority 4:</strong> DeepSeek V4 Flash (via OpenCode / Nvidia) [<a href="https://www.google.com/search?q=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DtS2kW3glowc%26t%3D2220">37:00</a>]</li>
+<li><strong>Priority 5:</strong> OpenRouter Free Tier (Ultimate fallback) [<a href="https://www.google.com/search?q=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DtS2kW3glowc%26t%3D2229">37:09</a>]</li>
+</ul>
+</li>
+</ol>
+<h2>Phase 5: Configuring Claude Code &amp; Desktop</h2>
+<p>Now, point Claude Code to your local <code>9-Router</code> gateway [<a href="https://www.google.com/search?q=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DtS2kW3glowc%26t%3D2404">40:04</a>].</p>
+<p><strong>1.Configure Claude Code CLI:</strong></p>
+<p>2 mins.</p>
+<p>In 9-Router, go to <strong>CLI Tools</strong> $\rightarrow$ <strong>Claude Code</strong>. Select <code>claude-opus-free</code> as your active model and click <strong>Apply</strong>, or manually paste the generated config into <code>~/.claude/settings.json</code> [<a href="https://www.youtube.com/watch?v=tS2kW3glowc&t=2415">40:15</a>].</p>
+<p><strong>2.Verify Terminal Connection:</strong></p>
+<p>1 min.</p>
+<p>Open a new terminal session and launch Claude Code:</p>
+<p>Bash</p>
+<pre><code class="language-plain">claude
+</code></pre>
+<p>Prompt it with a test query (e.g., <code>&quot;Hi, which model are you running?&quot;</code>). Check the 9-Router console logs to verify that the query successfully routes through your combo [<a href="https://www.youtube.com/watch?v=tS2kW3glowc&t=2485">41:25</a>].</p>
+<p><strong>3.Enable Developer Mode in Claude Desktop:</strong></p>
+<p>2 mins.</p>
+<p>Open Claude Desktop, go to <strong>Help</strong> $\rightarrow$ <strong>Troubleshooting</strong>, and select <strong>Enable Developer Options</strong> [<a href="https://www.youtube.com/watch?v=tS2kW3glowc&t=2736">45:36</a>].</p>
+<p><strong>4.Connect Claude Desktop to Local Gateway:</strong></p>
+<p>2 mins.</p>
+<p>Go to <strong>Developer</strong> $\rightarrow$ <strong>Configure Third Party Inference</strong> [<a href="https://www.youtube.com/watch?v=tS2kW3glowc&t=2771">46:11</a>]:</p>
+<ul>
+<li><strong>Gateway Base URL:</strong> Enter your local 9-Router base URL (<code>http://localhost:XXXX/v1</code>) [<a href="https://www.youtube.com/watch?v=tS2kW3glowc&t=2784">46:24</a>].</li>
+<li><strong>Gateway API Key:</strong> Enter any string (e.g., <code>api-key</code>) [<a href="https://www.youtube.com/watch?v=tS2kW3glowc&t=2797">46:37</a>].</li>
+<li><strong>Auth Scheme:</strong> Select <code>x-api-key</code> [<a href="https://www.youtube.com/watch?v=tS2kW3glowc&t=2803">46:43</a>].</li>
+<li>Click <strong>Apply Changes &amp; Restart</strong> [<a href="https://www.youtube.com/watch?v=tS2kW3glowc&t=2816">46:56</a>]. Select <code>claude-opus-free</code> from the model dropdown.</li>
+</ul>
+<h2>Bonus: Supercharge Claude Code with AutoHarness</h2>
+<p>The video highlights an open-source plugin called <strong>AutoHarness</strong> that acts as a self-learning skill layer for Claude Code [<a href="https://www.google.com/search?q=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DtS2kW3glowc%26t%3D2648">44:08</a>]:</p>
+<blockquote>
+<p><strong>What AutoHarness Does:</strong> It silently monitors your coding sessions in the background. When it detects repeated patterns or workflows, it automatically converts them into reusable skills so Claude Code doesn&#39;t need to be retrained on your preferences every time [<a href="https://www.google.com/search?q=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DtS2kW3glowc%26t%3D2654">44:14</a>].</p>
+</blockquote>
+<p>To install AutoHarness, run the installation command provided in the repository directly inside your active Claude Code terminal [<a href="https://www.google.com/search?q=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DtS2kW3glowc%26t%3D2689">44:49</a>].</p>
+<h2>Bonus: Setting Up Codex CLI &amp; Antigravity</h2>
+<p>If you also want to use Codex CLI or Antigravity for free:</p>
+<ul>
+<li><strong>Codex CLI:</strong> Navigate to <strong>CLI Tools</strong> $\rightarrow$ <strong>Codex CLI</strong> in 9-Router, select <code>GPT 5.5</code> as the model, and apply the settings to <code>config.toml</code> [<a href="https://www.google.com/search?q=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DtS2kW3glowc%26t%3D2903">48:23</a>].</li>
+<li><strong>Antigravity:</strong> Run <code>9router</code> as Administrator [<a href="https://www.google.com/search?q=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DtS2kW3glowc%26t%3D3054">50:54</a>]. Enable the MITM local server and update your system <code>hosts</code> file DNS records as prompted in the dashboard [<a href="https://www.google.com/search?q=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DtS2kW3glowc%26t%3D3111">51:51</a>]. Route Antigravity requests directly through your <code>claude-opus-free</code> combo [<a href="https://www.google.com/search?q=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DtS2kW3glowc%26t%3D3214">53:34</a>].</li>
+</ul>
+<h3>Key Takeaways</h3>
+<ul>
+<li><strong>Zero Subscription Cost:</strong> By aggregating free credits across Google AI Studio, AWS Builder ID, and open endpoints, you get near-unlimited coding sessions [<a href="https://www.google.com/search?q=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DtS2kW3glowc%26t%3D3372">56:12</a>].</li>
+<li><strong>Seamless Failover:</strong> You won&#39;t be blocked when a single API rate-limits your session; 9-Router handles fallbacks transparently [<a href="https://www.google.com/search?q=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DtS2kW3glowc%26t%3D103">01:43</a>].</li>
+<li><strong>Full Ecosystem Support:</strong> Works across Claude Code CLI, Claude Desktop App, Codex CLI, and Antigravity [<a href="https://www.google.com/search?q=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DtS2kW3glowc%26t%3D3386">56:26</a>].</li>
+</ul>
+<p>For complete video walkthroughs, repository links, and config scripts, check out the original tutorial video on YouTube: <a href="https://youtu.be/tS2kW3glowc">The ONLY Setup Guide You&#39;ll Need — Claude Code, Codex &amp; Antigravity FREE</a> [<a href="https://www.google.com/search?q=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DtS2kW3glowc%26t%3D0">00:00</a>].</p>
+
+    <!-- ARTICLE_CONTENT_END -->
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <p>&copy; 2026 Shubh Gupta.</p>
+    <p><a href="/creative.html" style="color:var(--accent);text-decoration:underline;text-underline-offset:2px;">Creative Portfolio</a> &nbsp;|&nbsp; <a href="/links.html" style="color:var(--accent);text-decoration:underline;text-underline-offset:2px;">All Links</a> &nbsp;|&nbsp; <a href="/" style="text-decoration:underline;text-underline-offset:2px;">shubhuu.in</a></p>
+  </div>
+</footer>
+
+</body>
+</html>
