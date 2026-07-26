@@ -16,18 +16,20 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --bg:#F7F7F5;
-    --bg-raised:#FFFFFF;
-    --ink:#14161A;
-    --ink-soft:#4A4D52;
-    --graphite:#6B6558;
-    --accent:#2954A6;
-    --accent-soft:#EAF0FA;
-    --line:#DEDDD8;
-    --mono:'IBM Plex Mono', monospace;
-    --sans:'IBM Plex Sans', sans-serif;
-    --display:'Space Grotesk', sans-serif;
+  :root {
+    --bg: #070708; /* Dark cinematic background */
+    --bg-raised: #1A1A1E;
+    --ink: #FFFFFF; /* White text */
+    --ink-soft: #A0A0A5;
+    --graphite: #6B6558;
+    --accent: #EAF0FA; /* Faint highlight */
+    --accent-soft: rgba(255,255,255,0.1);
+    --line: rgba(255, 255, 255, 0.1); /* Subtle white borders */
+    --glass-bg: rgba(255, 255, 255, 0.05); /* Glass fill */
+    --glass-hover: rgba(255, 255, 255, 0.1);
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+    --display: 'Space Grotesk', sans-serif;
   }
   *{margin:0;padding:0;box-sizing:border-box;}
   body{
@@ -41,17 +43,52 @@
     align-items:center;
     min-height:100vh;
     padding:40px 20px;
+    overflow-x: hidden;
   }
   @media (prefers-reduced-motion: reduce){
     *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;}
   }
   a{color:inherit;text-decoration:none;}
-  a:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px;}
-  ::selection{background:var(--accent-soft);color:var(--accent);}
+  a:focus-visible{outline:2px solid var(--ink);outline-offset:3px;border-radius:6px;}
+  ::selection{background:var(--glass-hover);color:var(--ink);}
 
+  /* BACKGROUND ORBS */
+  .orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    z-index: -1;
+    opacity: 0.5;
+    animation: float 20s infinite ease-in-out alternate;
+  }
+  .orb-1 {
+    width: 300px; height: 300px;
+    background: rgba(41, 84, 166, 0.6);
+    top: 10%; left: -10%;
+  }
+  .orb-2 {
+    width: 400px; height: 400px;
+    background: rgba(225, 48, 108, 0.4);
+    bottom: 20%; right: -10%;
+    animation-delay: -5s;
+  }
+  .orb-3 {
+    width: 250px; height: 250px;
+    background: rgba(255, 252, 0, 0.2);
+    top: 50%; left: 40%;
+    animation-delay: -10s;
+  }
+  @keyframes float {
+    0% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(50px, -50px) scale(1.1); }
+    100% { transform: translate(-30px, 30px) scale(0.9); }
+  }
+
+  /* PROFILE */
   .profile {
     text-align:center;
-    margin-bottom:32px;
+    margin-bottom:24px;
+    z-index: 1;
   }
   .avatar {
     width:90px;
@@ -66,6 +103,7 @@
     font-size:2.4rem;
     font-weight:700;
     margin:0 auto 16px;
+    border: 1px solid var(--line);
   }
   .name {
     font-family:var(--display);
@@ -81,35 +119,63 @@
     margin-left:auto;
     margin-right:auto;
   }
-  
+
+  /* SOCIAL ICONS ROW */
+  .social-row {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    margin-bottom: 32px;
+    z-index: 1;
+  }
+  .social-icon {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: var(--glass-bg);
+    border: 1px solid var(--line);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--ink);
+    transition: all 0.3s ease;
+    backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  }
+  .social-icon:hover {
+    background: var(--glass-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  }
+
+  /* LINKS CONTAINER */
   .links-container {
     width:100%;
     max-width:540px;
     display:flex;
     flex-direction:column;
-    gap:14px;
+    gap:16px;
+    z-index: 1;
   }
   
   .link-btn {
     display:flex;
     flex-direction:column;
     width:100%;
-    background:var(--bg-raised);
-    border:1px solid var(--line);
-    padding:16px 20px;
-    border-radius:10px;
+    background: var(--glass-bg);
+    border: 1px solid var(--line);
+    padding: 18px 24px;
+    border-radius: 40px; /* Pill shape */
     font-family:var(--sans);
     font-weight:500;
     font-size:1.05rem;
-    transition:background-color 0.3s ease, color 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     overflow: hidden;
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
   }
   
   .link-header {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 12px;
     width: 100%;
     transition: color 0.3s ease;
     position: relative;
@@ -120,8 +186,8 @@
     width: 100%;
     height: 0;
     opacity: 0;
-    border-radius: 6px;
-    background: rgba(0,0,0,0.1); /* Slightly dark to contrast with brand color */
+    border-radius: 12px;
+    background: rgba(0,0,0,0.3);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -137,19 +203,13 @@
     object-fit: cover;
   }
 
-  /* Prevent hover effects for users who prefer reduced motion */
   @media (prefers-reduced-motion: no-preference) {
     .link-btn:hover {
-      background-color: var(--hover-bg, var(--bg-raised));
-      border-color: var(--hover-bg, var(--accent));
-      color: var(--hover-text, var(--ink));
+      background: var(--glass-hover);
+      border-radius: 20px; /* Morph to rounded rect to fit thumbnail */
       transform:translateY(-2px);
-      box-shadow:0 6px 16px rgba(0,0,0,0.06);
+      box-shadow:0 12px 24px rgba(0,0,0,0.3);
     }
-    .link-btn:hover .link-header {
-      color: var(--hover-text, var(--accent));
-    }
-    /* Expand thumbnail on hover */
     .link-btn:hover .link-thumbnail {
       height: 180px;
       opacity: 1;
@@ -162,13 +222,14 @@
     padding-top:40px;
     font-family:var(--mono);
     font-size:0.75rem;
-    color:var(--graphite);
+    color:var(--ink-soft);
+    z-index: 1;
   }
   .footer a {
     text-decoration:underline;
   }
   .footer a:hover {
-    color:var(--accent);
+    color:var(--ink);
   }
 
   /* --- SHARE FEATURES --- */
@@ -179,19 +240,21 @@
     width: 44px;
     height: 44px;
     border-radius: 50%;
-    background: var(--bg-raised);
+    background: var(--glass-bg);
     border: 1px solid var(--line);
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     z-index: 100;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    transition: transform 0.2s, background 0.2s;
+    backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    color: var(--ink);
   }
   .global-share:hover {
     transform: scale(1.05);
-    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+    background: var(--glass-hover);
   }
 
   .link-share-btn {
@@ -211,15 +274,15 @@
   }
   .link-share-btn:hover {
     opacity: 1;
-    background: rgba(0,0,0,0.05);
+    background: var(--glass-hover);
   }
 
   /* MODAL */
   .modal-overlay {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(20, 22, 26, 0.4);
-    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
     z-index: 999;
     display: flex;
     align-items: center;
@@ -234,13 +297,15 @@
   }
   .modal-content {
     background: var(--bg-raised);
+    border: 1px solid var(--line);
     width: 90%;
     max-width: 360px;
     border-radius: 20px;
     padding: 24px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
     transform: translateY(20px) scale(0.95);
     transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    color: var(--ink);
   }
   .modal-overlay.active .modal-content {
     transform: translateY(0) scale(1);
@@ -263,9 +328,10 @@
     align-items: center;
     justify-content: center;
   }
+  .close-modal:hover { color: var(--ink); }
   
   .preview-card {
-    background: var(--bg);
+    background: rgba(0,0,0,0.3);
     border: 1px solid var(--line);
     border-radius: 12px;
     padding: 16px;
@@ -277,8 +343,9 @@
   .preview-icon {
     width: 48px; height: 48px;
     border-radius: 10px;
-    background: var(--ink);
-    color: var(--bg-raised);
+    background: var(--glass-bg);
+    border: 1px solid var(--line);
+    color: var(--ink);
     display: flex; align-items: center; justify-content: center;
   }
   .preview-info {
@@ -303,21 +370,23 @@
     display: flex; flex-direction: column; align-items: center; gap: 8px;
     font-size: 0.75rem; color: var(--ink-soft); cursor: pointer;
     background: none; border: none; font-family: var(--sans);
+    transition: color 0.2s;
+  }
+  .share-option:hover {
+    color: var(--ink);
   }
   .share-icon-circle {
     width: 48px; height: 48px;
     border-radius: 50%;
-    background: var(--bg);
+    background: var(--glass-bg);
     border: 1px solid var(--line);
     display: flex; align-items: center; justify-content: center;
     color: var(--ink);
-    transition: transform 0.2s, background 0.2s, border-color 0.2s, color 0.2s;
+    transition: transform 0.2s, background 0.2s;
   }
   .share-option:hover .share-icon-circle {
     transform: translateY(-2px);
-    background: var(--accent-soft);
-    color: var(--accent);
-    border-color: var(--accent);
+    background: var(--glass-hover);
   }
 
   /* TOAST */
@@ -327,12 +396,12 @@
     left: 50%;
     transform: translateX(-50%) translateY(20px);
     background: var(--ink);
-    color: var(--bg-raised);
+    color: var(--bg);
     padding: 12px 24px;
     border-radius: 30px;
     font-size: 0.9rem;
-    font-weight: 500;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    font-weight: 600;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
     opacity: 0;
     visibility: hidden;
     transition: all 0.3s ease;
@@ -367,16 +436,41 @@
 </head>
 <body>
 
+<!-- Background Orbs -->
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
 <div class="profile">
   <div class="avatar"><img src="profile2.png" alt="Shubh Gupta" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;"></div>
   <h1 class="name">@shubh_153</h1>
   <p class="bio">Currently building: Life Quest<br>[a gamified to-do web app]</p>
 </div>
 
+<!-- Social Icons Row -->
+<div class="social-row">
+  <a href="https://www.instagram.com/shubh_153_" class="social-icon" target="_blank" rel="noopener" aria-label="Instagram">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+  </a>
+  <a href="https://x.com/shubh_153_" class="social-icon" target="_blank" rel="noopener" aria-label="X (Twitter)">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l11.733 16h4.267l-11.733 -16z"></path><path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"></path></svg>
+  </a>
+  <a href="https://www.threads.com/@shubh_153_" class="social-icon" target="_blank" rel="noopener" aria-label="Threads">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10v2.5a3.5 3.5 0 0 1-7 0V12a5 5 0 1 0-5 5c2.69 0 4.908-1.554 5.708-3.79"></path></svg>
+  </a>
+  <a href="https://www.snapchat.com/add/shubhhh153" class="social-icon" target="_blank" rel="noopener" aria-label="Snapchat">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 10h.01"/><path d="M15 10h.01"/><path d="M12 2a8 8 0 0 0-8 8v12l3-3 2.5 2.5L12 19l2.5 2.5L17 19l3 3V10a8 8 0 0 0-8-8z"/></svg>
+  </a>
+  <a href="https://www.youtube.com/@shubh153" class="social-icon" target="_blank" rel="noopener" aria-label="YouTube">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33 2.78 2.78 0 0 0 1.94 2c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg>
+  </a>
+</div>
+
+<!-- Main Pill Links -->
 <div class="links-container">
   
   <!-- Website -->
-  <a href="/" class="link-btn" style="--hover-bg: var(--accent); --hover-text: #FFFFFF;">
+  <a href="/" class="link-btn">
     <div class="link-header">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
       Website & Portfolio
@@ -384,17 +478,8 @@
     <div class="link-thumbnail">[ Replace with &lt;img src="thumb-web.jpg"&gt; ]</div>
   </a>
   
-  <!-- GitHub -->
-  <a href="https://github.com/Shubh-153" target="_blank" rel="noopener" class="link-btn" style="--hover-bg: #181717; --hover-text: #FFFFFF;">
-    <div class="link-header">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
-      GitHub
-    </div>
-    <div class="link-thumbnail">[ Replace with &lt;img src="thumb-github.jpg"&gt; ]</div>
-  </a>
-
   <!-- Creative Portfolio -->
-  <a href="/creative.html" class="link-btn" style="--hover-bg: #111111; --hover-text: #FFFFFF;">
+  <a href="/creative.html" class="link-btn">
     <div class="link-header">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
       Photography & Video
@@ -402,58 +487,22 @@
     <div class="link-thumbnail">[ Replace with &lt;img src="thumb-creative.jpg"&gt; ]</div>
   </a>
 
+  <!-- GitHub -->
+  <a href="https://github.com/Shubh-153" target="_blank" rel="noopener" class="link-btn">
+    <div class="link-header">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+      GitHub
+    </div>
+    <div class="link-thumbnail">[ Replace with &lt;img src="thumb-github.jpg"&gt; ]</div>
+  </a>
+  
   <!-- LinkedIn -->
-  <a href="https://www.linkedin.com/in/shubh153" class="link-btn" target="_blank" rel="noopener" style="--hover-bg: #0A66C2; --hover-text: #FFFFFF;">
+  <a href="https://www.linkedin.com/in/shubh153" class="link-btn" target="_blank" rel="noopener">
     <div class="link-header">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
       LinkedIn
     </div>
     <div class="link-thumbnail">[ Replace with &lt;img src="thumb-linkedin.jpg"&gt; ]</div>
-  </a>
-
-  <!-- X / Twitter -->
-  <a href="https://x.com/shubh_153_" class="link-btn" target="_blank" rel="noopener" style="--hover-bg: #000000; --hover-text: #FFFFFF;">
-    <div class="link-header">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l11.733 16h4.267l-11.733 -16z"></path><path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"></path></svg>
-      X (Twitter)
-    </div>
-    <div class="link-thumbnail">[ Replace with &lt;img src="thumb-x.jpg"&gt; ]</div>
-  </a>
-
-  <!-- Threads -->
-  <a href="https://www.threads.com/@shubh_153_" class="link-btn" target="_blank" rel="noopener" style="--hover-bg: #000000; --hover-text: #FFFFFF;">
-    <div class="link-header">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10v2.5a3.5 3.5 0 0 1-7 0V12a5 5 0 1 0-5 5c2.69 0 4.908-1.554 5.708-3.79"></path></svg>
-      Threads
-    </div>
-    <div class="link-thumbnail">[ Replace with &lt;img src="thumb-threads.jpg"&gt; ]</div>
-  </a>
-
-  <!-- Instagram -->
-  <a href="https://www.instagram.com/shubh_153_" class="link-btn" target="_blank" rel="noopener" style="--hover-bg: #E1306C; --hover-text: #FFFFFF;">
-    <div class="link-header">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-      Instagram
-    </div>
-    <div class="link-thumbnail">[ Replace with &lt;img src="thumb-insta.jpg"&gt; ]</div>
-  </a>
-
-  <!-- YouTube -->
-  <a href="https://www.youtube.com/@shubh153" class="link-btn" target="_blank" rel="noopener" style="--hover-bg: #FF0000; --hover-text: #FFFFFF;">
-    <div class="link-header">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33 2.78 2.78 0 0 0 1.94 2c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg>
-      YouTube
-    </div>
-    <div class="link-thumbnail">[ Replace with &lt;img src="thumb-youtube.jpg"&gt; ]</div>
-  </a>
-
-  <!-- Snapchat -->
-  <a href="https://www.snapchat.com/add/shubhhh153" class="link-btn" target="_blank" rel="noopener" style="--hover-bg: #FFFC00; --hover-text: #000000;">
-    <div class="link-header">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 10h.01"/><path d="M15 10h.01"/><path d="M12 2a8 8 0 0 0-8 8v12l3-3 2.5 2.5L12 19l2.5 2.5L17 19l3 3V10a8 8 0 0 0-8-8z"/></svg>
-      Snapchat
-    </div>
-    <div class="link-thumbnail">[ Replace with &lt;img src="thumb-snap.jpg"&gt; ]</div>
   </a>
 
 </div>
@@ -605,6 +654,5 @@
     }, 3000);
   }
 </script>
-
 </body>
 </html>
