@@ -155,6 +155,10 @@
   .gallery-item.is-playing .card-inner iframe {
     filter: grayscale(0%) !important;
   }
+  /* Restore default cursor when playing so the user can interact with the video */
+  .gallery-item.is-playing, .gallery-item.is-playing iframe {
+    cursor: auto !important;
+  }
   
   /* Glassmorphic Caption */
   .caption {
@@ -333,7 +337,20 @@
       const rotate = isHoveringPhoto ? 0 : currentAngle + 45;
       const scale = isHoveringPhoto ? 1.2 : 1;
 
-      cursorEl.style.transform = `translate(${cursorX}px, ${cursorY}px) rotate(${rotate}deg) scale(${scale})`;
+      // Hide custom cursor if hovering an iframe or a playing video (to fix cross-origin click blocking)
+      let hideCursor = false;
+      if (targetX !== -100 && targetY !== -100) {
+        const el = document.elementFromPoint(targetX, targetY);
+        if (el && (el.tagName === 'IFRAME' || el.closest('.is-playing'))) {
+          hideCursor = true;
+        }
+      }
+      cursorEl.style.display = hideCursor ? 'none' : 'block';
+
+      if (!hideCursor) {
+        cursorEl.style.transform = `translate(${cursorX}px, ${cursorY}px) rotate(${rotate}deg) scale(${scale})`;
+      }
+      
       requestAnimationFrame(updateCursor);
     }
     updateCursor();
