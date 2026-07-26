@@ -493,12 +493,20 @@
 
 <section id="blog">
   <div class="wrap">
-    <p class="path">~/blog</p>
-    <h2>Writing</h2>
-    <div class="blog-empty">
-      <p class="lead">First post is in progress.</p>
-      <p class="sub">Notes on building with AI dev tools, DevOps as I learn it, and whatever I'm shipping that week. Check back soon — or get in touch if you want to know when it's live.</p>
+    <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 36px; flex-wrap: wrap; gap: 16px;">
+      <div>
+        <p class="path">~/blog</p>
+        <h2 style="margin-bottom: 0;">Latest Writing</h2>
+      </div>
+      <a href="/blogs.html" style="font-family: var(--mono); font-size: 0.9rem; color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent); padding-bottom: 2px;">Read all blogs ➔</a>
     </div>
+    
+    <a href="/blogs.html" style="text-decoration: none; display: block; border: 1px solid var(--line); border-radius: 12px; padding: 32px; background: var(--bg-raised); transition: transform 0.2s ease, border-color 0.2s ease;" onmouseover="this.style.transform='translateY(-4px)'; this.style.borderColor='var(--accent)';" onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='var(--line)';">
+      <div style="font-family: var(--mono); font-size: 0.85rem; color: var(--ink-soft); margin-bottom: 12px;">July 25, 2026 • Web Development</div>
+      <h3 style="font-family: var(--display); font-size: 1.5rem; color: var(--ink); margin-bottom: 16px; font-weight: 600;">Building a Minimalist Portfolio with Pure HTML & CSS</h3>
+      <p style="color: var(--ink-soft); font-size: 1rem; line-height: 1.5; margin-bottom: 24px;">A deep dive into why I chose to avoid heavy JavaScript frameworks for my personal site, and how focusing on fundamentals leads to better performance and design.</p>
+      <span style="font-family: var(--mono); font-size: 0.9rem; color: var(--accent);">Read Article ➔</span>
+    </a>
   </div>
 </section>
 

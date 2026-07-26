@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blogs | Shubh Gupta</title>
+<meta name="description" content="Thoughts on software engineering, AI, and design by Shubh Gupta.">
+<meta property="og:title" content="Blogs | Shubh Gupta">
+<meta property="og:description" content="Thoughts on software engineering, AI, and design by Shubh Gupta.">
+<meta property="og:image" content="https://shubhuu.in/thumbnail.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://shubhuu.in/thumbnail.png">
+<meta property="og:url" content="https://shubhuu.in/blogs.html">
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F7F7F5;
+    --bg-raised:#FFFFFF;
+    --ink:#14161A;
+    --ink-soft:#4A4D52;
+    --graphite:#6B6558;
+    --accent:#2954A6;
+    --accent-soft:#EAF0FA;
+    --line:#DEDDD8;
+    --mono:'IBM Plex Mono', monospace;
+    --sans:'IBM Plex Sans', sans-serif;
+    --display:'Space Grotesk', sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--sans);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none;}
+  a:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px;}
+  ::selection{background:var(--accent-soft);color:var(--accent);}
+
+  .wrap{max-width:920px;margin:0 auto;padding:0 28px;}
+
+  nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(247,247,245,0.88);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;}
+  .brand{font-family:var(--display);font-weight:700;font-size:1.05rem;letter-spacing:-0.01em;}
+  .navlinks{display:flex;gap:28px;font-family:var(--mono);font-size:0.82rem;color:var(--ink-soft);}
+  .navlinks a { transition: color .2s ease; position: relative; padding-bottom: 2px; }
+  .navlinks a::after {
+    content: ''; position: absolute; width: 0; height: 1.5px;
+    bottom: 0; left: 50%; background-color: var(--accent);
+    transition: width 0.2s ease, left 0.2s ease;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .navlinks a:hover::after, .navlinks a:focus-visible::after { width: 100%; left: 0; }
+  }
+  .navlinks a:hover, .navlinks a:focus-visible{color:var(--accent);}
+  @media (max-width:700px){ 
+    nav .wrap { flex-direction: column; height: auto; padding: 14px 28px; gap: 12px; align-items: flex-start; }
+    .navlinks { width: 100%; overflow-x: auto; padding-bottom: 4px; justify-content: flex-start; gap: 18px; white-space: nowrap; -webkit-overflow-scrolling: touch; }
+    .navlinks::-webkit-scrollbar { display: none; }
+    .navlinks { -ms-overflow-style: none; scrollbar-width: none; }
+    .navlinks span{display:none;} 
+  }
+
+  section{padding:72px 0;border-bottom:1px solid var(--line);}
+  .path{font-family:var(--mono);font-size:0.8rem;color:var(--graphite);margin-bottom:8px;}
+  h2{
+    font-family:var(--display);font-weight:600;
+    font-size:clamp(1.5rem,3vw,1.9rem);letter-spacing:-0.01em;
+    margin-bottom:36px;
+  }
+
+  /* Blog Post Layout */
+  .blog-grid { display: grid; gap: 24px; }
+  .blog-card {
+    display: block;
+    background: var(--bg-raised);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 32px;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+  }
+  .blog-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent);
+  }
+  .blog-meta { font-family: var(--mono); font-size: 0.85rem; color: var(--ink-soft); margin-bottom: 12px; }
+  .blog-title { font-family: var(--display); font-size: 1.5rem; color: var(--ink); margin-bottom: 16px; font-weight: 600; }
+  .blog-excerpt { color: var(--ink-soft); font-size: 1rem; line-height: 1.5; margin-bottom: 24px; }
+  .blog-readmore { font-family: var(--mono); font-size: 0.9rem; color: var(--accent); }
+
+  footer{padding:32px 0;}
+  footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
+  footer p{font-family:var(--mono);font-size:0.78rem;color:var(--graphite);}
+  
+  /* Entrance Animations */
+  h2, .blog-card, .path {
+    opacity: 0;
+    transform: translateY(15px);
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  @media (max-width:600px){
+    .blog-card { padding: 24px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a href="/index.html" class="brand">shubh<span style="color:var(--accent)">.</span></a>
+    <div class="navlinks">
+      <a href="/index.html#projects"><span>~/</span>projects</a>
+      <a href="/index.html#skills"><span>~/</span>skills</a>
+      <a href="/links.html"><span>~/</span>links</a>
+      <a href="/academics.html"><span>~/</span>academics</a>
+    </div>
+  </div>
+</nav>
+
+<section id="blog-list" style="border-bottom: none;">
+  <div class="wrap">
+    <p class="path">~/blogs</p>
+    <h2>All Articles</h2>
+    
+    <div class="blog-grid">
+      <!-- Blog Post 1 -->
+      <a href="#" class="blog-card">
+        <div class="blog-meta">July 25, 2026 • Web Development</div>
+        <h3 class="blog-title">Building a Minimalist Portfolio with Pure HTML & CSS</h3>
+        <p class="blog-excerpt">A deep dive into why I chose to avoid heavy JavaScript frameworks for my personal site, and how focusing on fundamentals leads to better performance and design.</p>
+        <span class="blog-readmore">Read Article ➔</span>
+      </a>
+
+      <!-- Blog Post 2 -->
+      <a href="#" class="blog-card">
+        <div class="blog-meta">June 14, 2026 • AI / ML</div>
+        <h3 class="blog-title">Integrating LLMs into Traditional Web Apps</h3>
+        <p class="blog-excerpt">Exploring the challenges and successes of adding generative AI capabilities to my recent hackathon projects, from prompt engineering to deployment.</p>
+        <span class="blog-readmore">Read Article ➔</span>
+      </a>
+      
+      <!-- Blog Post 3 -->
+      <a href="#" class="blog-card">
+        <div class="blog-meta">May 02, 2026 • DevOps</div>
+        <h3 class="blog-title">My Journey Learning Docker & CI/CD</h3>
+        <p class="blog-excerpt">How moving from manual deployments to automated GitHub Actions and containerization completely transformed my developer workflow.</p>
+        <span class="blog-readmore">Read Article ➔</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>&copy; 2026 Shubh Gupta.</p>
+    <p><a href="/creative.html" style="color:var(--accent);text-decoration:underline;text-underline-offset:2px;">Creative Portfolio</a> &nbsp;|&nbsp; <a href="/links.html" style="color:var(--accent);text-decoration:underline;text-underline-offset:2px;">All Links</a> &nbsp;|&nbsp; <a href="/" style="text-decoration:underline;text-underline-offset:2px;">shubhuu.in</a></p>
+  </div>
+</footer>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const fadeElements = document.querySelectorAll('h2, .blog-card, .path');
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      let staggerDelay = 0;
+      let staggerTimeout;
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            if (staggerDelay > 0) {
+              entry.target.style.transitionDelay = `${staggerDelay}ms`;
+            }
+            entry.target.classList.add('is-visible');
+            staggerDelay += 80;
+            observer.unobserve(entry.target);
+          }
+        });
+        clearTimeout(staggerTimeout);
+        staggerTimeout = setTimeout(() => { staggerDelay = 0; }, 100);
+      }, { rootMargin: "0px 0px -20px 0px" });
+      
+      fadeElements.forEach(el => observer.observe(el));
+    } else {
+      fadeElements.forEach(el => el.classList.add('is-visible'));
+    }
+  });
+</script>
+
+</body>
+</html>
