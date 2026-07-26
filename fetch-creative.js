@@ -15,6 +15,7 @@ async function buildCreative() {
     const result = await cloudinary.search
       .expression('folder:shubhuu-creative')
       .sort_by('created_at', 'desc')
+      .with_field('context')
       .max_results(100)
       .execute();
       
