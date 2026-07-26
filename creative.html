@@ -141,7 +141,17 @@
   .card-inner img, .card-inner iframe {
     width: 100%; display: block; border: none; filter: grayscale(80%); transition: filter 0.6s ease;
   }
-  .gallery-item:hover .card-inner img { filter: grayscale(0%); }
+  .gallery-item:hover .card-inner img, 
+  .gallery-item:hover .card-inner iframe { filter: grayscale(0%); }
+  
+  /* Video Overlay & Playback State */
+  .video-overlay {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 5; cursor: none;
+  }
+  .gallery-item.is-playing .card-inner iframe {
+    filter: grayscale(0%) !important;
+  }
   
   /* Glassmorphic Caption */
   .caption {
@@ -209,11 +219,12 @@
 <div class="gallery">
   
   <!-- Item 1 (Hero Video) -->
-  <div class="gallery-item item-1">
+  <div class="gallery-item item-1 tilt-card">
     <div class="bg-number">01</div>
-    <div class="card-inner">
+    <div class="card-inner video-card">
+      <div class="video-overlay"></div>
       <!-- Replace src with your YouTube embed link -->
-      <iframe width="560" height="315" src="https://www.youtube.com/embed/HOGbLyHH1sg?si=fK7ES6YuQ3ZaGB2U&amp;start=6" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style="aspect-ratio: 16/9"></iframe>
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/HOGbLyHH1sg?si=fK7ES6YuQ3ZaGB2U&amp;start=6" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style="aspect-ratio: 16/9; position: relative; z-index: 1;"></iframe>
       <div class="caption">
         <div class="caption-title">Cinematic Reel 2026</div>
         <div class="caption-num">// VIDEO</div>
@@ -361,11 +372,36 @@
       const rotateX = ((y - centerY) / centerY) * -8;
       const rotateY = ((x - centerX) / centerX) * 8;
       
-      inner.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+      // Stop tilting if video is playing
+      if (!card.classList.contains('is-playing')) {
+        inner.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+      }
     });
     card.addEventListener('mouseleave', () => {
       inner.style.transform = `rotateX(0deg) rotateY(0deg)`;
     });
+  });
+
+  // --- 3.5 VIDEO OVERLAY LOGIC ---
+  const videoCards = document.querySelectorAll('.video-card');
+  videoCards.forEach(card => {
+    const overlay = card.querySelector('.video-overlay');
+    const iframe = card.querySelector('iframe');
+    if(overlay && iframe) {
+      overlay.addEventListener('click', () => {
+        // Hide overlay, remove tilt, and keep colors vibrant
+        overlay.style.display = 'none';
+        const galleryItem = card.closest('.gallery-item');
+        galleryItem.classList.add('is-playing');
+        card.style.transform = 'rotateX(0deg) rotateY(0deg)'; // Reset tilt flat
+        
+        // Force YouTube iframe to autoplay so the user doesn't have to click twice
+        const src = iframe.getAttribute('src');
+        if(!src.includes('autoplay=1')) {
+           iframe.setAttribute('src', src + (src.includes('?') ? '&' : '?') + 'autoplay=1');
+        }
+      });
+    }
   });
 
   // --- 4. INTERACTIVE GALAXY CONSTELLATION CANVAS ---
