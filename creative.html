@@ -160,6 +160,7 @@
     border: 1px solid rgba(255,255,255,0.08);
     padding: 18px 24px; border-radius: 4px;
     display: flex; justify-content: space-between; align-items: flex-end;
+    pointer-events: none; /* Let clicks pass through to the video */
   }
   .caption-title { font-family: var(--sans); font-weight: 500; font-size: 1.05rem; }
   .caption-num { font-family: var(--mono); color: var(--ink-soft); font-size: 0.8rem; letter-spacing: 0.05em; }
@@ -394,9 +395,6 @@
         const galleryItem = card.closest('.gallery-item');
         galleryItem.classList.add('is-playing');
         card.style.transform = 'rotateX(0deg) rotateY(0deg)'; // Reset tilt flat
-        
-        // Magically play the YouTube video on the first click using the JS API
-        iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'playVideo', args: [] }), '*');
       });
     }
   });
