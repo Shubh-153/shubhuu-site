@@ -116,6 +116,14 @@
   @media (max-width:600px){
     .blog-card { padding: 24px 20px; }
   }
+
+  .back-link {
+    display: inline-block;
+    font-family: var(--mono); font-size: 0.9rem; color: var(--accent);
+    margin-bottom: 32px; text-decoration: none;
+    border-bottom: 1px solid transparent; transition: border-color 0.2s;
+  }
+  .back-link:hover { border-bottom-color: var(--accent); }
 </style>
 
 <!-- PostHog Analytics -->
@@ -140,17 +148,20 @@
 </head>
 <body>
 
-<nav>
-  <div class="wrap">
-    <a href="/index.html" class="brand">shubh<span style="color:var(--accent)">.</span></a>
-    <div class="navlinks">
-      <a href="/index.html#projects"><span>~/</span>projects</a>
-      <a href="/index.html#skills"><span>~/</span>skills</a>
-      <a href="/links.html"><span>~/</span>links</a>
-      <a href="/academics.html"><span>~/</span>academics</a>
-    </div>
+<div class="wrap" style="padding-top: 40px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+  <a href="/" class="back-link" style="margin-bottom: 0;">← Back to Portfolio</a>
+  <div style="display: flex; gap: 16px; font-family: var(--mono); font-size: 0.85rem; color: var(--ink-soft);">
+    <a href="/links.html" style="display: flex; align-items: center; gap: 6px; transition: color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color=''">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg> Links
+    </a>
+    <a href="/creative.html" style="display: flex; align-items: center; gap: 6px; transition: color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color=''">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="4"></circle></svg> Creative
+    </a>
+    <a href="/" style="display: flex; align-items: center; gap: 6px; transition: color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color=''">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg> Portfolio
+    </a>
   </div>
-</nav>
+</div>
 
 <section id="blog-list" style="border-bottom: none;">
   <div class="wrap">

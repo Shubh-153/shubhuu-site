@@ -110,6 +110,14 @@
   @media (max-width:600px){
     .entry{padding:24px 20px;}
   }
+
+  .back-link {
+    display: inline-block;
+    font-family: var(--mono); font-size: 0.9rem; color: var(--accent);
+    margin-bottom: 32px; text-decoration: none;
+    border-bottom: 1px solid transparent; transition: border-color 0.2s;
+  }
+  .back-link:hover { border-bottom-color: var(--accent); }
 </style>
 
 <!-- PostHog Analytics -->
@@ -140,14 +148,15 @@
     <div class="navlinks">
       <a href="/index.html#projects"><span>~/</span>projects</a>
       <a href="/index.html#skills"><span>~/</span>skills</a>
-      <a href="/links.html"><span>~/</span>links</a>
-      <a href="/creative.html"><span>~/</span>creative</a>
+      <a href="#education"><span>~/</span>education</a>
+      <a href="#achievements"><span>~/</span>achievements</a>
     </div>
   </div>
 </nav>
 
 <section id="education">
   <div class="wrap">
+    <a href="/" class="back-link">← Back to Portfolio</a>
     <p class="path">~/education</p>
     <h2>Academic Background</h2>
     <div class="entry-list">
