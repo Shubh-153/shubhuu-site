@@ -120,29 +120,6 @@
     margin-right:auto;
   }
 
-  /* SOCIAL ICONS ROW */
-  .social-row {
-    display: flex;
-    gap: 16px;
-    justify-content: center;
-    margin-bottom: 32px;
-    z-index: 1;
-  }
-  .social-icon {
-    width: 48px; height: 48px;
-    border-radius: 50%;
-    background: var(--glass-bg);
-    border: 1px solid var(--line);
-    display: flex; align-items: center; justify-content: center;
-    color: var(--ink);
-    transition: all 0.3s ease;
-    backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-  }
-  .social-icon:hover {
-    background: var(--glass-hover);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  }
 
   /* LINKS CONTAINER */
   .links-container {
@@ -447,24 +424,6 @@
   <p class="bio">Currently building: Life Quest<br>[a gamified to-do web app]</p>
 </div>
 
-<!-- Social Icons Row -->
-<div class="social-row">
-  <a href="https://www.instagram.com/shubh_153_" class="social-icon" target="_blank" rel="noopener" aria-label="Instagram">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-  </a>
-  <a href="https://x.com/shubh_153_" class="social-icon" target="_blank" rel="noopener" aria-label="X (Twitter)">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l11.733 16h4.267l-11.733 -16z"></path><path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"></path></svg>
-  </a>
-  <a href="https://www.threads.com/@shubh_153_" class="social-icon" target="_blank" rel="noopener" aria-label="Threads">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10v2.5a3.5 3.5 0 0 1-7 0V12a5 5 0 1 0-5 5c2.69 0 4.908-1.554 5.708-3.79"></path></svg>
-  </a>
-  <a href="https://www.snapchat.com/add/shubhhh153" class="social-icon" target="_blank" rel="noopener" aria-label="Snapchat">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 10h.01"/><path d="M15 10h.01"/><path d="M12 2a8 8 0 0 0-8 8v12l3-3 2.5 2.5L12 19l2.5 2.5L17 19l3 3V10a8 8 0 0 0-8-8z"/></svg>
-  </a>
-  <a href="https://www.youtube.com/@shubh153" class="social-icon" target="_blank" rel="noopener" aria-label="YouTube">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33 2.78 2.78 0 0 0 1.94 2c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg>
-  </a>
-</div>
 
 <!-- Main Pill Links -->
 <div class="links-container">
@@ -495,6 +454,24 @@
     </div>
     <div class="link-thumbnail">[ Replace with &lt;img src="thumb-github.jpg"&gt; ]</div>
   </a>
+
+  <!-- Instagram -->
+  <a href="https://www.instagram.com/shubh_153_" class="link-btn" target="_blank" rel="noopener">
+    <div class="link-header">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+      Instagram
+    </div>
+    <div class="link-thumbnail">[ Replace with &lt;img src="thumb-insta.jpg"&gt; ]</div>
+  </a>
+
+  <!-- YouTube -->
+  <a href="https://www.youtube.com/@shubh153" class="link-btn" target="_blank" rel="noopener">
+    <div class="link-header">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33 2.78 2.78 0 0 0 1.94 2c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg>
+      YouTube
+    </div>
+    <div class="link-thumbnail">[ Replace with &lt;img src="thumb-youtube.jpg"&gt; ]</div>
+  </a>
   
   <!-- LinkedIn -->
   <a href="https://www.linkedin.com/in/shubh153" class="link-btn" target="_blank" rel="noopener">
@@ -503,6 +480,42 @@
       LinkedIn
     </div>
     <div class="link-thumbnail">[ Replace with &lt;img src="thumb-linkedin.jpg"&gt; ]</div>
+  </a>
+
+  <!-- Pinterest -->
+  <a href="https://www.pinterest.com/shubh_153_" class="link-btn" target="_blank" rel="noopener">
+    <div class="link-header">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.354-.629-2.758-1.379l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.607 0 11.985-5.365 11.985-11.987C23.97 5.367 18.624 0 12.017 0z"/></svg>
+      Pinterest
+    </div>
+    <div class="link-thumbnail">[ Replace with &lt;img src="thumb-pinterest.jpg"&gt; ]</div>
+  </a>
+
+  <!-- Snapchat -->
+  <a href="https://www.snapchat.com/add/shubhhh153" class="link-btn" target="_blank" rel="noopener">
+    <div class="link-header">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 10h.01"/><path d="M15 10h.01"/><path d="M12 2a8 8 0 0 0-8 8v12l3-3 2.5 2.5L12 19l2.5 2.5L17 19l3 3V10a8 8 0 0 0-8-8z"/></svg>
+      Snapchat
+    </div>
+    <div class="link-thumbnail">[ Replace with &lt;img src="thumb-snap.jpg"&gt; ]</div>
+  </a>
+
+  <!-- Threads -->
+  <a href="https://www.threads.com/@shubh_153_" class="link-btn" target="_blank" rel="noopener">
+    <div class="link-header">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10v2.5a3.5 3.5 0 0 1-7 0V12a5 5 0 1 0-5 5c2.69 0 4.908-1.554 5.708-3.79"></path></svg>
+      Threads
+    </div>
+    <div class="link-thumbnail">[ Replace with &lt;img src="thumb-threads.jpg"&gt; ]</div>
+  </a>
+  
+  <!-- X / Twitter -->
+  <a href="https://x.com/shubh_153_" class="link-btn" target="_blank" rel="noopener">
+    <div class="link-header">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l11.733 16h4.267l-11.733 -16z"></path><path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"></path></svg>
+      X (Twitter)
+    </div>
+    <div class="link-thumbnail">[ Replace with &lt;img src="thumb-x.jpg"&gt; ]</div>
   </a>
 
 </div>
