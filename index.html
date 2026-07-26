@@ -93,6 +93,35 @@
     .navlinks span{display:none;} 
   }
 
+  .qa-container { position: relative; display: inline-flex; align-items: center; }
+  .qa-btn {
+    background: none; border: none; cursor: pointer; color: var(--ink-soft);
+    display: flex; align-items: center; justify-content: center;
+    padding: 6px; border-radius: 4px; transition: color 0.2s, background 0.2s;
+  }
+  .qa-btn:hover { color: var(--accent); background: var(--accent-soft); }
+  .qa-dropdown {
+    position: absolute; top: 100%; right: 0; margin-top: 8px;
+    background: var(--bg-raised); border: 1px solid var(--line);
+    border-radius: 8px; padding: 8px 0; width: 180px;
+    box-shadow: 0 10px 24px var(--shadow);
+    opacity: 0; visibility: hidden; transform: translateY(-8px);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex; flex-direction: column; z-index: 100;
+  }
+  .qa-dropdown.active {
+    opacity: 1; visibility: visible; transform: translateY(0);
+  }
+  .qa-dropdown a {
+    padding: 8px 16px; font-family: var(--mono); font-size: 0.85rem;
+    color: var(--ink); display: flex; align-items: center; gap: 10px;
+    transition: background 0.2s, color 0.2s; text-decoration: none;
+  }
+  .navlinks .qa-dropdown a::after { display: none; }
+  .qa-dropdown a:hover {
+    background: var(--accent-soft); color: var(--accent);
+  }
+
   /* HERO */
   header.hero{padding:96px 0 64px;border-bottom:1px solid var(--line);position:relative;overflow:hidden;}
   .hero-grid{display:flex;align-items:center;justify-content:space-between;gap:20px;}
@@ -314,6 +343,16 @@
       <a href="#blog"><span>~/</span>blog</a>
       <a href="#academics"><span>~/</span>academics</a>
       <a href="#contact"><span>~/</span>contact</a>
+      <div class="qa-container">
+        <button class="qa-btn" aria-label="Quick Access Menu" onclick="document.getElementById('qa-dropdown').classList.toggle('active')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="20" y2="12"></line><line x1="4" y1="6" x2="20" y2="6"></line><line x1="4" y1="18" x2="20" y2="18"></line></svg>
+        </button>
+        <div id="qa-dropdown" class="qa-dropdown">
+          <a href="/creative.html"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="4"></circle></svg> Creative Space</a>
+          <a href="/links.html"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg> Links</a>
+          <a href="/blogs.html"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg> Blogs</a>
+        </div>
+      </div>
     </div>
   </div>
 </nav>
@@ -633,6 +672,14 @@ If you&#39;ve been wanting to build with Claude Code, Codex CLI, or Antigravity 
     }, { rootMargin: "-50% 0px -50% 0px" }); 
 
     themeSections.forEach(section => themeObserver.observe(section));
+
+    // 3. Quick Access Click Outside
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.qa-container')) {
+        const dropdown = document.getElementById('qa-dropdown');
+        if(dropdown) dropdown.classList.remove('active');
+      }
+    });
   });
 </script>
 

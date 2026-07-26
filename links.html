@@ -66,16 +66,14 @@
   }
   .bg-overlay {
     position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
+    top: -50%; left: -50%; width: 200%; height: 200%;
     background: linear-gradient(135deg, rgba(225, 48, 108, 0.2), rgba(41, 84, 166, 0.2), rgba(131, 58, 180, 0.2), rgba(253, 29, 29, 0.2));
-    background-size: 400% 400%;
-    animation: gradientMove 15s ease infinite;
+    animation: gradientMove 15s ease-in-out infinite alternate;
     z-index: -1;
   }
   @keyframes gradientMove {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+    0% { transform: translate(0%, 0%) rotate(0deg); }
+    100% { transform: translate(10%, 10%) rotate(10deg); }
   }
 
   /* PROFILE & HERO IMAGE */
@@ -136,7 +134,8 @@
     font-size:1.05rem;
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     overflow: hidden;
-    /* backdrop-filter is handled by liquidGlass */
+    backdrop-filter: blur(10px) saturate(1.5);
+    -webkit-backdrop-filter: blur(10px) saturate(1.5);
     box-shadow:
       0 12px 32px rgba(0, 0, 0, 0.3),
       inset 0 1px 1px rgba(255, 255, 255, 0.5),
@@ -229,7 +228,8 @@
       inset 0 1px 1px rgba(255, 255, 255, 0.5),
       inset 0 0 0 1px rgba(255, 255, 255, 0.15);
     transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
-    /* backdrop-filter is handled by liquidGlass */
+    backdrop-filter: blur(10px) saturate(1.5);
+    -webkit-backdrop-filter: blur(10px) saturate(1.5);
     color: var(--ink);
   }
   .global-share:hover {
@@ -681,15 +681,29 @@
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.link-btn, .global-share').forEach(btn => {
-      const glass = liquidGlass(btn, {
-        scale: -112,
-        chroma: 6,
-        blur: 10,
-        saturate: 1.5
+      let glass = null;
+
+      btn.addEventListener('mouseenter', () => {
+        if (!glass) {
+          glass = liquidGlass(btn, {
+            scale: -112,
+            chroma: 6,
+            blur: 10,
+            saturate: 1.5
+          });
+        }
       });
+
+      btn.addEventListener('mouseleave', () => {
+        if (glass) {
+          glass.destroy();
+          glass = null;
+        }
+      });
+
       // Refresh refraction map after hover transitions finish
       btn.addEventListener('transitionend', (e) => {
-        if (e.propertyName === 'height' || e.propertyName === 'margin-top' || e.propertyName === 'border-radius') {
+        if (glass && (e.propertyName === 'height' || e.propertyName === 'margin-top' || e.propertyName === 'border-radius')) {
           glass.refresh();
         }
       });
