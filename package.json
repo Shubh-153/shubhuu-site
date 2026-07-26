@@ -1,0 +1,25 @@
+{
+  "name": "shubhuu-site",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shubh-153/shubhuu-site.git"
+  },
+  "keywords": [],
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Shubh-153/shubhuu-site/issues"
+  },
+  "homepage": "https://github.com/Shubh-153/shubhuu-site#readme",
+  "dependencies": {
+    "@notionhq/client": "^5.23.2",
+    "dotenv": "^17.4.2",
+    "marked": "^18.0.7",
+    "notion-to-md": "^3.1.9"
+  }
+}
