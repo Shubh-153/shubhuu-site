@@ -1,13 +1,14 @@
 require('dotenv').config();
 const { Client } = require('@notionhq/client');
 const { NotionToMarkdown } = require('notion-to-md');
-const { marked } = require('marked');
 const fs = require('fs');
 
 const notion = new Client({ auth: process.env.NOTION_API_KEY });
 const n2m = new NotionToMarkdown({ notionClient: notion });
 
 async function buildSite() {
+  const { marked } = await import('marked');
+  
   const databaseId = process.env.NOTION_DATABASE_ID;
   if (!databaseId) {
     console.log("No NOTION_DATABASE_ID provided. Skipping build.");
