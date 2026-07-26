@@ -38,11 +38,14 @@
   /* CUSTOM CURSOR */
   @media (pointer: fine) and (prefers-reduced-motion: no-preference) {
     body, a, .magnetic-btn, .gallery-item, iframe { cursor: none !important; }
-    #custom-cursor {
+    #custom-cursor, #custom-cursor * {
       position: fixed; top: 0; left: 0;
+      pointer-events: none !important; 
+    }
+    #custom-cursor {
       width: 24px; height: 24px;
       margin-left: -12px; margin-top: -12px;
-      pointer-events: none; z-index: 10000;
+      z-index: 10000;
       will-change: transform;
     }
     .cursor-icon {
