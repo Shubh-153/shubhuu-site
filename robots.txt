@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://shubhuu.in/sitemap.xml
