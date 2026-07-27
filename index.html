@@ -85,9 +85,11 @@
   }
   .navlinks a:hover, .navlinks a:focus-visible{color:var(--accent);}
   .navlinks a:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:2px;}
+  .nav-right { display: flex; align-items: center; gap: 32px; justify-content: flex-end; min-width: 0; }
   @media (max-width:700px){ 
     nav .wrap { flex-direction: column; height: auto; padding: 14px 28px; gap: 12px; align-items: flex-start; }
-    .navlinks { width: 100%; overflow-x: auto; padding-bottom: 4px; justify-content: flex-start; gap: 18px; white-space: nowrap; -webkit-overflow-scrolling: touch; }
+    .nav-right { flex-direction: row; width: 100%; justify-content: space-between; gap: 16px; margin-top: 16px; }
+    .navlinks { flex: 1; width: auto; overflow-x: auto; padding-bottom: 4px; justify-content: flex-start; gap: 18px; white-space: nowrap; -webkit-overflow-scrolling: touch; }
     .navlinks::-webkit-scrollbar { display: none; }
     .navlinks { -ms-overflow-style: none; scrollbar-width: none; }
     .navlinks span{display:none;} 
@@ -337,12 +339,14 @@
 <nav>
   <div class="wrap">
     <a href="#" class="brand">shubh<span style="color:var(--accent)">.</span></a>
-    <div class="navlinks">
-      <a href="#projects"><span>~/</span>projects</a>
-      <a href="#skills"><span>~/</span>skills</a>
-      <a href="#blog"><span>~/</span>blog</a>
-      <a href="#academics"><span>~/</span>academics</a>
-      <a href="#contact"><span>~/</span>contact</a>
+    <div class="nav-right">
+      <div class="navlinks">
+        <a href="#projects"><span>~/</span>projects</a>
+        <a href="#skills"><span>~/</span>skills</a>
+        <a href="#blog"><span>~/</span>blog</a>
+        <a href="#academics"><span>~/</span>academics</a>
+        <a href="#contact"><span>~/</span>contact</a>
+      </div>
       <div class="qa-container">
         <button class="qa-btn" aria-label="Quick Access Menu" onclick="document.getElementById('qa-dropdown').classList.toggle('active')">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="20" y2="12"></line><line x1="4" y1="6" x2="20" y2="6"></line><line x1="4" y1="18" x2="20" y2="18"></line></svg>
