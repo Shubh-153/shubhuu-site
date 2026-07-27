@@ -92,21 +92,26 @@ async function buildSite() {
   blogsHtml = blogsHtml.replace(gridRegex, `<!-- BLOG_CARDS_START -->\n${cardsHtml}\n      <!-- BLOG_CARDS_END -->`);
   fs.writeFileSync('blogs.html', blogsHtml);
 
-  // 3. Update index.html latest article
+  // 3. Update index.html latest articles
   if (blogs.length > 0) {
-    const latest = blogs[0];
+    const latestBlogs = blogs.slice(0, 3);
     let indexHtml = fs.readFileSync('index.html', 'utf8');
     
     const latestHtml = `<!-- LATEST_BLOG_START -->
-    <a href="/${latest.slug}.html" style="text-decoration: none; display: block; border: 1px solid var(--line); border-radius: 12px; padding: 32px; background: var(--bg-raised); transition: transform 0.2s ease, border-color 0.2s ease;" onmouseover="this.style.transform='translateY(-4px)'; this.style.borderColor='var(--accent)';" onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='var(--line)';">
-      <div style="font-family: var(--mono); font-size: 0.85rem; color: var(--ink-soft); margin-bottom: 12px;">${latest.date} • ${latest.category}</div>
-      <h3 style="font-family: var(--display); font-size: 1.5rem; color: var(--ink); margin-bottom: 16px; font-weight: 600;">${latest.title}</h3>
-      <p style="color: var(--ink-soft); font-size: 1rem; line-height: 1.5; margin-bottom: 24px;">${latest.excerpt}</p>
-      <span style="font-family: var(--mono); font-size: 0.9rem; color: var(--accent);">Read Article ➔</span>
-    </a>
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+      ${latestBlogs.map(blog => `
+      <a href="/${blog.slug}.html" style="text-decoration: none; display: block; border: 1px solid var(--line); border-radius: 8px; padding: 24px; background: var(--bg-raised); transition: transform 0.2s ease, border-color 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.borderColor='var(--accent)';" onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='var(--line)';">
+        <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+          <h3 style="font-family: var(--display); font-size: 1.25rem; color: var(--ink); margin: 0; font-weight: 600;">${blog.title}</h3>
+          <span style="font-family: var(--mono); font-size: 0.85rem; color: var(--ink-soft);">${blog.date} • ${blog.category}</span>
+        </div>
+        <p style="color: var(--ink-soft); font-size: 0.95rem; line-height: 1.5; margin: 0 0 16px 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${blog.excerpt}</p>
+        <span style="font-family: var(--mono); font-size: 0.85rem; color: var(--accent);">Read Article ➔</span>
+      </a>`).join('')}
+    </div>
     <!-- LATEST_BLOG_END -->`;
     
-    const indexRegex = /<!-- LATEST_BLOG_START -->[\s\S]*?<!-- LATEST_BLOG_END -->/;
+    const indexRegex = /<!-- LATEST_BLOG_START -->[\\s\\S]*?<!-- LATEST_BLOG_END -->/;
     indexHtml = indexHtml.replace(indexRegex, latestHtml);
     fs.writeFileSync('index.html', indexHtml);
   }
