@@ -168,11 +168,13 @@
   /* Glassmorphic Caption */
   .caption {
     position: absolute; bottom: 24px; left: 24px; right: 24px;
-    background: rgba(10, 10, 12, 0.4); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255,255,255,0.08);
-    padding: 18px 24px; border-radius: 4px;
+    background: rgba(10, 10, 12, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.1);
+    padding: 16px 24px; border-radius: 16px;
     display: flex; justify-content: space-between; align-items: flex-end;
     pointer-events: none; /* Let clicks pass through to the video */
+    z-index: 10;
   }
   .caption-title { font-family: var(--sans); font-weight: 500; font-size: 1.05rem; }
   .caption-num { font-family: var(--mono); color: var(--ink-soft); font-size: 0.8rem; letter-spacing: 0.05em; }
@@ -965,5 +967,13 @@
   }
 </script>
 
+<script src="liquid-glass.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll('.caption').forEach(el => {
+      liquidGlass(el, { scale: -90, blur: 16, border: 0 });
+    });
+  });
+</script>
 </body>
 </html>
