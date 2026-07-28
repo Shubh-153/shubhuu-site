@@ -212,6 +212,89 @@
     color:var(--ink);
   }
 
+  
+  .view-toggle-btn {
+    position: absolute;
+    top: 24px;
+    left: 24px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.02));
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 100;
+    box-shadow:
+      0 4px 12px rgba(0,0,0,0.2),
+      inset 0 1px 1px rgba(255, 255, 255, 0.5),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+    transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
+    backdrop-filter: blur(10px) saturate(1.5);
+    -webkit-backdrop-filter: blur(10px) saturate(1.5);
+    color: var(--ink);
+  }
+  .view-toggle-btn:hover {
+    transform: scale(1.05);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+    box-shadow:
+      0 8px 24px rgba(0,0,0,0.3),
+      inset 0 1px 1px rgba(255, 255, 255, 0.6),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+  }
+
+  @media (max-width: 799px) {
+    .view-toggle-btn { display: none; } /* Hide toggle on phone */
+  }
+  
+  @media (min-width: 800px) {
+    .links-container.bento-mode {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      max-width: 900px;
+      margin-top: 20px;
+    }
+    .links-container.bento-mode .link-btn {
+      padding: 32px 24px;
+      border-radius: 32px;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      height: 100%;
+      min-height: 200px;
+    }
+    .links-container.bento-mode .link-header {
+      flex-direction: column;
+      gap: 16px;
+      font-size: 1.1rem;
+    }
+    .links-container.bento-mode .link-header svg {
+      width: 42px;
+      height: 42px;
+      opacity: 0.9;
+    }
+    .links-container.bento-mode .link-thumbnail {
+      border-radius: 20px;
+    }
+    
+    /* Bento Spans */
+    .links-container.bento-mode .link-btn:nth-child(1),
+    .links-container.bento-mode .link-btn:nth-child(9) {
+      grid-column: span 2;
+    }
+    
+    .links-container.bento-mode .link-btn:hover {
+      border-radius: 32px;
+      transform: scale(1.03) translateY(-4px);
+    }
+    .links-container.bento-mode .link-btn:hover .link-thumbnail {
+      height: 120px;
+    }
+  }
+
   /* --- SHARE FEATURES --- */
   .global-share {
     position: fixed;
@@ -538,6 +621,13 @@
   <p style="margin-top: 6px;"><a href="/creative.html">Creative Portfolio</a> &nbsp;|&nbsp; <a href="/">shubhuu.in</a></p>
 </div>
 
+
+<!-- View Toggle Button -->
+<button class="view-toggle-btn" aria-label="Toggle Bento View" onclick="toggleBentoView()">
+  <svg class="icon-stack" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+  <svg class="icon-bento" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+</button>
+
 <!-- Global Share Button -->
 <button class="global-share" aria-label="Share Page" onclick="shareGlobal()">
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
@@ -679,6 +769,17 @@
       toast.classList.remove('show');
     }, 3000);
   }
+
+  // 6. View Toggle
+  function toggleBentoView() {
+    const container = document.querySelector(".links-container");
+    const isBento = container.classList.toggle("bento-mode");
+    
+    // Toggle icons
+    document.querySelector(".icon-bento").style.display = isBento ? "none" : "block";
+    document.querySelector(".icon-stack").style.display = isBento ? "block" : "none";
+  }
+
 </script>
 
 <script src="liquid-glass.js"></script>
