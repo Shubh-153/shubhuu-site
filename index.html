@@ -310,6 +310,22 @@
   .skill-chip{
     font-size:0.88rem;padding:7px 13px;border:1px solid var(--line);
     border-radius:6px;background:var(--bg-raised);
+    display: inline-flex; align-items: center; gap: 8px;
+    color: inherit; text-decoration: none;
+    transition: all 0.2s ease;
+  }
+  .skill-chip:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  }
+  .skill-icon {
+    width: 16px; height: 16px;
+    filter: grayscale(100%) opacity(0.5) brightness(1.5);
+    transition: all 0.3s ease;
+  }
+  .skill-chip:hover .skill-icon {
+    filter: grayscale(0%) opacity(1) brightness(1);
   }
 
   /* BLOG */
