@@ -850,6 +850,13 @@
 <script src="liquid-glass.js"></script>
 <script>
   document.addEventListener('DOMContentLoaded', () => {
+    if (window.innerWidth >= 800) {
+      const container = document.querySelector(".links-container");
+      container.classList.add("bento-mode");
+      document.querySelector(".icon-desktop").style.display = "none";
+      document.querySelector(".icon-phone").style.display = "block";
+    }
+
     document.querySelectorAll('.link-btn, .global-share').forEach(btn => {
       let glass = null;
 
