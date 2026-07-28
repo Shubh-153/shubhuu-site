@@ -253,8 +253,8 @@
   .project {
     background: var(--bg-raised);
     padding: 32px;
-    display: grid;
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
     gap: 12px;
     height: 100%;
     border: 1px solid var(--line);
@@ -269,6 +269,34 @@
   .tag{
     font-family:var(--mono);font-size:0.72rem;color:var(--accent);
     background:var(--accent-soft);padding:4px 9px;border-radius:20px;
+  }
+
+  
+  .project-action {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    margin-top: auto;
+    display: flex;
+    justify-content: flex-end;
+  }
+  .project-action a {
+    font-size: 0.85rem;
+    font-family: var(--mono);
+    color: var(--accent);
+    border-bottom: 1px solid transparent;
+  }
+  .project-action a:hover {
+    border-bottom-color: var(--accent);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .project:hover .project-action {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @media (max-width: 700px) {
+    .project-action { opacity: 1; transform: translateY(0); margin-top: 16px; }
   }
 
   /* SKILLS */
@@ -456,6 +484,7 @@
         </div>
         <p class="project-desc">A mental health-focused AI chat companion designed around supportive, low-pressure conversation.</p>
         <div class="tags"><span class="tag">AI/ML</span><span class="tag">Chatbot</span></div>
+        <div class="project-action"><a href="https://mental-health-ai-chat-bot.vercel.app/" target="_blank" rel="noopener">View Project ↗</a></div>
       </div>
 
       <div class="project">
