@@ -36,10 +36,16 @@ async function buildCreative() {
       const typeLabel = item.resource_type === 'video' ? '// VIDEO' : '// PHOTO';
       
       let mediaHtml = '';
+      let optimizedUrl = item.secure_url;
+      if (optimizedUrl.includes('/upload/')) {
+        // Automatically compress and resize to max 1200px width for massive performance gains
+        optimizedUrl = optimizedUrl.replace('/upload/', '/upload/f_auto,q_auto,w_1200,c_limit/');
+      }
+
       if (item.resource_type === 'video') {
-        mediaHtml = `<video src="${item.secure_url}" autoplay loop muted playsinline alt="${title}"></video>`;
+        mediaHtml = `<video src="${optimizedUrl}" autoplay loop muted playsinline alt="${title}" preload="metadata"></video>`;
       } else {
-        mediaHtml = `<img src="${item.secure_url}" alt="${title}">`;
+        mediaHtml = `<img src="${optimizedUrl}" alt="${title}" loading="lazy" decoding="async">`;
       }
       
       htmlContent += `
