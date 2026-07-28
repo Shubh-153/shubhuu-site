@@ -86,40 +86,9 @@
   /* NAV */
   nav {
     padding: 40px;
-    display: flex; justify-content: space-between; align-items: flex-start;
+    display: flex; justify-content: space-between; align-items: center;
     position: relative; z-index: 10;
   }
-  .nav-left, .nav-right { display: flex; flex-direction: column; }
-  .nav-left { align-items: flex-start; gap: 12px; position: relative; }
-  .nav-right { align-items: flex-end; gap: 12px; }
-  
-  .dev-message {
-    background: rgba(20, 20, 20, 0.8);
-    border: 1px solid rgba(255,255,255,0.1);
-    padding: 8px 12px;
-    border-radius: 8px;
-    font-family: var(--mono);
-    font-size: 0.7rem;
-    color: rgba(255, 255, 255, 0.7);
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    backdrop-filter: blur(10px);
-    white-space: nowrap;
-    pointer-events: none;
-    opacity: 0;
-    transform: translateY(-10px);
-    animation: dev-message-pop 6s cubic-bezier(0.2, 0.8, 0.2, 1) 1.5s forwards;
-  }
-  @keyframes dev-message-pop {
-    0% { opacity: 0; transform: translateY(-10px); }
-    10% { opacity: 1; transform: translateY(0); }
-    90% { opacity: 1; transform: translateY(0); }
-    100% { opacity: 0; transform: translateY(-10px); }
-  }
-  
   .brand { font-family: var(--display); font-weight: 700; font-size: 1.2rem; color: #FFF; text-decoration: none;}
   .magnetic-btn {
     display: inline-block;
@@ -146,123 +115,38 @@
   h1 { font-family: var(--display); font-size: clamp(3rem, 8vw, 6.5rem); font-weight: 700; line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 24px; text-transform: uppercase; }
   p.sub { color: var(--ink-soft); font-size: 1.1rem; max-width: 500px; margin: 0 auto; font-family: var(--sans); }
 
-  /* Intelligent Bento Grid */
-  .gallery-grid {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    grid-auto-rows: 150px;
-    grid-auto-flow: dense;
-    gap: 24px;
+  /* EDITORIAL GALLERY GRID */
+  .gallery {
     max-width: 1400px; margin: 0 auto 120px; padding: 0 40px;
+    display: grid; grid-template-columns: repeat(12, 1fr); gap: 40px;
   }
-  
   .gallery-item {
-    position: relative; border-radius: 24px;
-    height: 100%;
+    position: relative; z-index: 10;
+    /* 3D setup */
+    perspective: 1200px;
+    transform-style: preserve-3d;
   }
   
-  /* Smart Image Scaling */
-  .card-inner img, .card-inner video {
-    width: 100%; height: 100%; object-fit: contain; border-radius: inherit;
-  }
-
-  /* Intelligent Bento Spans */
-  .hero-horiz { grid-column: span 4; grid-row: span 3; }
-  .hero-vert { grid-column: span 2; grid-row: span 4; }
-  .standard-horiz { grid-column: span 2; grid-row: span 2; }
-  .standard-vert { grid-column: span 2; grid-row: span 3; }
+  /* Asymmetric Layout */
+  .item-1 { grid-column: 1 / 9; }
+  .item-2 { grid-column: 9 / 13; margin-top: 120px; }
+  .item-3 { grid-column: 2 / 6; margin-top: -60px; }
+  .item-4 { grid-column: 7 / 12; margin-top: 80px; }
   
   @media (max-width: 900px) {
-    .gallery-grid { grid-template-columns: repeat(4, 1fr); grid-auto-rows: 120px; }
-    .hero-horiz { grid-column: span 4; grid-row: span 3; }
+    .gallery { display: flex; flex-direction: column; gap: 80px; }
+    .item-2, .item-3, .item-4 { margin-top: 0; }
   }
-  
-  @media (max-width: 600px) {
-    .gallery-grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 140px; gap: 16px; }
-    .gallery-item { border-radius: 16px; }
-    .hero-horiz, .standard-horiz { grid-column: span 2; grid-row: span 2; }
-    .hero-vert, .standard-vert { grid-column: span 1; grid-row: span 2; }
-  }
-
-  /* --- PHONE MODE OVERRIDES --- */
-  body.layout-transitioning .gallery-grid {
-    opacity: 0 !important;
-    pointer-events: none;
-  }
-  .gallery-grid { transition: opacity 0.3s ease; }
-
-  body.phone-mode .gallery-grid {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 24px !important;
-  }
-  body.phone-mode .gallery-item {
-    width: 100% !important; height: 50vh !important; min-height: 400px !important;
-  }
-  body.phone-mode .card-inner::before {
-    display: none !important; /* Disable flashlight */
-  }
-  body.phone-mode .card-inner img, 
-  body.phone-mode .card-inner video {
-    filter: grayscale(100%);
-    transition: filter 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  body.phone-mode .gallery-item.in-view .card-inner img,
-  body.phone-mode .gallery-item.in-view .card-inner video {
-    filter: grayscale(0%);
-  }
-
-  /* Layout Toggle Button in Nav */
-  .mode-toggle {
-    display: inline-flex; align-items: center; gap: 8px;
-    background: transparent;
-    cursor: pointer; position: relative;
-    opacity: 1; transform: translateY(0);
-  }
-  .mode-icon { color: rgba(255, 255, 255, 0.3); transition: color 0.3s; }
-  body.desktop-mode .mode-toggle .desktop-icon { color: white; filter: drop-shadow(0 0 5px white); }
-  body.phone-mode .mode-toggle .phone-icon { color: white; filter: drop-shadow(0 0 5px white); }
-  .toggle-switch { width: 34px; height: 18px; background: rgba(255, 255, 255, 0.15); border-radius: 20px; position: relative; border: 1px solid rgba(255,255,255,0.1); }
-  .toggle-switch::after {
-    content: ''; position: absolute; top: 2px; left: 2px; width: 12px; height: 12px; background: white; border-radius: 50%;
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  body.phone-mode .toggle-switch::after { transform: translateX(16px); }
 
   .card-inner {
     position: relative;
-    width: 100%; height: 100%;
-    border-radius: 24px; overflow: hidden;
+    border-radius: 6px; overflow: hidden;
     transition: transform 0.1s linear; /* Responsive to mouse */
-    background: rgba(10, 10, 12, 0.2);
-    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255,255,255,0.1);
-    box-shadow: 0 4px 24px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.1);
-  }
-  
-  /* The Glass Flashlight / Shimmer */
-  .card-inner::before {
-    content: "";
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: radial-gradient(
-      800px circle at var(--mouse-x) var(--mouse-y), 
-      rgba(255, 255, 255, 0.15),
-      transparent 40%
-    );
-    z-index: 10; /* Above images to create glass glare */
-    pointer-events: none;
-    transition: opacity 0.4s ease;
-    opacity: 0;
-  }
-  .gallery-grid:hover .card-inner::before {
-    opacity: 1;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.08);
   }
   .card-inner img, .card-inner iframe, .card-inner video {
-    position: absolute; top: 0; left: 0;
-    width: 100%; height: 100%; display: block; border: none; 
-    filter: grayscale(80%); transition: filter 0.6s ease;
-    object-fit: contain; /* Prevents cutting the photos */
+    width: 100%; display: block; border: none; filter: grayscale(80%); transition: filter 0.6s ease;
   }
   .gallery-item:hover .card-inner img, 
   .gallery-item:hover .card-inner iframe,
@@ -284,13 +168,11 @@
   /* Glassmorphic Caption */
   .caption {
     position: absolute; bottom: 24px; left: 24px; right: 24px;
-    background: rgba(10, 10, 12, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 4px 24px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.1);
-    padding: 16px 24px; border-radius: 16px;
+    background: rgba(10, 10, 12, 0.4); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.08);
+    padding: 18px 24px; border-radius: 4px;
     display: flex; justify-content: space-between; align-items: flex-end;
     pointer-events: none; /* Let clicks pass through to the video */
-    z-index: 10;
   }
   .caption-title { font-family: var(--sans); font-weight: 500; font-size: 1.05rem; }
   .caption-num { font-family: var(--mono); color: var(--ink-soft); font-size: 0.8rem; letter-spacing: 0.05em; }
@@ -302,75 +184,6 @@
     color: rgba(255,255,255,0.15); z-index: -1; pointer-events: none;
     line-height: 1; letter-spacing: -0.05em;
   }
-  /* 3D Floating Planets */
-  .planet {
-    position: fixed;
-    z-index: 1; /* Above galaxy, behind cards */
-    pointer-events: none;
-    will-change: transform;
-    background-size: contain;
-    background-position: center;
-    background-repeat: no-repeat;
-    mix-blend-mode: screen;
-    opacity: 0.7;
-    filter: saturate(1.5);
-  }
-  .planet-1 {
-    width: 450px; height: 450px;
-    top: 15%; right: -150px;
-    background-image: url('assets/planet_purple.jpg');
-  }
-  .planet-2 {
-    width: 300px; height: 300px;
-    top: 55%; left: -80px;
-    background-image: url('assets/planet_gold.jpg');
-  }
-  .planet-3 {
-    width: 600px; height: 600px;
-    bottom: -200px; right: 5%;
-    background-image: url('assets/planet_icy.jpg');
-  }
-
-  /* Supernova Shockwave Shake */
-  @keyframes shockwave-shake {
-    0% { transform: translate(0, 0); }
-    10% { transform: translate(-10px, 5px); filter: blur(2px); }
-    20% { transform: translate(8px, -6px); filter: blur(0px); }
-    30% { transform: translate(-5px, 3px); }
-    40% { transform: translate(3px, -2px); }
-    50% { transform: translate(-2px, 1px); }
-    100% { transform: translate(0, 0); }
-  }
-  @keyframes shockwave-shake-margin {
-    0% { margin-top: 0; margin-left: 0; }
-    10% { margin-top: 5px; margin-left: -10px; filter: blur(2px) brightness(1.2); }
-    20% { margin-top: -6px; margin-left: 8px; filter: blur(0px) brightness(1); }
-    30% { margin-top: 3px; margin-left: -5px; }
-    40% { margin-top: -2px; margin-left: 3px; }
-    50% { margin-top: 1px; margin-left: -2px; }
-    100% { margin-top: 0; margin-left: 0; }
-  }
-  .shockwave-active .gallery-grid,
-  .shockwave-active .bg-number {
-    animation: shockwave-shake 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
-  }
-  .shockwave-active .planet {
-    animation: shockwave-shake-margin 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
-  }
-
-  /* Dynamic Heading Transitions */
-  #dynamic-heading {
-    transition: opacity 0.2s ease, color 0.3s ease, text-shadow 0.3s ease !important;
-  }
-  #dynamic-heading.text-hidden {
-    opacity: 0 !important;
-  }
-  #dynamic-heading.text-explosion {
-    color: #ff4444 !important;
-    text-shadow: none !important;
-  }
-
-
 </style>
 
 <!-- PostHog Analytics -->
@@ -394,11 +207,6 @@
 </script>
 </head>
 <body>
-
-
-<div class="planet planet-1" data-speed="0.25"></div>
-<div class="planet planet-2" data-speed="0.45"></div>
-<div class="planet planet-3" data-speed="-0.15"></div>
 
 <!-- Custom Cursor -->
 <div id="custom-cursor">
@@ -427,40 +235,40 @@
 <canvas id="galaxy"></canvas>
 
 <nav>
-  <div class="nav-left">
-    <a href="/" class="brand">shubh.</a>
-    <div class="dev-message">
-      <span class="hint-dot"></span> Message from dev: Hold in space for supernova
-    </div>
-  </div>
-  <div class="nav-right">
-    <a href="/" class="magnetic-btn">[ Return to Portfolio ]</a>
-    <div id="mode-toggle" class="mode-toggle">
-      <svg class="mode-icon desktop-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
-      <div class="toggle-switch"></div>
-      <svg class="mode-icon phone-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
-    </div>
-  </div>
+  <a href="/" class="brand">shubh.</a>
+  <a href="/" class="magnetic-btn">[ Return to Portfolio ]</a>
 </nav>
 
 <header class="is-visible">
   <h1>
     <div class="mask-wrap"><span class="mask-text" style="transition-delay: 0.1s">Visual</span></div><br>
-    <div class="mask-wrap"><span id="dynamic-heading" class="mask-text" style="transition-delay: 0.2s">Exploration</span></div>
+    <div class="mask-wrap"><span class="mask-text" style="transition-delay: 0.2s">Exploration</span></div>
   </h1>
   <div class="mask-wrap">
     <p class="sub mask-text" style="transition-delay: 0.3s">A digital gallery of photography, cinematic cuts, and visual design experiments.</p>
   </div>
 </header>
 
-<div class="gallery-grid">
+<div class="gallery">
   
-
+  <!-- Item 1 (Hero Video) -->
+  <div class="gallery-item item-1 tilt-card">
+    <div class="bg-number">01</div>
+    <div class="card-inner video-card">
+      <div class="video-overlay"></div>
+      <!-- Replace src with your YouTube embed link -->
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/HOGbLyHH1sg?si=fK7ES6YuQ3ZaGB2U&amp;start=6&amp;enablejsapi=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style="aspect-ratio: 16/9; position: relative; z-index: 1;"></iframe>
+      <div class="caption">
+        <div class="caption-title">Cinematic Reel 2026</div>
+        <div class="caption-num">// VIDEO</div>
+      </div>
+    </div>
+  </div>
 
   <!-- CLOUDINARY_START -->
 
   <!-- Generated Item 2 -->
-  <div class="gallery-item hero-vert tilt-card">
+  <div class="gallery-item item-2 tilt-card">
     <div class="bg-number">02</div>
     <div class="card-inner">
       <img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_1200,c_limit/v1785232672/7E842656-6915-4D51-842A-CB440B6C187B_1_105_c_rvxl5a.jpg" alt="Chowk wali holi" loading="lazy" decoding="async">
@@ -472,7 +280,7 @@
   </div>
 
   <!-- Generated Item 3 -->
-  <div class="gallery-item standard-horiz tilt-card">
+  <div class="gallery-item item-3 tilt-card">
     <div class="bg-number">03</div>
     <div class="card-inner">
       <img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_1200,c_limit/v1785232669/D95786ED-2EC8-4D41-BBFF-D607B2942686_1_201_a_jxcfdw.jpg" alt="Say yes to heaven" loading="lazy" decoding="async">
@@ -484,7 +292,7 @@
   </div>
 
   <!-- Generated Item 4 -->
-  <div class="gallery-item standard-horiz tilt-card">
+  <div class="gallery-item item-4 tilt-card">
     <div class="bg-number">04</div>
     <div class="card-inner">
       <img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_1200,c_limit/v1785232666/19F79C7B-40CF-4FF3-86B8-82C945AC6D9A_1_105_c_b309aw.jpg" alt="TEXTURES" loading="lazy" decoding="async">
@@ -496,7 +304,7 @@
   </div>
 
   <!-- Generated Item 5 -->
-  <div class="gallery-item standard-vert tilt-card">
+  <div class="gallery-item item-1 tilt-card">
     <div class="bg-number">05</div>
     <div class="card-inner">
       <img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_1200,c_limit/v1785232663/044F4D1F-C286-4A5B-AEBE-3F30AABAB75A_o4apwt.heic" alt="Robo park but wet" loading="lazy" decoding="async">
@@ -508,7 +316,7 @@
   </div>
 
   <!-- Generated Item 6 -->
-  <div class="gallery-item standard-vert tilt-card">
+  <div class="gallery-item item-2 tilt-card">
     <div class="bg-number">06</div>
     <div class="card-inner">
       <img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_1200,c_limit/v1785232661/94988198-6E28-43F1-87D0-6956272D8DEB_hq8tgx.jpg" alt="GOKUUUU!!!!" loading="lazy" decoding="async">
@@ -520,7 +328,7 @@
   </div>
 
   <!-- Generated Item 7 -->
-  <div class="gallery-item hero-horiz tilt-card">
+  <div class="gallery-item item-3 tilt-card">
     <div class="bg-number">07</div>
     <div class="card-inner">
       <img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_1200,c_limit/v1785232659/2CA4FFD8-F889-4389-8C3C-01F7E0089FCF_gjbcyv.heic" alt="Let me click a snap" loading="lazy" decoding="async">
@@ -532,7 +340,7 @@
   </div>
 
   <!-- Generated Item 8 -->
-  <div class="gallery-item standard-vert tilt-card">
+  <div class="gallery-item item-4 tilt-card">
     <div class="bg-number">08</div>
     <div class="card-inner">
       <img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_1200,c_limit/v1785232656/FE72C41E-6F23-4C7D-B163-EF2519E631FE_1_105_c_mf27oe.jpg" alt="Most viewed on pexels" loading="lazy" decoding="async">
@@ -544,7 +352,7 @@
   </div>
 
   <!-- Generated Item 9 -->
-  <div class="gallery-item standard-vert tilt-card">
+  <div class="gallery-item item-1 tilt-card">
     <div class="bg-number">09</div>
     <div class="card-inner">
       <img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_1200,c_limit/v1785232654/9F7B1044-5B93-4CB6-AABD-EFD93E04F0F8_1_105_c_p9mmpo.jpg" alt="Imperfections makes you unique" loading="lazy" decoding="async">
@@ -556,7 +364,7 @@
   </div>
 
   <!-- Generated Item 10 -->
-  <div class="gallery-item standard-vert tilt-card">
+  <div class="gallery-item item-2 tilt-card">
     <div class="bg-number">10</div>
     <div class="card-inner">
       <img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_1200,c_limit/v1785232652/8878D0C6-E9EE-44E1-B246-DF844385CB71_1_105_c_vtpjt0.jpg" alt="Wo din bhi kya din the" loading="lazy" decoding="async">
@@ -568,7 +376,7 @@
   </div>
 
   <!-- Generated Item 11 -->
-  <div class="gallery-item standard-horiz tilt-card">
+  <div class="gallery-item item-3 tilt-card">
     <div class="bg-number">11</div>
     <div class="card-inner">
       <img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_1200,c_limit/v1785232649/A7603786-9E3D-4C5A-A560-920E08D3905B_1_105_c_xsf4hm.jpg" alt="Lost somewhere" loading="lazy" decoding="async">
@@ -580,7 +388,7 @@
   </div>
 
   <!-- Generated Item 12 -->
-  <div class="gallery-item hero-horiz tilt-card">
+  <div class="gallery-item item-4 tilt-card">
     <div class="bg-number">12</div>
     <div class="card-inner">
       <img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_1200,c_limit/v1785232634/53F29B61-9D1E-497C-BF64-2DB69A0D99AE_1_105_c_vf5ydo.jpg" alt="The beauty of wall paintings" loading="lazy" decoding="async">
@@ -592,7 +400,7 @@
   </div>
 
   <!-- Generated Item 13 -->
-  <div class="gallery-item standard-vert tilt-card">
+  <div class="gallery-item item-1 tilt-card">
     <div class="bg-number">13</div>
     <div class="card-inner">
       <img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_1200,c_limit/v1785232624/62420C75-ED5A-4E09-BD48-35F53242CEF1_ndhm8r.heic" alt="I am a lazy camal" loading="lazy" decoding="async">
@@ -604,7 +412,7 @@
   </div>
 
   <!-- Generated Item 14 -->
-  <div class="gallery-item standard-horiz tilt-card">
+  <div class="gallery-item item-2 tilt-card">
     <div class="bg-number">14</div>
     <div class="card-inner">
       <img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_1200,c_limit/v1785232621/7DC45833-C02A-477A-9787-0A2CF324D528_1_105_c_aufa1q.jpg" alt="First setup" loading="lazy" decoding="async">
@@ -616,7 +424,7 @@
   </div>
 
   <!-- Generated Item 15 -->
-  <div class="gallery-item standard-horiz tilt-card">
+  <div class="gallery-item item-3 tilt-card">
     <div class="bg-number">15</div>
     <div class="card-inner">
       <img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_1200,c_limit/v1785232617/5B1560F1-893F-4C85-8938-6089B4373E8C_cjk2ox.heic" alt="Corners full of colours" loading="lazy" decoding="async">
@@ -628,7 +436,7 @@
   </div>
 
   <!-- Generated Item 16 -->
-  <div class="gallery-item standard-vert tilt-card">
+  <div class="gallery-item item-4 tilt-card">
     <div class="bg-number">16</div>
     <div class="card-inner">
       <img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_1200,c_limit/v1785232614/24013C6F-4D9C-42D0-837E-6EBE72433BAE_gwrfdm.heic" alt="Into no Drama" loading="lazy" decoding="async">
@@ -640,7 +448,7 @@
   </div>
 
   <!-- Generated Item 17 -->
-  <div class="gallery-item hero-vert tilt-card">
+  <div class="gallery-item item-1 tilt-card">
     <div class="bg-number">17</div>
     <div class="card-inner">
       <img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_1200,c_limit/v1785232610/870104A5-FE40-4D2C-B041-7AA14B94D426_1_105_c_rgxoqw.jpg" alt="Streets of Chowk" loading="lazy" decoding="async">
@@ -652,7 +460,7 @@
   </div>
 
   <!-- Generated Item 18 -->
-  <div class="gallery-item standard-vert tilt-card">
+  <div class="gallery-item item-2 tilt-card">
     <div class="bg-number">18</div>
     <div class="card-inner">
       <img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_1200,c_limit/v1785232608/8A2C2F16-5872-4282-961B-2730C10A92B0_1_105_c_xmxr6n.jpg" alt="Bridge full of lightings" loading="lazy" decoding="async">
@@ -664,7 +472,7 @@
   </div>
 
   <!-- Generated Item 19 -->
-  <div class="gallery-item standard-vert tilt-card">
+  <div class="gallery-item item-3 tilt-card">
     <div class="bg-number">19</div>
     <div class="card-inner">
       <img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_1200,c_limit/v1785232595/984219E8-C6E5-4A2E-8D12-C5DAC6AE4733_1_201_a_qn2lom.jpg" alt="Drone" loading="lazy" decoding="async">
@@ -676,7 +484,7 @@
   </div>
 
   <!-- Generated Item 20 -->
-  <div class="gallery-item standard-vert tilt-card">
+  <div class="gallery-item item-4 tilt-card">
     <div class="bg-number">20</div>
     <div class="card-inner">
       <img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_1200,c_limit/v1785232591/20AB01ED-F987-4766-856D-31B99797BEAD_1_105_c_hpvtel.jpg" alt="Golden temple" loading="lazy" decoding="async">
@@ -688,7 +496,7 @@
   </div>
 
   <!-- Generated Item 21 -->
-  <div class="gallery-item standard-vert tilt-card">
+  <div class="gallery-item item-1 tilt-card">
     <div class="bg-number">21</div>
     <div class="card-inner">
       <img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_1200,c_limit/v1785232589/240EC45B-AD58-4593-AD75-2E66A34B2293_1_105_c_mn9h2h.jpg" alt="Out of caption" loading="lazy" decoding="async">
@@ -700,7 +508,7 @@
   </div>
 
   <!-- Generated Item 22 -->
-  <div class="gallery-item hero-vert tilt-card">
+  <div class="gallery-item item-2 tilt-card">
     <div class="bg-number">22</div>
     <div class="card-inner">
       <img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_1200,c_limit/v1785232579/D9D2447D-E756-47DF-B683-50C33A7805E1_1_105_c_fljbou.jpg" alt="The beauty of framing" loading="lazy" decoding="async">
@@ -712,7 +520,7 @@
   </div>
 
   <!-- Generated Item 23 -->
-  <div class="gallery-item standard-vert tilt-card">
+  <div class="gallery-item item-3 tilt-card">
     <div class="bg-number">23</div>
     <div class="card-inner">
       <img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_1200,c_limit/v1785232575/550FF1AB-0197-4C7B-8A49-FD82F2F720AA_gj2ond.heic" alt="Chill gang" loading="lazy" decoding="async">
@@ -724,7 +532,7 @@
   </div>
 
   <!-- Generated Item 24 -->
-  <div class="gallery-item standard-vert tilt-card">
+  <div class="gallery-item item-4 tilt-card">
     <div class="bg-number">24</div>
     <div class="card-inner">
       <img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_1200,c_limit/v1785232573/A09174A7-32A3-48D4-B23D-6EA356925840_tfgrrn.heic" alt="ROBO park" loading="lazy" decoding="async">
@@ -736,7 +544,7 @@
   </div>
 
   <!-- Generated Item 25 -->
-  <div class="gallery-item standard-horiz tilt-card">
+  <div class="gallery-item item-1 tilt-card">
     <div class="bg-number">25</div>
     <div class="card-inner">
       <img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_1200,c_limit/v1785232564/9903BF85-16AE-4F62-BE18-AEED85D5610F_et6h8i.heic" alt="From one shore to another" loading="lazy" decoding="async">
@@ -748,7 +556,7 @@
   </div>
 
   <!-- Generated Item 26 -->
-  <div class="gallery-item standard-vert tilt-card">
+  <div class="gallery-item item-2 tilt-card">
     <div class="bg-number">26</div>
     <div class="card-inner">
       <img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_1200,c_limit/v1785232562/9B7828D1-C82C-409F-BE27-0D4E13CCE57D_1_105_c_xjmxms.jpg" alt="The beauty of day and night at the same time" loading="lazy" decoding="async">
@@ -760,7 +568,7 @@
   </div>
 
   <!-- Generated Item 27 -->
-  <div class="gallery-item hero-vert tilt-card">
+  <div class="gallery-item item-3 tilt-card">
     <div class="bg-number">27</div>
     <div class="card-inner">
       <img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_1200,c_limit/v1785232554/87EEC9E3-9BFE-4C5C-9605-6CF0BA266EDC_1_105_c_zovgus.jpg" alt="Iskcon temple at night" loading="lazy" decoding="async">
@@ -772,7 +580,7 @@
   </div>
 
   <!-- Generated Item 28 -->
-  <div class="gallery-item standard-horiz tilt-card">
+  <div class="gallery-item item-4 tilt-card">
     <div class="bg-number">28</div>
     <div class="card-inner">
       <img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_1200,c_limit/v1785232547/4FFCEB39-5F74-4AAC-B848-4ACCAB354BC4_1_201_a_cdoewq.jpg" alt="Meow paw" loading="lazy" decoding="async">
@@ -784,7 +592,7 @@
   </div>
 
   <!-- Generated Item 29 -->
-  <div class="gallery-item standard-vert tilt-card">
+  <div class="gallery-item item-1 tilt-card">
     <div class="bg-number">29</div>
     <div class="card-inner">
       <img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_1200,c_limit/v1785232534/86A2DA48-151E-48EF-827A-58A0764358CA_1_201_a_eagi7f.heic" alt="WHERE am i?" loading="lazy" decoding="async">
@@ -796,7 +604,7 @@
   </div>
 
   <!-- Generated Item 30 -->
-  <div class="gallery-item standard-vert tilt-card">
+  <div class="gallery-item item-2 tilt-card">
     <div class="bg-number">30</div>
     <div class="card-inner">
       <img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_1200,c_limit/v1785232520/3D803658-1FE0-4442-ADFA-65FC75ED599F_1_201_a_lqpteu.jpg" alt="Unreal Clouds" loading="lazy" decoding="async">
@@ -808,7 +616,7 @@
   </div>
 
   <!-- Generated Item 31 -->
-  <div class="gallery-item standard-vert tilt-card">
+  <div class="gallery-item item-3 tilt-card">
     <div class="bg-number">31</div>
     <div class="card-inner">
       <img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_1200,c_limit/v1785232516/FDAAB094-5696-4E36-BB47-850FC33ABBEB_1_105_c_xsjcnc.jpg" alt="Meow?" loading="lazy" decoding="async">
@@ -820,7 +628,7 @@
   </div>
 
   <!-- Generated Item 32 -->
-  <div class="gallery-item hero-vert tilt-card">
+  <div class="gallery-item item-4 tilt-card">
     <div class="bg-number">32</div>
     <div class="card-inner">
       <img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_1200,c_limit/v1785232494/1E0F822F-312D-4637-9E8B-71FD0F950122_1_105_c_wfqylp.jpg" alt="Ganga Arti" loading="lazy" decoding="async">
@@ -832,7 +640,7 @@
   </div>
 
   <!-- Generated Item 33 -->
-  <div class="gallery-item standard-horiz tilt-card">
+  <div class="gallery-item item-1 tilt-card">
     <div class="bg-number">33</div>
     <div class="card-inner">
       <img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_1200,c_limit/v1785232487/IMG_7983_wn0fla.jpg" alt="Lighting coming through clouds" loading="lazy" decoding="async">
@@ -844,7 +652,7 @@
   </div>
 
   <!-- Generated Item 34 -->
-  <div class="gallery-item standard-vert tilt-card">
+  <div class="gallery-item item-2 tilt-card">
     <div class="bg-number">34</div>
     <div class="card-inner">
       <img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_1200,c_limit/v1785232487/IMG_7277_mqxevk.jpg" alt="Buildings Together" loading="lazy" decoding="async">
@@ -856,7 +664,7 @@
   </div>
 
   <!-- Generated Item 35 -->
-  <div class="gallery-item standard-vert tilt-card">
+  <div class="gallery-item item-3 tilt-card">
     <div class="bg-number">35</div>
     <div class="card-inner">
       <img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_1200,c_limit/v1785232485/IMG-20240924-WA0005_psv0ss.jpg" alt="Beach with a glow of sun" loading="lazy" decoding="async">
@@ -868,7 +676,7 @@
   </div>
 
   <!-- Generated Item 36 -->
-  <div class="gallery-item standard-vert tilt-card">
+  <div class="gallery-item item-4 tilt-card">
     <div class="bg-number">36</div>
     <div class="card-inner">
       <img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_1200,c_limit/v1785060747/IMG_20201010_154206-01_eufgky.jpg" alt="plant is life" loading="lazy" decoding="async">
@@ -880,7 +688,7 @@
   </div>
 
   <!-- Generated Item 37 -->
-  <div class="gallery-item hero-vert tilt-card">
+  <div class="gallery-item item-1 tilt-card">
     <div class="bg-number">37</div>
     <div class="card-inner">
       <img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_1200,c_limit/v1785060744/20210222_184037_pii897.jpg" alt="ghats of varanasi" loading="lazy" decoding="async">
@@ -892,7 +700,7 @@
   </div>
 
   <!-- Generated Item 38 -->
-  <div class="gallery-item standard-vert tilt-card">
+  <div class="gallery-item item-2 tilt-card">
     <div class="bg-number">38</div>
     <div class="card-inner">
       <img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_1200,c_limit/v1785060742/IMG_20200209_203354_dxxvts.jpg" alt="sunrise of kumbh" loading="lazy" decoding="async">
@@ -904,7 +712,7 @@
   </div>
 
   <!-- Generated Item 39 -->
-  <div class="gallery-item standard-horiz tilt-card">
+  <div class="gallery-item item-3 tilt-card">
     <div class="bg-number">39</div>
     <div class="card-inner">
       <img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_1200,c_limit/v1785060740/20190629_174340-01_yohtci.jpg" alt="in the mountains" loading="lazy" decoding="async">
@@ -1019,20 +827,6 @@
     });
   });
 
-  // --- 2.5 GLASS FLASHLIGHT TRACKING ---
-  const galleryGrid = document.querySelector('.gallery-grid');
-  if (galleryGrid) {
-    galleryGrid.addEventListener('mousemove', (e) => {
-      document.querySelectorAll('.card-inner').forEach(card => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        card.style.setProperty('--mouse-x', `${x}px`);
-        card.style.setProperty('--mouse-y', `${y}px`);
-      });
-    });
-  }
-
   // --- 3. 3D TILT & MICRO-PARALLAX ON CARDS ---
   const tiltCards = document.querySelectorAll('.tilt-card');
   tiltCards.forEach(card => {
@@ -1085,7 +879,7 @@
     width = canvas.width = window.innerWidth;
     height = canvas.height = window.innerHeight;
     particles = [];
-    const particleCount = Math.floor((width * height) / 4000); // 3x High density stars
+    const particleCount = Math.floor((width * height) / 12000); // Responsive density
     for(let i=0; i<particleCount; i++) {
       particles.push({
         x: Math.random() * width,
@@ -1100,149 +894,19 @@
   window.addEventListener('resize', initCanvas);
   
   // Track mouse coordinates for constellation interactions
-  let isMouseDown = false;
-  let blackHoleCharge = 0;
-  let headingTimeouts = [];
-  const updateMouse = (e) => {
-    if (e.touches) { mouse.x = e.touches[0].clientX; mouse.y = e.touches[0].clientY; }
-    else { mouse.x = e.clientX; mouse.y = e.clientY; }
-  };
-  window.addEventListener('mousemove', updateMouse);
-  window.addEventListener('touchmove', updateMouse, {passive: true});
-  window.addEventListener('mouseout', () => { mouse.x = null; mouse.y = null; });
-  
-  const startInteraction = (e) => {
-    if (!e.target.closest('.gallery-item') && !e.target.closest('a')) {
-      isMouseDown = true;
-      blackHoleCharge = 0;
-      updateMouse(e);
-      if (navigator.vibrate) navigator.vibrate(10); // initial click feedback
-    }
-  };
-  window.addEventListener('mousedown', startInteraction);
-  window.addEventListener('touchstart', startInteraction, {passive: true});
-
-  const endInteraction = () => {
-    if (isMouseDown && mouse.x != null && mouse.y != null) {
-      // Calculate charge multiplier for the explosion (1x to 3x)
-      const chargeMultiplier = 1 + (blackHoleCharge / 50);
-
-      // Trigger Supernova explosion originating from mouse
-      const shockwave = document.createElement('div');
-      shockwave.style.position = 'fixed';
-      shockwave.style.left = `${mouse.x}px`;
-      shockwave.style.top = `${mouse.y}px`;
-      shockwave.style.width = '20px';
-      shockwave.style.height = '20px';
-      shockwave.style.borderRadius = '50%';
-      shockwave.style.transform = 'translate(-50%, -50%) scale(1)';
-      shockwave.style.boxShadow = `0 0 ${80 * chargeMultiplier}px ${20 * chargeMultiplier}px rgba(150, 220, 255, 0.8), inset 0 0 ${20 * chargeMultiplier}px rgba(255, 255, 255, 1)`;
-      shockwave.style.border = `${4 * chargeMultiplier}px solid rgba(255, 255, 255, 1)`;
-      shockwave.style.zIndex = '9998';
-      shockwave.style.pointerEvents = 'none';
-      shockwave.style.transition = `all ${0.3 + (chargeMultiplier * 0.2)}s cubic-bezier(0.1, 0.8, 0.2, 1)`;
-      document.body.appendChild(shockwave);
-
-      requestAnimationFrame(() => {
-        shockwave.style.transform = `translate(-50%, -50%) scale(${50 * chargeMultiplier})`;
-        shockwave.style.opacity = '0';
-      });
-      setTimeout(() => shockwave.remove(), 1000);
-      
-      // Haptic feedback explosion for mobile
-      if (navigator.vibrate) {
-         if (chargeMultiplier > 2.5) navigator.vibrate([150, 50, 250, 50, 100]); // Max charge
-         else if (chargeMultiplier > 1.5) navigator.vibrate([100, 50, 150]); // Medium
-         else navigator.vibrate([80]); // Small
-      }
-
-      // Physically shake the UI when shockwave hits
-      document.body.classList.add('shockwave-active');
-      setTimeout(() => document.body.classList.remove('shockwave-active'), 500 + (chargeMultiplier * 100));
-
-      // Dynamic Heading transition
-      const heading = document.getElementById('dynamic-heading');
-      if (heading) {
-         headingTimeouts.forEach(clearTimeout);
-         headingTimeouts = [];
-         
-         heading.classList.add('text-hidden');
-         headingTimeouts.push(setTimeout(() => {
-            heading.innerText = 'Explosion';
-            heading.classList.remove('text-hidden');
-            heading.classList.add('text-explosion');
-         }, 200));
-
-         headingTimeouts.push(setTimeout(() => {
-            heading.classList.add('text-hidden');
-            headingTimeouts.push(setTimeout(() => {
-               heading.innerText = 'Exploration';
-               heading.classList.remove('text-hidden');
-               heading.classList.remove('text-explosion');
-            }, 200));
-         }, 2500 + (chargeMultiplier * 500)));
-      }
-
-      // Blast stars outwards
-      particles.forEach(p => {
-        const dx = p.x - mouse.x;
-        const dy = p.y - mouse.y;
-        const dist = Math.sqrt(dx*dx + dy*dy);
-        if (dist > 0) {
-          const force = Math.min((1500 * chargeMultiplier) / (dist + 5), 45 * chargeMultiplier);
-          p.vx = (dx / dist) * force;
-          p.vy = (dy / dist) * force;
-        }
-      });
-    }
-    isMouseDown = false;
-    blackHoleCharge = 0;
-  };
-  window.addEventListener('mouseup', endInteraction);
-  window.addEventListener('touchend', endInteraction);
+  window.addEventListener('mousemove', (e) => {
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+  });
+  window.addEventListener('mouseout', () => {
+    mouse.x = null;
+    mouse.y = null;
+  });
 
   function drawCanvas() {
     ctx.clearRect(0, 0, width, height);
     
     particles.forEach((p, index) => {
-      // 1. Calculate physics
-      if (isMouseDown && mouse.x != null && mouse.y != null) {
-        // Increase charge every frame (maxes out at 100 after ~1.6s)
-        if (index === 0 && blackHoleCharge < 100) {
-           blackHoleCharge += 1;
-           // Gentle haptic hum as the black hole charges up
-           if (blackHoleCharge % 15 === 0 && navigator.vibrate) navigator.vibrate(15);
-        }
-        
-        // Black Hole pull (gets stronger with charge)
-        const chargeBoost = 1 + (blackHoleCharge / 20);
-        const dx = mouse.x - p.x;
-        const dy = mouse.y - p.y;
-        const dist = Math.sqrt(dx*dx + dy*dy);
-        if (dist > 2) {
-          const gravity = Math.min((150 * chargeBoost) / (dist + 1), 3 * chargeBoost);
-          p.vx += (dx / dist) * gravity;
-          p.vy += (dy / dist) * gravity;
-        }
-        // Strong drag creates the vortex sink effect
-        p.vx *= 0.88;
-        p.vy *= 0.88;
-      } else {
-        // Normal drift & friction
-        if (Math.abs(p.vx) > 1.5 || Math.abs(p.vy) > 1.5) {
-          // Slow down after supernova
-          p.vx *= 0.94;
-          p.vy *= 0.94;
-        } else {
-          // Random drift
-          p.vx += (Math.random() - 0.5) * 0.1;
-          p.vy += (Math.random() - 0.5) * 0.1;
-          // Clamp normal speed
-          if (p.vx > 0.6) p.vx = 0.6; if (p.vx < -0.6) p.vx = -0.6;
-          if (p.vy > 0.6) p.vy = 0.6; if (p.vy < -0.6) p.vy = -0.6;
-        }
-      }
-
       p.x += p.vx;
       p.y += p.vy;
       
@@ -1252,22 +916,8 @@
 
       // Draw particle dot
       ctx.beginPath();
-      const speed = Math.sqrt(p.vx*p.vx + p.vy*p.vy);
-      // Particles stretch/enlarge slightly based on velocity
-      ctx.arc(p.x, p.y, p.radius + (speed > 3 ? Math.min(speed * 0.2, 4) : 0), 0, Math.PI * 2);
-      
-      // Color based on state
-      if (isMouseDown && mouse.x != null && mouse.y != null) {
-         const dx = mouse.x - p.x; const dy = mouse.y - p.y;
-         const dist = Math.sqrt(dx*dx + dy*dy);
-         // Glow hot orange/white as they get closer to the singularity
-         ctx.fillStyle = `rgba(255, ${Math.max(100, 255 - 500/dist)}, ${Math.max(50, 255 - 1000/dist)}, ${Math.min(1, 200/dist + 0.4)})`;
-      } else if (speed > 3) {
-         // Cool blue/white explosion blast
-         ctx.fillStyle = `rgba(150, 220, 255, ${Math.min(1, speed/15 + 0.3)})`;
-      } else {
-         ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
-      }
+      ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
       ctx.fill();
 
       // Connect particle to mouse cursor
@@ -1303,43 +953,6 @@
     });
     requestAnimationFrame(drawCanvas);
   }
-  // --- Phone/Desktop Mode Toggle Logic ---
-  const modeToggleBtn = document.getElementById('mode-toggle');
-  let isPhoneMode = window.innerWidth <= 768; // Auto detect
-  
-  if (isPhoneMode) document.body.classList.add('phone-mode');
-  else document.body.classList.add('desktop-mode');
-
-  modeToggleBtn.addEventListener('click', () => {
-    document.body.classList.add('layout-transitioning');
-    
-    setTimeout(() => {
-      isPhoneMode = !isPhoneMode;
-      if (isPhoneMode) {
-        document.body.classList.remove('desktop-mode');
-        document.body.classList.add('phone-mode');
-      } else {
-        document.body.classList.remove('phone-mode');
-        document.body.classList.add('desktop-mode');
-      }
-      setTimeout(() => {
-        document.body.classList.remove('layout-transitioning');
-      }, 50); // allow CSS reflow
-    }, 300); // Wait for fade out
-  });
-
-  // Intersection Observer for Phone Mode Grayscale Effect
-  const scrollObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('in-view');
-      } else {
-        entry.target.classList.remove('in-view');
-      }
-    });
-  }, { threshold: 0.6 });
-
-  document.querySelectorAll('.gallery-item').forEach(item => scrollObserver.observe(item));
 
   initCanvas();
   drawCanvas();
@@ -1352,26 +965,5 @@
   }
 </script>
 
-<script src="liquid-glass.js"></script>
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    document.querySelectorAll('.caption').forEach(el => {
-      liquidGlass(el, { scale: -90, blur: 16, border: 0 });
-    });
-  });
-</script>
-<script>
-  // Planet Parallax Scroll
-  const planets = document.querySelectorAll('.planet');
-  window.addEventListener('scroll', () => {
-    const scrolled = window.scrollY;
-    planets.forEach(planet => {
-      const speed = parseFloat(planet.getAttribute('data-speed'));
-      const yPos = -(scrolled * speed);
-      const rotation = scrolled * 0.05;
-      planet.style.transform = `translateY(${yPos}px) rotate(${rotation}deg)`;
-    });
-  });
-</script>
 </body>
 </html>
