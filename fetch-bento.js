@@ -68,8 +68,8 @@ async function buildCreative() {
 `;
     });
     
-    // Inject into creative-bento.html
-    const templatePath = 'creative-bento.html';
+    // Inject into creative.html
+    const templatePath = 'creative.html';
     const template = fs.readFileSync(templatePath, 'utf-8');
     const startTag = '<!-- CLOUDINARY_START -->';
     const endTag = '<!-- CLOUDINARY_END -->';
