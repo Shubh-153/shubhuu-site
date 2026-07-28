@@ -240,7 +240,12 @@
   }
 
   /* PROJECTS */
-  .projects{display:flex;flex-direction:column;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden;}
+  .projects{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden;}
+  .project.bento-wide { grid-column: span 2; }
+  @media (max-width: 700px) {
+    .projects { grid-template-columns: 1fr; }
+    .project.bento-wide { grid-column: span 1; }
+  }
   .project{
     background:var(--bg-raised);padding:26px 26px;
     display:grid;grid-template-columns:1fr;gap:10px;
@@ -417,7 +422,7 @@
     <h2>Things I've built</h2>
     <div class="projects">
 
-      <div class="project">
+      <div class="project bento-wide">
         <div class="project-top">
           <div class="project-title"><a href="https://github.com/Shubh-153/ModelHive/tree/main" target="_blank" rel="noopener">ModelHive</a></div>
         </div>
