@@ -245,6 +245,20 @@
       inset 0 0 0 1px rgba(255, 255, 255, 0.2);
   }
 
+
+  /* View Transition individual morphing */
+  .link-btn:nth-child(1) { view-transition-name: link-1; }
+  .link-btn:nth-child(2) { view-transition-name: link-2; }
+  .link-btn:nth-child(3) { view-transition-name: link-3; }
+  .link-btn:nth-child(4) { view-transition-name: link-4; }
+  .link-btn:nth-child(5) { view-transition-name: link-5; }
+  .link-btn:nth-child(6) { view-transition-name: link-6; }
+  .link-btn:nth-child(7) { view-transition-name: link-7; }
+  .link-btn:nth-child(8) { view-transition-name: link-8; }
+  .link-btn:nth-child(9) { view-transition-name: link-9; }
+  .link-btn:nth-child(10) { view-transition-name: link-10; }
+  ::view-transition-group(*) { animation-duration: 0.5s; animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1); }
+
   @media (max-width: 799px) {
     .view-toggle-btn { display: none; } /* Hide toggle on phone */
   }
@@ -773,11 +787,20 @@
   // 6. View Toggle
   function toggleBentoView() {
     const container = document.querySelector(".links-container");
-    const isBento = container.classList.toggle("bento-mode");
     
-    // Toggle icons
-    document.querySelector(".icon-bento").style.display = isBento ? "none" : "block";
-    document.querySelector(".icon-stack").style.display = isBento ? "block" : "none";
+    function updateDOM() {
+      const isBento = container.classList.toggle("bento-mode");
+      document.querySelector(".icon-bento").style.display = isBento ? "none" : "block";
+      document.querySelector(".icon-stack").style.display = isBento ? "block" : "none";
+    }
+
+    // Use View Transitions API for buttery smooth layout morphing
+    if (!document.startViewTransition) {
+      updateDOM();
+      return;
+    }
+    
+    document.startViewTransition(() => updateDOM());
   }
 
 </script>
