@@ -13,11 +13,12 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://shubhuu.in/thumbnail.png">
 <meta property="og:url" content="https://shubhuu.in/creative.html">
+<meta property="fb:app_id" content="1566874298369207" />
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📸</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" as="style">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" media="print" onload="this.media="all"">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"></noscript>
 <style>
   :root {
@@ -204,12 +205,13 @@
   }
   body.phone-mode .card-inner img, 
   body.phone-mode .card-inner video {
-    filter: grayscale(100%);
-    transition: filter 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0.3; transform: scale(0.95);
+    transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    filter: none !important;
   }
   body.phone-mode .gallery-item.in-view .card-inner img,
   body.phone-mode .gallery-item.in-view .card-inner video {
-    filter: grayscale(0%);
+    opacity: 1; transform: scale(1);
   }
 
   /* Layout Toggle Button in Nav */
@@ -222,12 +224,17 @@
   .mode-icon { color: rgba(255, 255, 255, 0.3); transition: color 0.3s; }
   body.desktop-mode .mode-toggle .desktop-icon { color: white; filter: drop-shadow(0 0 5px white); }
   body.phone-mode .mode-toggle .phone-icon { color: white; filter: drop-shadow(0 0 5px white); }
+  
+  body.muted-mode #mute-toggle .sound-off-icon { color: white; filter: drop-shadow(0 0 5px white); }
+  body:not(.muted-mode) #mute-toggle .sound-on-icon { color: white; filter: drop-shadow(0 0 5px white); }
+  body:not(.muted-mode) #mute-toggle .toggle-switch::after { transform: translateX(16px); }
+
   .toggle-switch { width: 34px; height: 18px; background: rgba(255, 255, 255, 0.15); border-radius: 20px; position: relative; border: 1px solid rgba(255,255,255,0.1); }
   .toggle-switch::after {
     content: ''; position: absolute; top: 2px; left: 2px; width: 12px; height: 12px; background: white; border-radius: 50%;
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  body.phone-mode .toggle-switch::after { transform: translateX(16px); }
+  body.phone-mode #mode-toggle .toggle-switch::after { transform: translateX(16px); }
 
   .card-inner {
     position: relative;
@@ -370,7 +377,6 @@
     text-shadow: none !important;
   }
 
-
 </style>
 
 <!-- PostHog Analytics -->
@@ -392,6 +398,8 @@
 
   gtag('config', 'G-WT7SWY7306');
 </script>
+
+<link rel="canonical" href="https://shubhuu.in/creative-bento.html">
 </head>
 <body>
 
@@ -429,12 +437,22 @@
 <nav>
   <div class="nav-left">
     <a href="/" class="brand">shubh.</a>
-    <div class="dev-message">
-      <span class="hint-dot"></span> Message from dev: Hold in space for supernova
+    <div class="dev-message-container" style="display: flex; flex-direction: column; gap: 6px;">
+      <div class="dev-message">
+        <span class="hint-dot"></span> Message from dev: Turn on sound for immersive experience
+      </div>
+      <div class="dev-message">
+        <span class="hint-dot"></span> Message from dev: Hold in space for supernova
+      </div>
     </div>
   </div>
   <div class="nav-right">
     <a href="/" class="magnetic-btn">[ Return to Portfolio ]</a>
+    <div id="mute-toggle" class="mode-toggle" style="margin-right: 15px;" title="Toggle Ambient Space Audio">
+      <svg class="mode-icon sound-off-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+      <div class="toggle-switch"></div>
+      <svg class="mode-icon sound-on-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
+    </div>
     <div id="mode-toggle" class="mode-toggle">
       <svg class="mode-icon desktop-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
       <div class="toggle-switch"></div>
@@ -1038,6 +1056,7 @@
   tiltCards.forEach(card => {
     const inner = card.querySelector('.card-inner');
     card.addEventListener('mousemove', (e) => {
+      if (document.body.classList.contains('phone-mode')) return;
       const rect = card.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
@@ -1074,6 +1093,105 @@
     }
   });
 
+  // --- AUDIO ENGINE ---
+  let audioCtx = null;
+  let chargeOsc = null;
+  let chargeGain = null;
+  let isMuted = true;
+
+  function initAudio() {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume();
+    }
+  }
+
+  function playHoverSound() {
+    if (isMuted || !audioCtx || document.body.classList.contains('phone-mode')) return;
+    const osc = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+    osc.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.05);
+    
+    gainNode.gain.setValueAtTime(0.015, audioCtx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+    
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.1);
+  }
+
+  function startChargeSound() {
+    if (isMuted) return;
+    initAudio();
+    if (chargeOsc) return;
+    
+    chargeOsc = audioCtx.createOscillator();
+    chargeGain = audioCtx.createGain();
+    
+    chargeOsc.type = 'sawtooth';
+    chargeOsc.frequency.setValueAtTime(40, audioCtx.currentTime);
+    
+    chargeGain.gain.setValueAtTime(0, audioCtx.currentTime);
+    chargeGain.gain.linearRampToValueAtTime(0.1, audioCtx.currentTime + 0.5);
+    
+    chargeOsc.connect(chargeGain);
+    chargeGain.connect(audioCtx.destination);
+    chargeOsc.start();
+  }
+
+  function updateChargeSound(chargeValue) {
+    if (!chargeOsc || !audioCtx) return;
+    const targetFreq = 40 + (chargeValue * 1.5);
+    chargeOsc.frequency.setTargetAtTime(targetFreq, audioCtx.currentTime, 0.1);
+    const targetVol = 0.1 + (chargeValue / 300);
+    chargeGain.gain.setTargetAtTime(targetVol, audioCtx.currentTime, 0.1);
+  }
+
+  function cancelChargeSound() {
+    if (chargeOsc && audioCtx) {
+      chargeGain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.1);
+      chargeOsc.stop(audioCtx.currentTime + 0.1);
+      chargeOsc = null;
+    }
+  }
+
+  function stopChargeSoundAndExplode(multiplier) {
+    cancelChargeSound();
+    if (isMuted) return;
+    if (audioCtx) {
+      const bufferSize = audioCtx.sampleRate * 2;
+      const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        data[i] = Math.random() * 2 - 1; // White noise
+      }
+      
+      const noiseSource = audioCtx.createBufferSource();
+      noiseSource.buffer = buffer;
+      
+      const filter = audioCtx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(800 * multiplier, audioCtx.currentTime);
+      filter.frequency.exponentialRampToValueAtTime(20, audioCtx.currentTime + (0.5 + multiplier * 0.5));
+      
+      const expGain = audioCtx.createGain();
+      expGain.gain.setValueAtTime(0.6 * multiplier, audioCtx.currentTime);
+      expGain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + (0.5 + multiplier * 0.5));
+      
+      noiseSource.connect(filter);
+      filter.connect(expGain);
+      expGain.connect(audioCtx.destination);
+      
+      noiseSource.start();
+    }
+  }
+
   // --- 4. INTERACTIVE GALAXY CONSTELLATION CANVAS ---
   const canvas = document.getElementById('galaxy');
   const ctx = canvas.getContext('2d');
@@ -1085,7 +1203,8 @@
     width = canvas.width = window.innerWidth;
     height = canvas.height = window.innerHeight;
     particles = [];
-    const particleCount = Math.floor((width * height) / 4000); // 3x High density stars
+    const isMobile = window.innerWidth <= 768;
+    const particleCount = Math.floor((width * height) / (isMobile ? 12000 : 4000)); // Lower density on mobile for performance
     for(let i=0; i<particleCount; i++) {
       particles.push({
         x: Math.random() * width,
@@ -1103,12 +1222,25 @@
   let isMouseDown = false;
   let blackHoleCharge = 0;
   let headingTimeouts = [];
+  let startTouch = {x: 0, y: 0};
   const updateMouse = (e) => {
     if (e.touches) { mouse.x = e.touches[0].clientX; mouse.y = e.touches[0].clientY; }
     else { mouse.x = e.clientX; mouse.y = e.clientY; }
   };
   window.addEventListener('mousemove', updateMouse);
-  window.addEventListener('touchmove', updateMouse, {passive: true});
+  window.addEventListener('touchmove', (e) => {
+    updateMouse(e);
+    if (isMouseDown && e.touches) {
+      const dx = e.touches[0].clientX - startTouch.x;
+      const dy = e.touches[0].clientY - startTouch.y;
+      // Cancel the black hole charge if the user scrolls (moves thumb more than 15px)
+      if (Math.abs(dx) > 15 || Math.abs(dy) > 15) {
+        isMouseDown = false;
+        blackHoleCharge = 0;
+        cancelChargeSound();
+      }
+    }
+  }, {passive: true});
   window.addEventListener('mouseout', () => { mouse.x = null; mouse.y = null; });
   
   const startInteraction = (e) => {
@@ -1116,16 +1248,20 @@
       isMouseDown = true;
       blackHoleCharge = 0;
       updateMouse(e);
+      if (e.touches) { startTouch.x = e.touches[0].clientX; startTouch.y = e.touches[0].clientY; }
       if (navigator.vibrate) navigator.vibrate(10); // initial click feedback
+      startChargeSound();
     }
   };
   window.addEventListener('mousedown', startInteraction);
   window.addEventListener('touchstart', startInteraction, {passive: true});
 
   const endInteraction = () => {
-    if (isMouseDown && mouse.x != null && mouse.y != null) {
+    const minCharge = document.body.classList.contains('phone-mode') ? 15 : 0;
+    if (isMouseDown && mouse.x != null && mouse.y != null && blackHoleCharge >= minCharge) {
       // Calculate charge multiplier for the explosion (1x to 3x)
       const chargeMultiplier = 1 + (blackHoleCharge / 50);
+      stopChargeSoundAndExplode(chargeMultiplier);
 
       // Trigger Supernova explosion originating from mouse
       const shockwave = document.createElement('div');
@@ -1197,6 +1333,7 @@
     }
     isMouseDown = false;
     blackHoleCharge = 0;
+    cancelChargeSound();
   };
   window.addEventListener('mouseup', endInteraction);
   window.addEventListener('touchend', endInteraction);
@@ -1209,9 +1346,10 @@
       if (isMouseDown && mouse.x != null && mouse.y != null) {
         // Increase charge every frame (maxes out at 100 after ~1.6s)
         if (index === 0 && blackHoleCharge < 100) {
-           blackHoleCharge += 1;
+           blackHoleCharge += document.body.classList.contains('phone-mode') ? 0.5 : 1;
            // Gentle haptic hum as the black hole charges up
            if (blackHoleCharge % 15 === 0 && navigator.vibrate) navigator.vibrate(15);
+           updateChargeSound(blackHoleCharge);
         }
         
         // Black Hole pull (gets stronger with charge)
@@ -1303,6 +1441,67 @@
     });
     requestAnimationFrame(drawCanvas);
   }
+  // --- Ambient Music Toggle Logic ---
+  const muteToggleBtn = document.getElementById('mute-toggle');
+  document.body.classList.add('muted-mode'); // Start muted (browser policy)
+  
+  let ambientOsc1 = null;
+  let ambientOsc2 = null;
+  let ambientGain = null;
+
+  muteToggleBtn.addEventListener('click', () => {
+    isMuted = !isMuted;
+    if (isMuted) {
+      document.body.classList.add('muted-mode');
+      if (ambientGain && audioCtx) {
+        ambientGain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 1);
+      }
+    } else {
+      document.body.classList.remove('muted-mode');
+      initAudio();
+      
+      // Init deep space drone if not already active
+      if (!ambientOsc1 && audioCtx) {
+        ambientOsc1 = audioCtx.createOscillator();
+        ambientOsc2 = audioCtx.createOscillator();
+        const lfo = audioCtx.createOscillator();
+        const filter = audioCtx.createBiquadFilter();
+        ambientGain = audioCtx.createGain();
+        
+        ambientOsc1.type = 'triangle';
+        ambientOsc2.type = 'sine';
+        ambientOsc1.frequency.value = 55; // Deep bass
+        ambientOsc2.frequency.value = 55.5; // Slight detune (phasing)
+        
+        lfo.type = 'sine';
+        lfo.frequency.value = 0.05; // Very slow sweep
+        const lfoGain = audioCtx.createGain();
+        lfoGain.gain.value = 200;
+        
+        filter.type = 'lowpass';
+        filter.frequency.value = 400;
+        
+        lfo.connect(lfoGain);
+        lfoGain.connect(filter.frequency);
+        
+        ambientGain.gain.value = 0;
+        
+        ambientOsc1.connect(filter);
+        ambientOsc2.connect(filter);
+        filter.connect(ambientGain);
+        ambientGain.connect(audioCtx.destination);
+        
+        ambientOsc1.start();
+        ambientOsc2.start();
+        lfo.start();
+      }
+      
+      if (ambientGain && audioCtx) {
+        ambientGain.gain.linearRampToValueAtTime(0.2, audioCtx.currentTime + 2);
+      }
+    }
+  });
+
   // --- Phone/Desktop Mode Toggle Logic ---
   const modeToggleBtn = document.getElementById('mode-toggle');
   let isPhoneMode = window.innerWidth <= 768; // Auto detect
@@ -1339,7 +1538,10 @@
     });
   }, { threshold: 0.6 });
 
-  document.querySelectorAll('.gallery-item').forEach(item => scrollObserver.observe(item));
+  document.querySelectorAll('.gallery-item').forEach(item => {
+    scrollObserver.observe(item);
+    item.addEventListener('mouseenter', () => playHoverSound());
+  });
 
   initCanvas();
   drawCanvas();
@@ -1361,17 +1563,24 @@
   });
 </script>
 <script>
-  // Planet Parallax Scroll
+  // Planet Parallax Scroll with GPU Acceleration & RAF
   const planets = document.querySelectorAll('.planet');
+  let ticking = false;
   window.addEventListener('scroll', () => {
-    const scrolled = window.scrollY;
-    planets.forEach(planet => {
-      const speed = parseFloat(planet.getAttribute('data-speed'));
-      const yPos = -(scrolled * speed);
-      const rotation = scrolled * 0.05;
-      planet.style.transform = `translateY(${yPos}px) rotate(${rotation}deg)`;
-    });
-  });
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        const scrolled = window.scrollY;
+        planets.forEach(planet => {
+          const speed = parseFloat(planet.getAttribute('data-speed'));
+          const yPos = -(scrolled * speed);
+          const rotation = scrolled * 0.05;
+          planet.style.transform = `translate3d(0, ${yPos}px, 0) rotate(${rotation}deg)`;
+        });
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive: true });
 </script>
 </body>
 </html>

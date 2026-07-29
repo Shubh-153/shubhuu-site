@@ -47,10 +47,11 @@ async function buildCreative() {
         optimizedUrl = optimizedUrl.replace('/upload/', '/upload/f_auto,q_auto,w_1200,c_limit/');
       }
 
+      let altText = item.filename ? item.filename.replace(/_/g, ' ') : `Gallery Image ${index}`;
       if (item.resource_type === 'video') {
-        mediaHtml = `<video src="${optimizedUrl}" autoplay loop muted playsinline alt="${title}" preload="metadata"></video>`;
+        mediaHtml = `<video src="${optimizedUrl}" width="${item.width}" height="${item.height}" autoplay loop muted playsinline aria-label="${altText}" preload="metadata"></video>`;
       } else {
-        mediaHtml = `<img src="${optimizedUrl}" alt="${title}" loading="lazy" decoding="async">`;
+        mediaHtml = `<img src="${optimizedUrl}" alt="${altText}" width="${item.width}" height="${item.height}" loading="lazy" decoding="async">`;
       }
       
       htmlContent += `
