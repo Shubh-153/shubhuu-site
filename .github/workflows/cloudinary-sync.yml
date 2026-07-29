@@ -29,7 +29,7 @@ jobs:
         CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
         CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
         CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
-      run: node fetch-creative.js
+      run: node fetch-bento.js
 
     - name: Commit and push if changed
       run: |
