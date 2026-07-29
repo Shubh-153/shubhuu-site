@@ -80,9 +80,9 @@ async function buildCreative() {
     if (startIndex !== -1 && endIndex !== -1) {
       const newHtml = template.substring(0, startIndex + startTag.length) + '\n' + htmlContent + '\n  ' + template.substring(endIndex);
       fs.writeFileSync(templatePath, newHtml);
-      console.log('creative-bento.html successfully updated with Cloudinary photos!');
+      console.log('creative.html successfully updated with Cloudinary photos!');
     } else {
-      console.error('Could not find CLOUDINARY_START or CLOUDINARY_END tags in creative-bento.html');
+      console.error('Could not find CLOUDINARY_START or CLOUDINARY_END tags in creative.html');
       process.exit(1);
     }
   } catch (error) {
