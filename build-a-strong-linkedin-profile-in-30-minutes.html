@@ -3,17 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Blogs | Shubh Gupta</title>
-<meta name="description" content="Thoughts on software engineering, AI, and design by Shubh Gupta.">
+<title>Build a Strong LinkedIn Profile in 30 Minutes | Shubh Gupta</title>
+<meta name="description" content="A deep dive into why I chose to avoid heavy JavaScript frameworks for my personal site.">
 <meta name="keywords" content="Shubh Gupta, software development, ai software development, software development engineer, ai software developer, software engineering, application developer, app software developer, software development india, find a software developer, full stack, app developer, ai developer, software developer india, find developer, web app developer, it software developer, software developer skills, build software, dev ops">
-<meta property="og:title" content="Blogs | Shubh Gupta">
-<meta property="og:description" content="Thoughts on software engineering, AI, and design by Shubh Gupta.">
+<meta property="og:title" content="Building a Minimalist Portfolio | Shubh Gupta">
+<meta property="og:description" content="A deep dive into why I chose to avoid heavy JavaScript frameworks for my personal site.">
 <meta property="og:image" content="https://shubhuu.in/thumbnail.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://shubhuu.in/thumbnail.png">
-<meta property="og:url" content="https://shubhuu.in/blogs.html">
+<meta property="og:url" content="https://shubhuu.in/article.html">
 
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📖</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📄</text></svg>">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -39,7 +39,7 @@
     background:var(--bg);
     color:var(--ink);
     font-family:var(--sans);
-    line-height:1.6;
+    line-height:1.7;
     -webkit-font-smoothing:antialiased;
   }
   a{color:inherit;text-decoration:none;}
@@ -57,7 +57,7 @@
     --accent-soft: #1E283C;
     --line: #2A2D35;
   }
-  body, .blog-card {
+  body, .article-content code, .article-content pre {
     transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease;
   }
 
@@ -90,59 +90,66 @@
     .navlinks span{display:none;} 
   }
 
-  section{padding:72px 0;border-bottom:1px solid var(--line);}
-  .path{font-family:var(--mono);font-size:0.8rem;color:var(--graphite);margin-bottom:8px;}
-  h2{
-    font-family:var(--display);font-weight:600;
-    font-size:clamp(1.5rem,3vw,1.9rem);letter-spacing:-0.01em;
-    margin-bottom:36px;
+  /* Article specific styles */
+  .article-wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 80px 28px;
   }
-
-  /* Blog Post Layout */
-  .blog-grid { display: grid; gap: 24px; }
-  .blog-card {
-    display: block;
-    background: var(--bg-raised);
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    padding: 32px;
-    transition: transform 0.2s ease, border-color 0.2s ease;
+  .article-header { margin-bottom: 64px; }
+  .article-meta { font-family: var(--mono); font-size: 0.85rem; color: var(--ink-soft); margin-bottom: 24px; }
+  .article-title {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 3rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+    color: var(--ink);
   }
-  .blog-card:hover {
-    transform: translateY(-4px);
-    border-color: var(--accent);
+  .article-content h2 {
+    font-family: var(--display); font-weight: 600; font-size: 1.6rem;
+    margin-top: 48px; margin-bottom: 16px; color: var(--ink);
   }
-  .blog-meta { font-family: var(--mono); font-size: 0.85rem; color: var(--ink-soft); margin-bottom: 12px; }
-  .blog-title { font-family: var(--display); font-size: 1.5rem; color: var(--ink); margin-bottom: 16px; font-weight: 600; }
-  .blog-excerpt { color: var(--ink-soft); font-size: 1rem; line-height: 1.5; margin-bottom: 24px; }
-  .blog-readmore { font-family: var(--mono); font-size: 0.9rem; color: var(--accent); }
-
-  footer{padding:32px 0;}
-  footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
-  footer p{font-family:var(--mono);font-size:0.78rem;color:var(--graphite);}
-  
-  /* Entrance Animations */
-  h2, .blog-card, .path {
-    opacity: 0;
-    transform: translateY(15px);
-    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  .article-content h3 {
+    font-family: var(--display); font-weight: 600; font-size: 1.25rem;
+    margin-top: 32px; margin-bottom: 12px; color: var(--ink);
   }
-  .is-visible {
-    opacity: 1;
-    transform: translateY(0);
+  .article-content p {
+    margin-bottom: 24px;
+    font-size: 1.05rem; color: var(--ink-soft);
   }
-  
-  @media (max-width:600px){
-    .blog-card { padding: 24px 20px; }
+  .article-content ul, .article-content ol { margin-bottom: 24px; margin-left: 24px; color: var(--ink-soft); font-size: 1.05rem; }
+  .article-content li { margin-bottom: 8px; }
+  .article-content img { max-width: 100%; border-radius: 8px; margin-bottom: 24px; }
+  .article-content code {
+    font-family: var(--mono); font-size: 0.85rem;
+    background: var(--bg-raised); border: 1px solid var(--line);
+    padding: 2px 6px; border-radius: 4px;
+  }
+  .article-content pre {
+    background: var(--bg-raised); border: 1px solid var(--line);
+    padding: 24px; border-radius: 8px; margin-bottom: 24px;
+    overflow-x: auto;
+  }
+  .article-content pre code { background: none; border: none; padding: 0; }
+  .article-content blockquote {
+    border-left: 4px solid var(--accent); padding-left: 20px;
+    margin-left: 0; margin-bottom: 24px;
+    font-style: italic; color: var(--graphite);
   }
 
   .back-link {
     display: inline-block;
     font-family: var(--mono); font-size: 0.9rem; color: var(--accent);
-    margin-bottom: 32px; text-decoration: none;
+    margin-bottom: 40px; text-decoration: none;
     border-bottom: 1px solid transparent; transition: border-color 0.2s;
   }
   .back-link:hover { border-bottom-color: var(--accent); }
+
+  footer{padding:32px 0; border-top:1px solid var(--line);}
+  footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
+  footer p{font-family:var(--mono);font-size:0.78rem;color:var(--graphite);}
 </style>
 
 <!-- PostHog Analytics -->
@@ -165,14 +172,13 @@
   gtag('config', 'G-WT7SWY7306');
 </script>
 
-<link rel="canonical" href="https://shubhuu.in/blogs.html">
+<link rel="canonical" href="https://shubhuu.in/article.html">
 </head>
 <body>
 
 <div class="wrap" style="padding-top: 40px; display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px;">
   <div style="display: flex; flex-direction: column; gap: 8px;">
     <a href="/index.html" class="brand" style="font-family: var(--display); font-weight: 700; font-size: 1.05rem; letter-spacing: -0.01em;">shubh<span style="color:var(--accent)">.</span></a>
-    <a href="/" class="back-link" style="margin-bottom: 0;">← Back to Portfolio</a>
   </div>
   <div style="display: flex; align-items: center; gap: 16px; font-family: var(--mono); font-size: 0.85rem; color: var(--ink-soft);">
     <a href="/links.html" style="display: flex; align-items: center; gap: 6px; transition: color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color=''">
@@ -191,40 +197,97 @@
   </div>
 </div>
 
-<section id="blog-list" style="border-bottom: none;">
-  <div class="wrap">
-    <p class="path">~/blogs</p>
-    <h2>All Articles</h2>
+<div class="article-wrap">
+  <a href="/blogs.html" class="back-link">← Back to blogs</a>
+  
+  <div class="article-header">
+    <div class="article-meta">August 11, 2026 • Blog</div>
+    <h1 class="article-title">Build a Strong LinkedIn Profile in 30 Minutes</h1>
+  </div>
+
+  <div class="article-content">
+    <!-- ARTICLE_CONTENT_START -->
+<h1>Build a Strong LinkedIn Profile in 30 Minutes</h1>
+<p>LinkedIn is not just a resume online. It is your personal brand, your networking tool, and sometimes the first thing a recruiter checks before your resume. The good news? You do not need hours to fix it. Just 30 focused minutes, split into 4 simple steps, can turn your profile from average to impressive.</p>
+<p>Let&#39;s break it down.</p>
+<hr>
+<h2>Step 1: Get the Basics Right (5 minutes)</h2>
+<p>Before anything else, your profile needs to <em>look</em> professional. This is the first impression, so get it right.</p>
+<ul>
+<li><strong>Professional Profile Photo</strong>
+Use a clear, well-lit photo of yourself. Smile, dress neatly, and keep the background simple. No group photos, no filters, no low-quality selfies.</li>
+<li><strong>Custom LinkedIn Banner</strong>
+Do not leave the default blue background. Add a simple banner that reflects who you are — your role, your field, or your interests. Canva has free templates for this.</li>
+<li><strong>Headline</strong>
+Your headline is not just your job title. Use this space to show your role and what you are into. For example:
+<em>&quot;CSE Student | Aspiring Developer | Passionate About AI and Web Development&quot;</em></li>
+<li><strong>Location</strong>
+Add your current city or the place you are targeting for jobs/internships. Recruiters often filter by location.</li>
+</ul>
+<hr>
+<h2>Step 2: Write a Strong About Section (10 minutes)</h2>
+<p>This is where you tell your story — but keep it short and clear. Aim for <strong>under 250 words</strong>.</p>
+<p>Here is what to include:</p>
+<ul>
+<li>Who you are and what you are currently doing (student, developer, etc.)</li>
+<li>Your key experiences: internships, college projects, freelance work</li>
+<li>Extra involvement: volunteering, student clubs, hackathons</li>
+<li>What you are looking for (internship, job, collaboration, etc.)
+Keep the tone simple and confident. Avoid long paragraphs — use line breaks so it is easy to scan.</li>
+</ul>
+<hr>
+<h2>Step 3: Add Skills and Certificates (10 minutes)</h2>
+<p>This section is where recruiters and search filters actually look. The more relevant skills you add, the more searchable your profile becomes.</p>
+<ul>
+<li><strong>Aim for 20–30 skills total</strong>, mixing:<ul>
+<li><strong>Technical skills</strong> – programming languages, tools, frameworks you know</li>
+<li><strong>Soft skills</strong> – communication, teamwork, leadership, problem-solving</li>
+</ul>
+</li>
+<li><strong>Add Certificates</strong>
+Free certificates from platforms like Coursera, Google, freeCodeCamp, or LinkedIn Learning count too. Don&#39;t wait for a paid certificate — free ones are just as valid for showing you are learning.</li>
+<li><strong>Add Relevant Courses</strong>
+If you have completed any online courses related to your field, list them. It shows initiative.</li>
+</ul>
+<hr>
+<h2>Step 4: Start Networking (5 minutes)</h2>
+<p>A LinkedIn profile without connections is like a shop without customers. This step is ongoing, but start today.</p>
+<p>Connect with:</p>
+<ul>
+<li><strong>Seniors and alumni</strong> from your college — they understand your journey and can guide you</li>
+<li><strong>Recruiters</strong> in your target industry — even if you are not job-hunting yet, build the connection early</li>
+<li><strong>Professors</strong> — they often share opportunities and can vouch for you later</li>
+<li><strong>Industry professionals</strong> — people already working in the field you want to enter
+<strong>Golden Rule:</strong> Always send a <strong>personalized connection request</strong>. A simple note like this works well:</li>
+</ul>
+<blockquote>
+<p><em>&quot;Hi [Name], I&#39;m a CSE student exploring [field]. I&#39;d love to connect and learn from your journey!&quot;</em></p>
+</blockquote>
+<p>Generic requests get ignored. Personalized ones get accepted.</p>
+<hr>
+<h2>Final Thoughts</h2>
+<p>Your LinkedIn profile does not need to be perfect — it needs to be <strong>clear, honest, and active</strong>. Spend these 30 minutes today, and then keep showing up: post updates, engage with others, and keep your profile growing.</p>
+<p>A strong LinkedIn profile is not built in one day. But a great foundation? That takes just 30 minutes.</p>
+
+    <!-- ARTICLE_CONTENT_END -->
     
-    <div class="blog-grid">
-      <!-- BLOG_CARDS_START -->
-
-      <a href="/build-a-strong-linkedin-profile-in-30-minutes.html" class="blog-card">
-        <div class="blog-meta">August 11, 2026 • Blog</div>
-        <h3 class="blog-title">Build a Strong LinkedIn Profile in 30 Minutes</h3>
-        <p class="blog-excerpt">Build a Strong LinkedIn Profile in 30 Minutes
-LinkedIn is not just a resume online. It is your personal brand, your networking tool, and sometimes the...</p>
-        <span class="blog-readmore">Read Article ➔</span>
-      </a>
-
-      <a href="/how-to-use-claude-code-for-free-the-ultimate-setup-guide.html" class="blog-card">
-        <div class="blog-meta">July 26, 2026 • Blog</div>
-        <h3 class="blog-title">How to Use Claude Code for Free: The Ultimate Setup Guide</h3>
-        <p class="blog-excerpt">How to Use Claude Code for Free: The Ultimate Setup Guide
-If you&#39;ve been wanting to build with Claude Code, Codex CLI, or Antigravity without payi...</p>
-        <span class="blog-readmore">Read Article ➔</span>
-      </a>
-
-      <a href="/my-first-automated-blog-post-from-notion.html" class="blog-card">
-        <div class="blog-meta">July 26, 2026 • Blog</div>
-        <h3 class="blog-title">My First Automated Blog Post from Notion!</h3>
-        <p class="blog-excerpt">It is officially working! I am writing this blog post from the comfort of my Notion workspace, and it is automatically syncing to my static website po...</p>
-        <span class="blog-readmore">Read Article ➔</span>
-      </a>
-      <!-- BLOG_CARDS_END -->
+    <div style="margin-top: 64px; padding: 24px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg-raised); text-align: center; transition: border-color 0.5s ease, background-color 0.5s ease;">
+      <p style="margin-bottom: 16px; font-size: 1rem; color: var(--ink-soft);">
+        Enjoyed this write-up? Consider supporting my work!
+      </p>
+      <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+        <a href="https://github.com/sponsors/Shubh-153" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center; gap: 8px; padding: 10px 20px; background: var(--ink); color: var(--bg); border-radius: 6px; font-family: var(--mono); font-size: 0.9rem; transition: transform 0.2s ease, opacity 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.opacity='0.9';" onmouseout="this.style.transform='translateY(0)'; this.style.opacity='1';">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.161 22 16.418 22 12c0-5.523-4.477-10-10-10z"></path></svg>
+          Sponsor on GitHub
+        </a>
+        <a href="https://ko-fi.com/shubh153" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center; gap: 8px; padding: 10px 20px; background: #FF5E5B; color: #ffffff; border-radius: 6px; font-family: var(--mono); font-size: 0.9rem; transition: transform 0.2s ease, opacity 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.opacity='0.9';" onmouseout="this.style.transform='translateY(0)'; this.style.opacity='1';">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M23.881 8.948c-.773-4.085-4.859-4.593-4.859-4.593H.723c-.604 0-.679.798-.679.798s-.082 7.324-.022 11.822c.164 2.424 2.586 2.672 2.586 2.672s8.267-.023 11.966-.049c2.438-.426 2.683-2.566 2.658-3.734 4.352.24 7.422-2.831 6.649-6.916zm-11.062 3.511c-1.246 1.453-4.011 3.976-4.011 3.976s-.121.119-.31.023c-.076-.057-.108-.09-.108-.09-.443-.441-3.368-3.049-4.034-3.954-.709-.965-1.041-2.7-.091-3.71.951-1.01 3.005-1.086 4.363.407 0 0 1.565-1.782 3.468-.963 1.904.82 1.832 3.011.723 4.311zm6.173.478c-.928.116-1.682.028-1.682.028V7.284h1.77s1.971.551 1.971 2.638c0 1.913-.985 2.667-2.059 3.015z"/></svg>
+          Support on Ko-fi
+        </a>
+      </div>
     </div>
   </div>
-</section>
+</div>
 
 <footer>
   <div class="wrap">
@@ -235,30 +298,6 @@ If you&#39;ve been wanting to build with Claude Code, Codex CLI, or Antigravity 
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    const fadeElements = document.querySelectorAll('h2, .blog-card, .path');
-    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      let staggerDelay = 0;
-      let staggerTimeout;
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            if (staggerDelay > 0) {
-              entry.target.style.transitionDelay = `${staggerDelay}ms`;
-            }
-            entry.target.classList.add('is-visible');
-            staggerDelay += 80;
-            observer.unobserve(entry.target);
-          }
-        });
-        clearTimeout(staggerTimeout);
-        staggerTimeout = setTimeout(() => { staggerDelay = 0; }, 100);
-      }, { rootMargin: "0px 0px -20px 0px" });
-      
-      fadeElements.forEach(el => observer.observe(el));
-    } else {
-      fadeElements.forEach(el => el.classList.add('is-visible'));
-    }
-
     const themeToggle = document.getElementById('theme-toggle');
     const moonIcon = document.getElementById('theme-icon-moon');
     const sunIcon = document.getElementById('theme-icon-sun');
