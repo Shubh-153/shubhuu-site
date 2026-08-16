@@ -31,6 +31,9 @@
     --display: 'Space Grotesk', sans-serif;
   }
   * { margin:0; padding:0; box-sizing:border-box; }
+  html {
+    overflow-x: hidden;
+  }
   body {
     background-color: var(--bg);
     color: var(--ink);
@@ -38,6 +41,7 @@
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
+    max-width: 100vw;
   }
   
   /* CUSTOM CURSOR */
@@ -89,10 +93,12 @@
     padding: 40px;
     display: flex; justify-content: space-between; align-items: flex-start;
     position: relative; z-index: 10;
+    flex-wrap: wrap;
+    gap: 16px;
   }
   .nav-left, .nav-right { display: flex; flex-direction: column; }
   .nav-left { align-items: flex-start; gap: 12px; position: relative; }
-  .nav-right { align-items: flex-end; gap: 12px; }
+  .nav-right { align-items: flex-end; gap: 12px; margin-left: auto; }
   
   .dev-message {
     background: rgba(20, 20, 20, 0.8);
@@ -183,6 +189,12 @@
     .gallery-item { border-radius: 16px; }
     .hero-horiz, .standard-horiz { grid-column: span 2; grid-row: span 2; }
     .hero-vert, .standard-vert { grid-column: span 1; grid-row: span 2; }
+
+    nav { padding: 24px 20px; }
+    /* These bubbles use white-space: nowrap and are wider than a phone
+       viewport, which was forcing the whole page to scroll horizontally
+       and pushing the mute/mode toggle buttons off-screen. */
+    .dev-message-container { display: none; }
   }
 
   /* --- PHONE MODE OVERRIDES --- */
