@@ -1456,6 +1456,8 @@
       if (ambientGain && audioCtx) {
         ambientGain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 1);
       }
+      // Also silence any black-hole charge tone the user is currently holding
+      cancelChargeSound();
     } else {
       document.body.classList.remove('muted-mode');
       initAudio();

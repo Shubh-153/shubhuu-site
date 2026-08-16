@@ -9,6 +9,15 @@ cloudinary.config({
   secure: true
 });
 
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 async function buildCreative() {
   console.log("Fetching resources from Cloudinary...");
   try {
@@ -37,9 +46,10 @@ async function buildCreative() {
         layoutClass = isHorizontal ? "standard-horiz" : "standard-vert";
       }
       
-      const title = item.context && (item.context.caption || item.context.captionn) ? (item.context.caption || item.context.captionn) : (item.filename || 'Creative');
+      const caption = item.context && (item.context.caption || item.context.captionn);
+      const title = caption || item.filename || 'Creative';
       const typeLabel = item.resource_type === 'video' ? '// VIDEO' : '// PHOTO';
-      
+
       let mediaHtml = '';
       let optimizedUrl = item.secure_url;
       if (optimizedUrl.includes('/upload/')) {
@@ -47,13 +57,15 @@ async function buildCreative() {
         optimizedUrl = optimizedUrl.replace('/upload/', '/upload/f_auto,q_auto,w_1200,c_limit/');
       }
 
-      let altText = item.filename ? item.filename.replace(/_/g, ' ') : `Gallery Image ${index}`;
+      // Prefer the human-written caption over the raw Cloudinary filename/GUID
+      const altText = escapeHtml(caption || (item.filename ? item.filename.replace(/_/g, ' ') : `Gallery Image ${index}`));
+      const safeUrl = escapeHtml(optimizedUrl);
       if (item.resource_type === 'video') {
-        mediaHtml = `<video src="${optimizedUrl}" width="${item.width}" height="${item.height}" autoplay loop muted playsinline aria-label="${altText}" preload="metadata"></video>`;
+        mediaHtml = `<video src="${safeUrl}" width="${item.width}" height="${item.height}" autoplay loop muted playsinline aria-label="${altText}" preload="metadata"></video>`;
       } else {
-        mediaHtml = `<img src="${optimizedUrl}" alt="${altText}" width="${item.width}" height="${item.height}" loading="lazy" decoding="async">`;
+        mediaHtml = `<img src="${safeUrl}" alt="${altText}" width="${item.width}" height="${item.height}" loading="lazy" decoding="async">`;
       }
-      
+
       htmlContent += `
   <!-- Generated Item ${itemNumber} -->
   <div class="gallery-item ${layoutClass} tilt-card">
@@ -61,7 +73,7 @@ async function buildCreative() {
     <div class="card-inner">
       ${mediaHtml}
       <div class="caption">
-        <div class="caption-title">${title}</div>
+        <div class="caption-title">${escapeHtml(title)}</div>
         <div class="caption-num">${typeLabel}</div>
       </div>
     </div>
