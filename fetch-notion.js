@@ -6,6 +6,18 @@ const fs = require('fs');
 const notion = new Client({ auth: process.env.NOTION_API_KEY });
 const n2m = new NotionToMarkdown({ notionClient: notion });
 
+function extractMarkdownContent(value) {
+  if (typeof value === 'string') return value;
+  if (Array.isArray(value)) {
+    return value.map(extractMarkdownContent).filter(Boolean).join('\n');
+  }
+  if (value && typeof value === 'object') {
+    if (typeof value.parent === 'string') return value.parent;
+    return Object.values(value).map(extractMarkdownContent).filter(Boolean).join('\n');
+  }
+  return '';
+}
+
 async function buildSite() {
   const { marked } = await import('marked');
   
@@ -53,7 +65,8 @@ async function buildSite() {
 
     const mdblocks = await n2m.pageToMarkdown(page.id);
     const mdString = n2m.toMarkdownString(mdblocks);
-    const htmlContent = marked.parse(mdString.parent || mdString);
+    const markdownContent = extractMarkdownContent(mdString);
+    const htmlContent = marked.parse(markdownContent);
 
     let plainText = htmlContent.replace(/<[^>]+>/g, '');
     let excerpt = plainText.substring(0, 150);
