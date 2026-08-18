@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Shubh Gupta — Blog</title>
+    <link>https://shubhuu.in/blogs.html</link>
+    <description>Writing on software development, AI and building things on the web.</description>
+    <language>en</language>
+    <lastBuildDate>Tue, 18 Aug 2026 20:39:59 GMT</lastBuildDate>
+    <atom:link href="https://shubhuu.in/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Build a Strong LinkedIn Profile in 30 Minutes</title>
+      <link>https://shubhuu.in/build-a-strong-linkedin-profile-in-30-minutes.html</link>
+      <guid isPermaLink="true">https://shubhuu.in/build-a-strong-linkedin-profile-in-30-minutes.html</guid>
+      <pubDate>Mon, 10 Aug 2026 18:30:00 GMT</pubDate>
+      <description>LinkedIn is not just a resume online. It is your personal brand, your networking tool, and sometimes the first thing a recruiter checks before your...</description>
+
+    </item>
+    <item>
+      <title>How to Use Claude Code for Free: The Ultimate Setup Guide</title>
+      <link>https://shubhuu.in/how-to-use-claude-code-for-free-the-ultimate-setup-guide.html</link>
+      <guid isPermaLink="true">https://shubhuu.in/how-to-use-claude-code-for-free-the-ultimate-setup-guide.html</guid>
+      <pubDate>Sat, 25 Jul 2026 18:30:00 GMT</pubDate>
+      <description>If you&#39;ve been wanting to build with Claude Code , Codex CLI , or Antigravity without paying steep API fees or hitting strict usage limits, this guide...</description>
+
+    </item>
+    <item>
+      <title>My First Automated Blog Post from Notion!</title>
+      <link>https://shubhuu.in/my-first-automated-blog-post-from-notion.html</link>
+      <guid isPermaLink="true">https://shubhuu.in/my-first-automated-blog-post-from-notion.html</guid>
+      <pubDate>Sat, 25 Jul 2026 18:30:00 GMT</pubDate>
+      <description>It is officially working! I am writing this blog post from the comfort of my Notion workspace, and it is automatically syncing to my static website...</description>
+
+    </item>
+  </channel>
+</rss>

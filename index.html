@@ -7,6 +7,7 @@
 <title>Shubh — Software Developer</title>
 <meta name="description" content="Shubh Gupta — CS student and developer building full-stack apps, AI/ML tools, and DevOps systems.">
 <link rel="canonical" href="https://shubhuu.in/">
+<link rel="alternate" type="application/rss+xml" title="Shubh Gupta — Blog" href="/feed.xml">
 <meta name="keywords" content="Shubh Gupta, software development, ai software development, software development engineer, ai software developer, software engineering, application developer, app software developer, software development india, find a software developer, full stack, app developer, ai developer, software developer india, find developer, web app developer, it software developer, software developer skills, build software, dev ops">
 
 <!-- Open Graph / Social Media -->
@@ -330,15 +331,22 @@
     filter: grayscale(0%) opacity(1) brightness(1);
   }
 
-  /* BLOG */
-  .blog-empty{
-    border:1px dashed var(--line);border-radius:10px;
-    padding:40px 30px;text-align:left;
-    background:var(--bg-raised);
+  /* BLOG — .blog-card mirrors the component in blogs.html (no shared stylesheet by design) */
+  .blog-grid { display: grid; gap: 24px; }
+  .blog-card {
+    display: block;
+    background: var(--bg-raised);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 32px;
+    text-decoration: none;
   }
-  .blog-empty p.lead{font-family:var(--display);font-weight:600;font-size:1.15rem;margin-bottom:8px;}
-  .blog-empty p.sub{color:var(--ink-soft);font-size:0.95rem;max-width:56ch;}
-  .blog-empty .path{margin-top:18px;margin-bottom:0;}
+  .blog-card:hover { border-color: var(--accent); }
+  .blog-meta { font-family: var(--mono); font-size: 0.85rem; color: var(--ink-soft); margin-bottom: 12px; }
+  .blog-title { font-family: var(--display); font-size: 1.5rem; color: var(--ink); margin-bottom: 16px; font-weight: 600; }
+  .blog-excerpt { color: var(--ink-soft); font-size: 1rem; line-height: 1.5; margin-bottom: 24px; }
+  .blog-readmore { font-family: var(--mono); font-size: 0.9rem; color: var(--accent); }
+  @media (max-width:600px){ .blog-card { padding: 24px 20px; } }
 
   /* CONTACT */
   .contact-grid{display:flex;flex-direction:column;gap:14px;max-width:480px;}
@@ -370,12 +378,16 @@
     --line: #2A2D35;
     --shadow: rgba(0,0,0,0.3);
   }
-  body, nav, .shell, .blog-empty, .skill-chip, .btn, .contact-value a {
+  body, nav, .shell, .blog-card, .skill-chip, .btn, .contact-value a {
     transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease;
   }
   .project {
     transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease, transform 0.2s ease, box-shadow 0.2s ease, z-index 0s;
     position: relative;
+  }
+  .blog-card { transition: background-color 0.5s ease, color 0.5s ease, border-color 0.2s ease, transform 0.2s ease; }
+  @media (prefers-reduced-motion: no-preference) {
+    .blog-card:hover { transform: translateY(-4px); }
   }
   @media (prefers-reduced-motion: no-preference) {
     .project:hover {
@@ -388,13 +400,13 @@
   body.dark-theme nav { background: rgba(17, 18, 22, 0.88); }
 
   /* --- NEW: ENTRANCE ANIMATIONS --- */
-  .js h1, .js h2, .js .hero-sub, .js .shell, .js .project, .js .skill-group, .js .blog-empty, .js .contact-row {
+  .js h1, .js h2, .js .hero-sub, .js .shell, .js .project, .js .skill-group, .js .blog-card, .js .contact-row {
     opacity: 0;
     transform: translateY(12px);
     transition: opacity 0.25s ease-out, transform 0.25s ease-out;
     will-change: opacity, transform;
   }
-  .js h1.is-visible, .js h2.is-visible, .js .hero-sub.is-visible, .js .shell.is-visible, .js .project.is-visible, .js .skill-group.is-visible, .js .blog-empty.is-visible, .js .contact-row.is-visible {
+  .js h1.is-visible, .js h2.is-visible, .js .hero-sub.is-visible, .js .shell.is-visible, .js .project.is-visible, .js .skill-group.is-visible, .js .blog-card.is-visible, .js .contact-row.is-visible {
     opacity: 1;
     transform: translateY(0);
   }
@@ -648,13 +660,26 @@
     </div>
     
     <!-- LATEST_BLOG_START -->
-    <a href="/how-to-use-claude-code-for-free-the-ultimate-setup-guide.html" style="text-decoration: none; display: block; border: 1px solid var(--line); border-radius: 12px; padding: 32px; background: var(--bg-raised); transition: transform 0.2s ease, border-color 0.2s ease;" onmouseover="this.style.transform='translateY(-4px)'; this.style.borderColor='var(--accent)';" onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='var(--line)';">
-      <div style="font-family: var(--mono); font-size: 0.85rem; color: var(--ink-soft); margin-bottom: 12px;">July 26, 2026 • Blog</div>
-      <h3 style="font-family: var(--display); font-size: 1.5rem; color: var(--ink); margin-bottom: 16px; font-weight: 600;">How to Use Claude Code for Free: The Ultimate Setup Guide</h3>
-      <p style="color: var(--ink-soft); font-size: 1rem; line-height: 1.5; margin-bottom: 24px;">How to Use Claude Code for Free: The Ultimate Setup Guide
-If you&#39;ve been wanting to build with Claude Code, Codex CLI, or Antigravity without payi...</p>
-      <span style="font-family: var(--mono); font-size: 0.9rem; color: var(--accent);">Read Article ➔</span>
-    </a>
+    <div class="blog-grid">
+      <a href="/build-a-strong-linkedin-profile-in-30-minutes.html" class="blog-card" data-category="blog">
+        <div class="blog-meta">August 11, 2026 • Blog</div>
+        <h3 class="blog-title">Build a Strong LinkedIn Profile in 30 Minutes</h3>
+        <p class="blog-excerpt">LinkedIn is not just a resume online. It is your personal brand, your networking tool, and sometimes the...</p>
+        <span class="blog-readmore">Read Article ➔</span>
+      </a>
+      <a href="/how-to-use-claude-code-for-free-the-ultimate-setup-guide.html" class="blog-card" data-category="blog">
+        <div class="blog-meta">July 26, 2026 • Blog</div>
+        <h3 class="blog-title">How to Use Claude Code for Free: The Ultimate Setup Guide</h3>
+        <p class="blog-excerpt">If you've been wanting to build with Claude Code, Codex CLI, or Antigravity without payi...</p>
+        <span class="blog-readmore">Read Article ➔</span>
+      </a>
+      <a href="/my-first-automated-blog-post-from-notion.html" class="blog-card" data-category="blog">
+        <div class="blog-meta">July 26, 2026 • Blog</div>
+        <h3 class="blog-title">My First Automated Blog Post from Notion!</h3>
+        <p class="blog-excerpt">It is officially working! I am writing this blog post from the comfort of my Notion workspace, and it is automatically syncing to my static website po...</p>
+        <span class="blog-readmore">Read Article ➔</span>
+      </a>
+    </div>
     <!-- LATEST_BLOG_END -->
     <div style="text-align: right; margin-top: 32px;">
       <a href="/blogs.html" class="btn ghost" style="display:inline-flex; align-items:center; gap:8px;">
@@ -716,7 +741,7 @@ If you&#39;ve been wanting to build with Claude Code, Codex CLI, or Antigravity 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     // 1. Text Entrance Animations
-    const animSelectors = 'h1, h2, .hero-sub, .shell, .project, .creative-img, .skill-group, .blog-empty, .contact-row';
+    const animSelectors = 'h1, h2, .hero-sub, .shell, .project, .creative-img, .skill-group, .blog-card, .contact-row';
     const fadeElements = document.querySelectorAll(animSelectors);
     
     if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {

@@ -3,15 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Building a Minimalist Portfolio | Shubh Gupta</title>
-<meta name="description" content="A deep dive into why I chose to avoid heavy JavaScript frameworks for my personal site.">
-<meta name="keywords" content="Shubh Gupta, software development, ai software development, software development engineer, ai software developer, software engineering, application developer, app software developer, software development india, find a software developer, full stack, app developer, ai developer, software developer india, find developer, web app developer, it software developer, software developer skills, build software, dev ops">
-<meta property="og:title" content="Building a Minimalist Portfolio | Shubh Gupta">
-<meta property="og:description" content="A deep dive into why I chose to avoid heavy JavaScript frameworks for my personal site.">
-<meta property="og:image" content="https://shubhuu.in/thumbnail.png">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://shubhuu.in/thumbnail.png">
-<meta property="og:url" content="https://shubhuu.in/article.html">
+<!-- SEO_META_START -->
+<title>Article Template | Shubh Gupta</title>
+<meta name="robots" content="noindex">
+<link rel="alternate" type="application/rss+xml" title="Shubh Gupta — Blog" href="/feed.xml">
+<!-- SEO_META_END -->
 
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📄</text></svg>">
 
@@ -147,6 +143,36 @@
   }
   .back-link:hover { border-bottom-color: var(--accent); }
 
+  /* Related posts — reuses the .blog-card component from blogs.html,
+     scoped under .related so it sits outside .article-content's prose styles. */
+  .related { margin-top: 72px; padding-top: 40px; border-top: 1px solid var(--line); }
+  .related h2 {
+    font-family: var(--display); font-size: 1.35rem; font-weight: 600;
+    color: var(--ink); margin-bottom: 24px;
+  }
+  .related-grid { display: grid; gap: 20px; grid-template-columns: repeat(2, 1fr); }
+  .related .blog-card {
+    display: block;
+    background: var(--bg-raised);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 24px;
+    text-decoration: none;
+    transition: transform 0.2s ease, border-color 0.2s ease, background-color 0.5s ease;
+  }
+  .related .blog-card:hover { transform: translateY(-4px); border-color: var(--accent); }
+  .related .blog-meta { font-family: var(--mono); font-size: 0.78rem; color: var(--ink-soft); margin-bottom: 10px; }
+  .related .blog-title { font-family: var(--display); font-size: 1.15rem; color: var(--ink); margin-bottom: 10px; font-weight: 600; line-height: 1.35; }
+  .related .blog-excerpt { color: var(--ink-soft); font-size: 0.9rem; line-height: 1.5; margin-bottom: 16px; }
+  .related .blog-readmore { font-family: var(--mono); font-size: 0.8rem; color: var(--accent); }
+  @media (max-width:700px){
+    .related-grid { grid-template-columns: 1fr; }
+    .related { margin-top: 56px; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .related .blog-card:hover { transform: none; }
+  }
+
   footer{padding:32px 0; border-top:1px solid var(--line);}
   footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
   footer p{font-family:var(--mono);font-size:0.78rem;color:var(--graphite);}
@@ -172,7 +198,6 @@
   gtag('config', 'G-WT7SWY7306');
 </script>
 
-<link rel="canonical" href="https://shubhuu.in/article.html">
 </head>
 <body>
 
@@ -243,8 +268,11 @@
         </a>
       </div>
     </div>
-  </div>
-</div>
+  </div><!-- /.article-content -->
+
+  <!-- RELATED_POSTS_START -->
+  <!-- RELATED_POSTS_END -->
+</div><!-- /.article-wrap -->
 
 <footer>
   <div class="wrap">

@@ -117,6 +117,21 @@
   .blog-excerpt { color: var(--ink-soft); font-size: 1rem; line-height: 1.5; margin-bottom: 24px; }
   .blog-readmore { font-family: var(--mono); font-size: 0.9rem; color: var(--accent); }
 
+  /* Category filter chips — only rendered when >1 category exists */
+  .blog-filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 32px; }
+  .filter-chip {
+    font-family: var(--mono); font-size: 0.72rem;
+    color: var(--ink-soft); background: transparent;
+    border: 1px solid var(--line); border-radius: 20px;
+    padding: 6px 14px; cursor: pointer;
+    transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+  }
+  .filter-chip:hover { color: var(--accent); border-color: var(--accent); }
+  .filter-chip[aria-pressed="true"] {
+    color: var(--accent); background: var(--accent-soft); border-color: var(--accent);
+  }
+  .blog-card[hidden] { display: none; }
+
   footer{padding:32px 0;}
   footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
   footer p{font-family:var(--mono);font-size:0.78rem;color:var(--graphite);}
@@ -166,6 +181,7 @@
 </script>
 
 <link rel="canonical" href="https://shubhuu.in/blogs.html">
+<link rel="alternate" type="application/rss+xml" title="Shubh Gupta — Blog" href="/feed.xml">
 </head>
 <body>
 
@@ -195,7 +211,10 @@
   <div class="wrap">
     <p class="path">~/blogs</p>
     <h2>All Articles</h2>
-    
+
+    <!-- BLOG_FILTERS_START -->
+    <!-- BLOG_FILTERS_END -->
+
     <div class="blog-grid">
       <!-- BLOG_CARDS_START -->
 
@@ -287,6 +306,23 @@ If you&#39;ve been wanting to build with Claude Code, Codex CLI, or Antigravity 
         isDark = document.body.classList.contains('dark-theme');
         localStorage.setItem('theme', isDark ? 'dark' : 'light');
         updateIcon(isDark);
+      });
+    }
+
+    // Category filtering. The chip bar is only generated when there is more
+    // than one category, so this is a no-op until then.
+    const chips = document.querySelectorAll('.filter-chip');
+    if (chips.length) {
+      const cards = document.querySelectorAll('.blog-card[data-category]');
+      chips.forEach(chip => {
+        chip.addEventListener('click', () => {
+          const want = chip.dataset.filter;
+          chips.forEach(c => c.setAttribute('aria-pressed', String(c === chip)));
+          cards.forEach(card => {
+            const cats = (card.dataset.category || '').split(' ');
+            card.hidden = want !== 'all' && cats.indexOf(want) === -1;
+          });
+        });
       });
     }
   });
