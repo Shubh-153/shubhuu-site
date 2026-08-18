@@ -15,7 +15,7 @@
 <meta property="og:description" content="The Complete Computer Science Glossary Computer science is full of overloaded words. “Resolution” means one thing in networking and another in graphics...">
 <meta property="og:image" content="https://shubhuu.in/thumbnail.png">
 <meta property="og:url" content="https://shubhuu.in/computer-science-glossary.html">
-<meta property="article:published_time" content="2026-08-16T18:30:00.000Z">
+<meta property="article:published_time" content="2026-08-17T20:59:00.000Z">
 <meta property="article:author" content="Shubh Gupta">
 
 <meta name="twitter:card" content="summary_large_image">
@@ -30,8 +30,8 @@
   "headline": "Computer Science Glossary",
   "description": "The Complete Computer Science Glossary Computer science is full of overloaded words. “Resolution” means one thing in networking and another in graphics...",
   "image": "https://shubhuu.in/thumbnail.png",
-  "datePublished": "2026-08-16T18:30:00.000Z",
-  "dateModified": "2026-08-16T18:30:00.000Z",
+  "datePublished": "2026-08-17T20:59:00.000Z",
+  "dateModified": "2026-08-17T20:59:00.000Z",
   "author": {
     "@type": "Person",
     "name": "Shubh Gupta",
@@ -183,6 +183,36 @@
     border-bottom: 1px solid transparent; transition: border-color 0.2s;
   }
   .back-link:hover { border-bottom-color: var(--accent); }
+
+  /* Related posts — reuses the .blog-card component from blogs.html,
+     scoped under .related so it sits outside .article-content's prose styles. */
+  .related { margin-top: 72px; padding-top: 40px; border-top: 1px solid var(--line); }
+  .related h2 {
+    font-family: var(--display); font-size: 1.35rem; font-weight: 600;
+    color: var(--ink); margin-bottom: 24px;
+  }
+  .related-grid { display: grid; gap: 20px; grid-template-columns: repeat(2, 1fr); }
+  .related .blog-card {
+    display: block;
+    background: var(--bg-raised);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 24px;
+    text-decoration: none;
+    transition: transform 0.2s ease, border-color 0.2s ease, background-color 0.5s ease;
+  }
+  .related .blog-card:hover { transform: translateY(-4px); border-color: var(--accent); }
+  .related .blog-meta { font-family: var(--mono); font-size: 0.78rem; color: var(--ink-soft); margin-bottom: 10px; }
+  .related .blog-title { font-family: var(--display); font-size: 1.15rem; color: var(--ink); margin-bottom: 10px; font-weight: 600; line-height: 1.35; }
+  .related .blog-excerpt { color: var(--ink-soft); font-size: 0.9rem; line-height: 1.5; margin-bottom: 16px; }
+  .related .blog-readmore { font-family: var(--mono); font-size: 0.8rem; color: var(--accent); }
+  @media (max-width:700px){
+    .related-grid { grid-template-columns: 1fr; }
+    .related { margin-top: 56px; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .related .blog-card:hover { transform: none; }
+  }
 
   footer{padding:32px 0; border-top:1px solid var(--line);}
   footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
@@ -779,8 +809,34 @@
         </a>
       </div>
     </div>
-  </div>
-</div>
+  </div><!-- /.article-content -->
+
+  <!-- RELATED_POSTS_START -->
+  <section class="related">
+    <h2>Read more</h2>
+    <div class="related-grid">
+      <a href="/from-scratch-to-sql.html" class="blog-card" data-category="uncategorized">
+        <div class="blog-meta">August 17, 2026 • Blog</div>
+        <h3 class="blog-title">From Scratch To SQL</h3>
+        <p class="blog-excerpt">: A No-BS Map of Computer Science Why This Exists CS sounds scary because of the words, not the ideas. &quot;Loop,&quot; &quot;query,&quot; &quot;Boolean logic&quot; — every one of...</p>
+        <span class="blog-readmore">Read Article ➔</span>
+      </a>
+      <a href="/build-a-strong-linkedin-profile-in-30-minutes.html" class="blog-card" data-category="uncategorized">
+        <div class="blog-meta">August 11, 2026 • Blog</div>
+        <h3 class="blog-title">Build a Strong LinkedIn Profile in 30 Minutes</h3>
+        <p class="blog-excerpt">LinkedIn is not just a resume online. It is your personal brand, your networking tool, and sometimes the first thing a recruiter checks before your...</p>
+        <span class="blog-readmore">Read Article ➔</span>
+      </a>
+      <a href="/how-to-use-claude-code-for-free-the-ultimate-setup-guide.html" class="blog-card" data-category="uncategorized">
+        <div class="blog-meta">July 26, 2026 • Blog</div>
+        <h3 class="blog-title">How to Use Claude Code for Free: The Ultimate Setup Guide</h3>
+        <p class="blog-excerpt">If you&#39;ve been wanting to build with Claude Code , Codex CLI , or Antigravity without paying steep API fees or hitting strict usage limits, this guide...</p>
+        <span class="blog-readmore">Read Article ➔</span>
+      </a>
+    </div>
+  </section>
+  <!-- RELATED_POSTS_END -->
+</div><!-- /.article-wrap -->
 
 <footer>
   <div class="wrap">
