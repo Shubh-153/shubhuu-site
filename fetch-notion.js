@@ -33,6 +33,18 @@ function escapeHtml(str) {
     .replace(/'/g, '&#39;');
 }
 
+function extractMarkdownContent(value) {
+  if (typeof value === 'string') return value;
+  if (Array.isArray(value)) {
+    return value.map(extractMarkdownContent).filter(Boolean).join('\n');
+  }
+  if (value && typeof value === 'object') {
+    if (typeof value.parent === 'string') return value.parent;
+    return Object.values(value).map(extractMarkdownContent).filter(Boolean).join('\n');
+  }
+  return '';
+}
+
 function decodeEntities(str) {
   return String(str)
     .replace(/&#39;/g, "'")
@@ -291,7 +303,7 @@ async function buildSite() {
 
     const mdblocks = await n2m.pageToMarkdown(page.id);
     const mdString = n2m.toMarkdownString(mdblocks);
-    const htmlContent = marked.parse(mdString.parent || mdString);
+    const htmlContent = marked.parse(extractMarkdownContent(mdString));
 
     blogs.push({
       title, slug, date, isoDate: createdTime.toISOString(),

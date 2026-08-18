@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Computer_Science_Glossary_Blog | Shubh Gupta</title>
+<meta name="description" content="A deep dive into why I chose to avoid heavy JavaScript frameworks for my personal site.">
+<meta name="keywords" content="Shubh Gupta, software development, ai software development, software development engineer, ai software developer, software engineering, application developer, app software developer, software development india, find a software developer, full stack, app developer, ai developer, software developer india, find developer, web app developer, it software developer, software developer skills, build software, dev ops">
+<meta property="og:title" content="Building a Minimalist Portfolio | Shubh Gupta">
+<meta property="og:description" content="A deep dive into why I chose to avoid heavy JavaScript frameworks for my personal site.">
+<meta property="og:image" content="https://shubhuu.in/thumbnail.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://shubhuu.in/thumbnail.png">
+<meta property="og:url" content="https://shubhuu.in/article.html">
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📄</text></svg>">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" as="style">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" media="print" onload="this.media="all"">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"></noscript>
+<style>
+  :root{
+    --bg:#F7F7F5;
+    --bg-raised:#FFFFFF;
+    --ink:#14161A;
+    --ink-soft:#4A4D52;
+    --graphite:#6B6558;
+    --accent:#2954A6;
+    --accent-soft:#EAF0FA;
+    --line:#DEDDD8;
+    --mono:'IBM Plex Mono', monospace;
+    --sans:'IBM Plex Sans', sans-serif;
+    --display:'Space Grotesk', sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--sans);
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none;}
+  a:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px;}
+  ::selection{background:var(--accent-soft);color:var(--accent);}
+
+  /* --- DARK THEME --- */
+  body.dark-theme {
+    --bg: #111216;
+    --bg-raised: #1A1D24;
+    --ink: #F7F7F5;
+    --ink-soft: #A09E96;
+    --graphite: #6B6558;
+    --accent: #6B94FA;
+    --accent-soft: #1E283C;
+    --line: #2A2D35;
+  }
+  body, .article-content code, .article-content pre {
+    transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease;
+  }
+
+  .wrap{max-width:920px;margin:0 auto;padding:0 28px;}
+
+  nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(247,247,245,0.88);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;}
+  .brand{font-family:var(--display);font-weight:700;font-size:1.05rem;letter-spacing:-0.01em;}
+  .navlinks{display:flex;gap:28px;font-family:var(--mono);font-size:0.82rem;color:var(--ink-soft);}
+  .navlinks a { transition: color .2s ease; position: relative; padding-bottom: 2px; }
+  .navlinks a::after {
+    content: ''; position: absolute; width: 0; height: 1.5px;
+    bottom: 0; left: 50%; background-color: var(--accent);
+    transition: width 0.2s ease, left 0.2s ease;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .navlinks a:hover::after, .navlinks a:focus-visible::after { width: 100%; left: 0; }
+  }
+  .navlinks a:hover, .navlinks a:focus-visible{color:var(--accent);}
+  @media (max-width:700px){ 
+    nav .wrap { flex-direction: column; height: auto; padding: 14px 28px; gap: 12px; align-items: flex-start; }
+    .navlinks { width: 100%; overflow-x: auto; padding-bottom: 4px; justify-content: flex-start; gap: 18px; white-space: nowrap; -webkit-overflow-scrolling: touch; }
+    .navlinks::-webkit-scrollbar { display: none; }
+    .navlinks { -ms-overflow-style: none; scrollbar-width: none; }
+    .navlinks span{display:none;} 
+  }
+
+  /* Article specific styles */
+  .article-wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 80px 28px;
+  }
+  .article-header { margin-bottom: 64px; }
+  .article-meta { font-family: var(--mono); font-size: 0.85rem; color: var(--ink-soft); margin-bottom: 24px; }
+  .article-title {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 3rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+    color: var(--ink);
+  }
+  .article-content h2 {
+    font-family: var(--display); font-weight: 600; font-size: 1.6rem;
+    margin-top: 48px; margin-bottom: 16px; color: var(--ink);
+  }
+  .article-content h3 {
+    font-family: var(--display); font-weight: 600; font-size: 1.25rem;
+    margin-top: 32px; margin-bottom: 12px; color: var(--ink);
+  }
+  .article-content p {
+    margin-bottom: 24px;
+    font-size: 1.05rem; color: var(--ink-soft);
+  }
+  .article-content ul, .article-content ol { margin-bottom: 24px; margin-left: 24px; color: var(--ink-soft); font-size: 1.05rem; }
+  .article-content li { margin-bottom: 8px; }
+  .article-content img { max-width: 100%; border-radius: 8px; margin-bottom: 24px; }
+  .article-content code {
+    font-family: var(--mono); font-size: 0.85rem;
+    background: var(--bg-raised); border: 1px solid var(--line);
+    padding: 2px 6px; border-radius: 4px;
+  }
+  .article-content pre {
+    background: var(--bg-raised); border: 1px solid var(--line);
+    padding: 24px; border-radius: 8px; margin-bottom: 24px;
+    overflow-x: auto;
+  }
+  .article-content pre code { background: none; border: none; padding: 0; }
+  .article-content blockquote {
+    border-left: 4px solid var(--accent); padding-left: 20px;
+    margin-left: 0; margin-bottom: 24px;
+    font-style: italic; color: var(--graphite);
+  }
+
+  .back-link {
+    display: inline-block;
+    font-family: var(--mono); font-size: 0.9rem; color: var(--accent);
+    margin-bottom: 40px; text-decoration: none;
+    border-bottom: 1px solid transparent; transition: border-color 0.2s;
+  }
+  .back-link:hover { border-bottom-color: var(--accent); }
+
+  footer{padding:32px 0; border-top:1px solid var(--line);}
+  footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
+  footer p{font-family:var(--mono);font-size:0.78rem;color:var(--graphite);}
+</style>
+
+<!-- PostHog Analytics -->
+<script>
+    !function(t,e){var o,n,p,r;e.__SV||(window.posthog && window.posthog.__loaded)||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="Ji Yi init fn mn Hr pn bn cn capture calculateEventProperties Sn register register_once register_for_session unregister unregister_for_session Tn getFeatureFlag getFeatureFlagPayload getFeatureFlagResult getAllFeatureFlags isFeatureEnabled reloadFeatureFlags updateFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSurveysLoaded onSessionId getSurveys getActiveMatchingSurveys renderSurvey displaySurvey cancelPendingSurvey canRenderSurvey canRenderSurveyAsync Mn identify setPersonProperties unsetPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset shutdown setIdentity clearIdentity get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException addExceptionStep captureLog startExceptionAutocapture stopExceptionAutocapture loadToolbar get_property getSessionProperty Cn xn createPersonProfile setInternalOrTestUser In hn Pn opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing get_explicit_consent_status is_capturing clear_opt_in_out_capturing debug Ur Rt getPageViewId captureTraceFeedback captureTraceMetric an".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+    posthog.init('phc_Csxr2shhxpQgnxkXGfEiYMdk3QNbG6KdU7ghdajiDxwK', {
+        api_host: 'https://us.i.posthog.com',
+        defaults: '2026-05-30',
+        person_profiles: 'identified_only',
+    })
+</script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-WT7SWY7306"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-WT7SWY7306');
+</script>
+
+<link rel="canonical" href="https://shubhuu.in/article.html">
+</head>
+<body>
+
+<div class="wrap" style="padding-top: 40px; display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px;">
+  <div style="display: flex; flex-direction: column; gap: 8px;">
+    <a href="/index.html" class="brand" style="font-family: var(--display); font-weight: 700; font-size: 1.05rem; letter-spacing: -0.01em;">shubh<span style="color:var(--accent)">.</span></a>
+  </div>
+  <div style="display: flex; align-items: center; gap: 16px; font-family: var(--mono); font-size: 0.85rem; color: var(--ink-soft);">
+    <a href="/links.html" style="display: flex; align-items: center; gap: 6px; transition: color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color=''">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg> Links
+    </a>
+    <a href="/creative.html" style="display: flex; align-items: center; gap: 6px; transition: color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color=''">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="4"></circle></svg> Creative
+    </a>
+    <a href="/" style="display: flex; align-items: center; gap: 6px; transition: color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color=''">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg> Portfolio
+    </a>
+    <button id="theme-toggle" style="background: none; border: none; cursor: pointer; color: var(--ink-soft); display: flex; align-items: center; justify-content: center; transition: color 0.2s; margin-left: 8px;" aria-label="Toggle Dark Mode" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color=''">
+      <svg id="theme-icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      <svg id="theme-icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+    </button>
+  </div>
+</div>
+
+<div class="article-wrap">
+  <a href="/blogs.html" class="back-link">← Back to blogs</a>
+  
+  <div class="article-header">
+    <div class="article-meta">August 17, 2026 • Blog</div>
+    <h1 class="article-title">Computer_Science_Glossary_Blog</h1>
+  </div>
+
+  <div class="article-content">
+    <!-- ARTICLE_CONTENT_START -->
+<h1>The Complete Computer Science Glossary</h1>
+<p>Computer science is full of overloaded words. “Resolution” means one thing in networking and another in graphics. “Encoding” shows up in both data formats and security. This glossary exists to cut through that ambiguity.</p>
+<p>It covers <strong>290+ terms</strong> across programming fundamentals, data processing, memory management, algorithms, concurrency, frontend engineering, networking, databases, system architecture, AI/ML, security, DevOps, hardware, and more — grouped by subject area so related ideas sit next to each other.</p>
+<p>Each entry explains the core idea, why it matters, and a typical example or a distinction from a commonly confused term. Bookmark this page and use <strong>Ctrl/Cmd + F</strong> to jump straight to a term.</p>
+<h2>Table of Contents</h2>
+<ul>
+<li><a href="about:blank#fundamental-operations">Fundamental Operations</a></li>
+<li><a href="about:blank#data-transformation-processing">Data Transformation &amp; Processing</a></li>
+<li><a href="about:blank#memory-object-lifecycle">Memory &amp; Object Lifecycle</a></li>
+<li><a href="about:blank#algorithmic-strategies">Algorithmic Strategies</a></li>
+<li><a href="about:blank#execution-flow">Execution Flow</a></li>
+<li><a href="about:blank#state-ui-operations-frontend">State &amp; UI Operations (Frontend)</a></li>
+<li><a href="about:blank#data-flow-networking">Data Flow &amp; Networking</a></li>
+<li><a href="about:blank#code-construction-execution">Code Construction &amp; Execution</a></li>
+<li><a href="about:blank#security-data-integrity">Security &amp; Data Integrity</a></li>
+<li><a href="about:blank#database-storage-management">Database &amp; Storage Management</a></li>
+<li><a href="about:blank#system-architecture-infrastructure">System Architecture &amp; Infrastructure</a></li>
+<li><a href="about:blank#artificial-intelligence-data-science">Artificial Intelligence &amp; Data Science</a></li>
+<li><a href="about:blank#version-control-collaboration">Version Control &amp; Collaboration</a></li>
+<li><a href="about:blank#performance-system-reliability">Performance &amp; System Reliability</a></li>
+<li><a href="about:blank#software-testing-quality-assurance">Software Testing &amp; Quality Assurance</a></li>
+<li><a href="about:blank#identity-security-operations">Identity &amp; Security Operations</a></li>
+<li><a href="about:blank#operating-system-hardware-integration">Operating System &amp; Hardware Integration</a></li>
+<li><a href="about:blank#api-microservice-operations">API &amp; Microservice Operations</a></li>
+<li><a href="about:blank#network-connectivity">Network &amp; Connectivity</a></li>
+<li><a href="about:blank#advanced-artificial-intelligence-mechanics">Advanced Artificial Intelligence Mechanics</a></li>
+<li><a href="about:blank#advanced-algorithm-structure-mechanics">Advanced Algorithm &amp; Structure Mechanics</a></li>
+<li><a href="about:blank#hardware-embedded-systems">Hardware &amp; Embedded Systems</a></li>
+<li><a href="about:blank#llm-agentic-ai-operations">LLM &amp; Agentic AI Operations</a></li>
+<li><a href="about:blank#ui-lifecycle-event-architecture">UI Lifecycle &amp; Event Architecture</a></li>
+<li><a href="about:blank#distributed-data-operations">Distributed Data Operations</a></li>
+<li><a href="about:blank#functional-programming-mechanics">Functional Programming Mechanics</a></li>
+<li><a href="about:blank#graphics-rendering-operations">Graphics &amp; Rendering Operations</a></li>
+<li><a href="about:blank#applied-cryptography">Applied Cryptography</a></li>
+<li><a href="about:blank#devops-infrastructure-management">DevOps &amp; Infrastructure Management</a></li>
+<li><a href="about:blank#distributed-systems-cloud-computing">Distributed Systems &amp; Cloud Computing</a></li>
+<li><a href="about:blank#network-engineering-protocols">Network Engineering &amp; Protocols</a></li>
+<li><a href="about:blank#data-science-big-data">Data Science &amp; Big Data</a></li>
+<li><a href="about:blank#language-design-compiler-mechanics">Language Design &amp; Compiler Mechanics</a></li>
+<li><a href="about:blank#advanced-algorithmic-patterns">Advanced Algorithmic Patterns</a></li>
+<li><a href="about:blank#low-level-systems-programming">Low-Level &amp; Systems Programming</a></li>
+<li><a href="about:blank#machine-learning-model-optimization">Machine Learning &amp; Model Optimization</a></li>
+<li><a href="about:blank#concurrency-synchronization-primitives">Concurrency &amp; Synchronization Primitives</a></li>
+<li><a href="about:blank#microcontroller-mechanics">Microcontroller Mechanics</a></li>
+<li><a href="about:blank#web-component-architecture">Web &amp; Component Architecture</a></li>
+<li><a href="about:blank#terminal-version-control-workflow">Terminal &amp; Version Control Workflow</a></li>
+<li><a href="about:blank#quick-distinctions">Quick Distinctions</a></li>
+<li><a href="about:blank#practical-usage-guidance">Practical Usage Guidance</a></li>
+</ul>
+<hr>
+<h2>Fundamental Operations</h2>
+<ul>
+<li><strong>Argument:</strong> An argument is the concrete value supplied to a function or command when it is invoked. For example, in <code>calculate_total(prices)</code>, <code>prices</code> is an argument. Arguments are often confused with parameters: a parameter is the named input in a function definition, while an argument is the value passed at call time. <a href="https://informatics.fas.harvard.edu/resources/glossary/">1</a> <a href="https://docs.python.org/3/glossary.html">6</a></li>
+<li><strong>Parameter:</strong> A parameter is a named variable in a function, method, or procedure definition that receives an argument when the operation is called. Parameters define what information an operation expects and can have default values, types, or constraints. Clear parameter design makes an interface easier to use and test. <a href="https://informatics.fas.harvard.edu/resources/glossary/">1</a> <a href="https://docs.python.org/3/glossary.html">6</a></li>
+<li><strong>Termination:</strong> Termination is the condition or event that causes an algorithm, loop, process, or recursive sequence to stop. A terminating loop reaches its exit condition, while a terminating recursive function eventually reaches its base case. Proving termination is important because an otherwise correct computation may run forever if its stopping condition is unreachable.</li>
+<li><strong>Invariant:</strong> An invariant is a property that remains true at a particular stage of an algorithm or throughout a program’s execution. A loop invariant can help prove that a sorting algorithm remains correct after every iteration. Invariants are also used to describe valid object states, database constraints, and assumptions shared between concurrent components.</li>
+<li><strong>Iteration:</strong> Iteration is the repeated execution of a block of instructions. A loop usually continues while a condition is true, for a fixed number of repetitions, or for each item in a collection. For example, a program can iterate through a list of student records and calculate a total. Iteration differs from recursion because it repeats through loop constructs rather than through a function calling itself.</li>
+<li><strong>Traversal:</strong> Traversal is the systematic process of visiting the elements of a data structure. A traversal may visit every element exactly once, although some algorithms revisit elements or stop early when a target is found. Examples include scanning an array from left to right, performing a depth-first search of a tree, or visiting nodes in a graph. The traversal order—such as preorder, inorder, postorder, or breadth-first—can affect the result.</li>
+<li><strong>Recursion:</strong> Recursion is a technique in which a function calls itself to solve a smaller instance of the same problem. A correct recursive procedure needs a <strong>base case</strong> that stops the calls and a <strong>recursive case</strong> that reduces the problem toward that base case. Tree traversal, divide-and-conquer algorithms, and directory searches are common applications. Recursion can make a solution clearer, but deep recursion may consume stack memory or exceed the call-stack limit.</li>
+<li><strong>Enumeration:</strong> Enumeration is the process of listing or generating the members of a set, collection, or search space. A program may enumerate every file in a directory, every value in an enumeration type, or every candidate solution to a puzzle. Enumeration is useful when the possible choices are finite and manageable. If the search space is very large, enumeration may need pruning, heuristics, or probabilistic methods.</li>
+<li><strong>Mutation:</strong> Mutation is a change to an existing value, object, or data structure after it has been created. Updating an array element, adding a key to a dictionary, or changing an object property are examples. Mutable data can be efficient because it avoids creating many copies, but shared mutation can make programs difficult to reason about and can cause concurrency bugs. Immutable programming instead creates a new value rather than changing the old one.</li>
+</ul>
+<h2>Data Transformation &amp; Processing</h2>
+<ul>
+<li><strong>Comma-Separated Values (CSV):</strong> CSV is a plain-text format for tabular data in which records are usually separated by line breaks and fields by commas. Quoting and escaping rules are needed when a field itself contains a comma, quote, or line break. CSV is simple and widely supported, but it does not inherently preserve types, relationships, or schema metadata. <a href="https://informatics.fas.harvard.edu/resources/glossary/">1</a></li>
+<li><strong>JavaScript Object Notation (JSON):</strong> JSON is a text-based format for representing objects, arrays, strings, numbers, Boolean values, and null. It is common in APIs and configuration because it is readable and supported across many languages. JSON has a smaller type system than many programming languages, so dates, binary data, and custom classes require explicit conventions. <a href="https://informatics.fas.harvard.edu/resources/glossary/">1</a> <a href="https://developer.mozilla.org/en-US/docs/Glossary">2</a></li>
+<li><strong>Reduction (Fold):</strong> Reduction combines the elements of a collection into one accumulated result by repeatedly applying an operation. Summing numbers, finding a maximum, or building a dictionary from records are examples. A reduction must define its initial value and combination rule, especially when the collection is empty or processed in parallel.</li>
+<li><strong>Encoding:</strong> Encoding represents data in a specified format so another component can store or transmit it. UTF-8 encodes text as bytes, while Base64 represents arbitrary bytes using printable characters. Encoding is not encryption: it is intended to be reversible by anyone who knows the format and does not provide secrecy.</li>
+<li><strong>Mapping:</strong> Mapping applies a function independently to each item in a collection and returns the resulting collection. Mapping a list of prices to include tax, for example, produces a new list of taxed prices. The operation normally preserves the number of elements, although particular libraries may allow a mapping function to return other structures. Mapping is a central operation in functional programming and data-processing pipelines.</li>
+<li><strong>Filtering:</strong> Filtering examines each item in a collection and retains only the items that satisfy a predicate, or Boolean-valued condition. Filtering a list of transactions for amounts above a threshold produces a smaller collection. Unlike mapping, filtering can change the number of elements. A filter should clearly define how missing, invalid, or borderline values are handled.</li>
+<li><strong>Parsing:</strong> Parsing converts an input sequence—such as source code, JSON, XML, a command, or a network message—into a structure that a program can understand. A parser checks the input grammar and often produces a parse tree or other abstract representation. Parsing is different from merely reading bytes: it interprets their organization and meaning. Robust parsers handle malformed input safely and report useful errors.</li>
+<li><strong>Serialization / Deserialization:</strong> <strong>Serialization</strong> converts an in-memory value or object into a transferable representation, such as JSON, XML, Protocol Buffers, or a byte sequence. <strong>Deserialization</strong> reconstructs an in-memory representation from that serialized form. These operations support storage, caching, messaging, and network communication. The format must account for data types, version changes, compatibility, and security; deserializing untrusted data can be dangerous if the format permits executable behavior.</li>
+</ul>
+<h2>Memory &amp; Object Lifecycle</h2>
+<ul>
+<li><strong>Reference Counting:</strong> Reference counting tracks how many active references point to an object and can reclaim the object when that count reaches zero. It provides predictable reclamation for many objects, but cycles of references may remain unless a separate cycle detector or tracing collector handles them. Reference counting can also add overhead to frequent reference updates. <a href="https://informatics.fas.harvard.edu/resources/glossary/">1</a> <a href="https://docs.python.org/3/glossary.html">6</a></li>
+<li><strong>Memory Leak:</strong> A memory leak occurs when a program retains memory that it no longer needs, preventing that memory from being reused. Leaks can result from forgotten deallocation, lingering references, unremoved event listeners, or caches without bounds. Long-running services are especially sensitive because a small leak can accumulate into exhaustion. <a href="https://informatics.fas.harvard.edu/resources/glossary/">1</a> <a href="https://docs.python.org/3/glossary.html">6</a></li>
+<li><strong>Stack:</strong> The stack is a memory region commonly used for function call frames, local variables, return addresses, and temporary values. Allocation and release are usually automatic as functions enter and leave. Stack memory is fast and structured, but it is limited in size; very deep recursion or large local objects can cause stack overflow.</li>
+<li><strong>Heap:</strong> The heap is a memory region used for dynamically allocated objects whose lifetimes are not necessarily tied to one function call. Heap allocation supports flexible data structures and objects shared across scopes. It generally requires more bookkeeping than stack allocation and can suffer from fragmentation, leaks, or synchronization overhead.</li>
+<li><strong>Allocation / Deallocation:</strong> <strong>Allocation</strong> reserves memory for a value, object, buffer, or data structure. <strong>Deallocation</strong> returns memory that is no longer needed so it can be reused. In languages such as C and C++, programmers may explicitly allocate and release heap memory, while managed runtimes automate much of this work. Incorrect deallocation can cause use-after-free errors, double frees, or memory leaks; failing to release memory when necessary is a leak, while releasing it too early is a lifetime error.</li>
+<li><strong>Instantiation:</strong> Instantiation is the creation of a concrete object from a class, type, or template definition. The class describes the fields and behavior, while the instance stores particular values. Instantiation may run a constructor that validates inputs and establishes the object’s initial state. A class can have many independently instantiated objects, each with its own data.</li>
+<li><strong>Garbage Collection:</strong> Garbage collection is automatic management of memory that identifies objects no longer reachable by a running program and reclaims their storage. A tracing collector often starts from roots such as active variables and follows references to determine what remains reachable. Garbage collection reduces many manual memory errors, but collection cycles can consume CPU time and may introduce pauses or latency. It does not automatically close every external resource, such as files or database connections; those resources usually require explicit cleanup.</li>
+</ul>
+<h2>Algorithmic Strategies</h2>
+<ul>
+<li><strong>Big O Notation:</strong> Big O notation describes an upper-bound growth rate for an algorithm’s resource usage as input size increases. It helps compare scalability, such as distinguishing linear <code>O(n)</code> from quadratic <code>O(n²)</code> behavior. Big O abstracts away constant factors and machine details, so real performance still depends on data, implementation, hardware, and workload.</li>
+<li><strong>Dynamic Programming:</strong> Dynamic programming solves problems with overlapping subproblems and optimal substructure by storing solutions to smaller subproblems. It can be implemented top-down with memoization or bottom-up with a table. The technique often turns an exponential recursive search into a polynomial-time algorithm, at the cost of additional memory.</li>
+<li><strong>Divide and Conquer:</strong> Divide and conquer breaks a problem into smaller subproblems, solves them independently, and combines their results. Merge sort and many geometric algorithms use this pattern. Its performance depends on how evenly the problem is divided and how expensive the combination step is.</li>
+<li><strong>Randomization:</strong> Randomization uses random choices during an algorithm’s execution to improve average performance, avoid adversarial inputs, or produce an approximate result. Randomized quicksort and probabilistic data structures are common examples. A randomized algorithm should document its probability guarantees and, when reproducibility matters, allow a controlled seed.</li>
+<li><strong>Hashing:</strong> Hashing applies a deterministic function to input data to produce a fixed-size value called a hash or digest. Hash tables use hashes to locate entries quickly, while cryptographic hashes help detect changes and support password-storage designs. A hash is not necessarily unique: different inputs can produce the same output, which is called a collision. Hash functions are therefore selected according to their purpose, and cryptographic hashing should not be confused with encryption because a secure hash is designed to be one-way.</li>
+<li><strong>Heuristic:</strong> A heuristic is a rule, estimate, or strategy that guides a search toward a useful answer without necessarily guaranteeing the mathematically optimal answer. Route planning may prefer roads that appear to move closer to the destination, and a game-playing program may evaluate promising moves first. Heuristics trade certainty or completeness for speed, lower memory use, or practical results. Some heuristics are admissible or otherwise designed to preserve optimality under specific conditions; others deliberately accept approximate solutions.</li>
+<li><strong>Memoization:</strong> Memoization stores the result of a function call so that the program can return the saved result when the same inputs occur again. It is especially effective for pure or side-effect-free functions with overlapping subproblems, such as recursive Fibonacci calculation or dynamic programming. The cache consumes memory and must use a correct key for the inputs. Results may also need expiration or invalidation if the underlying data can change.</li>
+</ul>
+<h2>Execution Flow</h2>
+<ul>
+<li><strong>Coroutine:</strong> A coroutine is a function-like computation that can suspend and later resume, preserving its execution state. Coroutines are useful for asynchronous I/O, cooperative scheduling, generators, and pipelines. A coroutine does not necessarily run on a separate thread; it must be scheduled or resumed by a runtime or event loop. <a href="https://docs.python.org/3/glossary.html">6</a> <a href="https://www.postgresql.org/docs/current/glossary.html">7</a></li>
+<li><strong>Atomic Operation:</strong> An atomic operation appears indivisible to other concurrent observers: they see either its state before the operation or its state after it, not a partially completed intermediate state. Atomicity may be supplied by hardware instructions, locks, transactions, or language guarantees. A statement that looks simple in source code is not automatically atomic. <a href="https://docs.python.org/3/glossary.html">6</a> <a href="https://www.postgresql.org/docs/current/glossary.html">7</a></li>
+<li><strong>Parallelism:</strong> Parallelism is the simultaneous execution of separate parts of a computation on multiple processors, cores, or hardware units. It can reduce elapsed time for work that can be divided safely. Parallel programs must address data dependencies, synchronization, load balancing, and the overhead of moving or combining results.</li>
+<li><strong>Event Loop:</strong> An event loop repeatedly waits for events, selects ready callbacks or tasks, and executes them according to a scheduling policy. It is common in graphical interfaces and asynchronous server runtimes. An event loop remains responsive only when individual callbacks avoid long-running blocking work or delegate that work appropriately.</li>
+<li><strong>Concurrency:</strong> Concurrency means that multiple tasks can make progress during overlapping periods. They may alternate on one processor, run in parallel on several cores, or be managed by an event loop. Concurrency improves responsiveness and allows a program to overlap waiting for I/O with useful work. It also introduces coordination concerns such as races, deadlocks, ordering, and visibility of shared data.</li>
+<li><strong>Asynchronous (Async):</strong> Asynchronous execution allows a program to start an operation and continue with other work instead of blocking until the operation completes. The result is later delivered through a callback, future, promise, event, or <code>await</code> expression. Async programming is particularly useful for network and file I/O. Asynchronous does not automatically mean parallel: an event loop can handle many waiting operations on a single thread.</li>
+<li><strong>Synchronization:</strong> Synchronization coordinates concurrent tasks so they observe and update shared state safely and in an intended order. Locks, semaphores, barriers, atomic operations, message passing, and condition variables are common synchronization mechanisms. Good synchronization protects invariants without unnecessarily reducing concurrency. Poor synchronization can produce data races, deadlocks, or performance bottlenecks.</li>
+</ul>
+<h2>State &amp; UI Operations (Frontend)</h2>
+<ul>
+<li><strong>State Machine:</strong> A state machine represents behavior as a set of states, events, transitions, and sometimes actions or guards. UI flows such as loading, success, failure, and retry can be modeled explicitly rather than through many loosely related Boolean flags. State machines help expose impossible transitions and make complex interaction logic testable.</li>
+<li><strong>Derived State:</strong> Derived state is a value calculated from existing source state rather than stored independently. For example, a filtered list or a button’s enabled status may be derived from the current data. Computing it from a single source of truth avoids synchronization bugs, while expensive derivations may be memoized. <a href="https://developer.mozilla.org/en-US/docs/Glossary">2</a></li>
+<li><strong>State Management:</strong> State management is the design and implementation of how an interface stores, updates, derives, and shares changing data. Local component state is suitable for narrowly scoped values, while shared stores or context can coordinate data across views. Good state management defines a single source of truth and predictable update rules.</li>
+<li><strong>Optimistic Update:</strong> An optimistic update changes the interface immediately on the assumption that a server operation will succeed. The application later confirms the result or restores the previous state if the request fails. Optimistic designs improve perceived responsiveness but require reconciliation, duplicate-request handling, and clear feedback when the assumption is wrong.</li>
+<li><strong>Hydration:</strong> Hydration is the process of attaching client-side JavaScript behavior to HTML that was rendered in advance, commonly by server-side rendering or static generation. The browser reuses the existing markup and connects it to components, event handlers, and state. Hydration can improve initial display speed and search visibility, but the server and client output must match closely. A mismatch can produce warnings, visual changes, or discarded server-rendered content.</li>
+<li><strong>Reconciliation:</strong> Reconciliation is the process by which a UI framework compares a previous component tree with a new one and determines which rendered elements need updating. Frameworks often use keys, identity rules, and a virtual representation to avoid replacing unchanged DOM nodes. Efficient reconciliation reduces unnecessary work, but it is not always literally the same as a minimal mathematical diff. Stable component identity and appropriate keys are important for preserving state correctly.</li>
+<li><strong>Debouncing:</strong> Debouncing delays a function until a specified quiet period has elapsed since the most recent triggering event. It is useful for search suggestions, form validation, and resize handling, where many rapid events should produce one final action. For example, a search request may be sent only after the user stops typing for 300 milliseconds. Debouncing can make interfaces less noisy, but it adds intentional delay and may need cancellation when a component is removed.</li>
+<li><strong>Throttling:</strong> Throttling limits how often a function may execute during a period of repeated events. A scroll handler might run at most once every 100 milliseconds even if the browser emits many scroll events. Throttling is useful when intermediate updates are valuable but unrestricted execution would waste CPU or cause jank. A throttle can be configured to run at the beginning of an interval, at the end, or both.</li>
+</ul>
+<h2>Data Flow &amp; Networking</h2>
+<ul>
+<li><strong>Long Polling:</strong> Long polling is a request pattern in which a server holds a client’s request open until new data is available or a timeout occurs, then returns a response and expects the client to reconnect. It can provide near-real-time updates without a persistent bidirectional connection. Servers must manage timeouts, reconnects, duplicate events, and many open requests. <a href="https://developer.mozilla.org/en-US/docs/Glossary">2</a> <a href="https://datatracker.ietf.org/doc/html/rfc1208">9</a></li>
+<li><strong>Server-Sent Events (SSE):</strong> Server-Sent Events provide a one-way stream in which a server sends event messages to a browser over a long-lived HTTP connection. SSE is useful for notifications, progress updates, and live feeds when the client does not need to send messages over the same channel. Reconnection behavior, event identifiers, and authorization should be designed explicitly. <a href="https://developer.mozilla.org/en-US/docs/Glossary">2</a></li>
+<li><strong>Buffering:</strong> Buffering temporarily stores data between a producer and a consumer whose speeds or schedules differ. Buffers smooth short bursts and allow streaming components to operate independently. A buffer that grows without limit can exhaust memory, so systems need capacity limits and a policy for blocking, dropping, or applying backpressure.</li>
+<li><strong>Flow Control:</strong> Flow control regulates the amount of data a sender transmits so a receiver or intermediate network can process it safely. It may use windows, acknowledgements, credits, or backpressure. Flow control protects receiver capacity, whereas congestion control primarily responds to limits in the network path.</li>
+<li><strong>Polling:</strong> Polling is the repeated act of requesting or checking for new information at intervals. A client may ask a server for job status every few seconds. Polling is straightforward and works when the server cannot initiate communication, but it can create unnecessary requests and delayed updates. Adaptive intervals, long polling, server-sent events, or WebSockets may be better for some workloads.</li>
+<li><strong>Streaming:</strong> Streaming processes data incrementally as it arrives rather than waiting for the complete dataset. Audio playback, log monitoring, video delivery, and large-file processing use streaming. Streaming reduces time to first result and peak memory requirements, but it requires flow control, error handling, ordering rules, and a defined way to signal completion.</li>
+<li><strong>Multiplexing:</strong> Multiplexing combines multiple logical data streams over one physical or logical connection. The receiver uses identifiers or framing information to separate the streams again. This can reduce connection overhead and allow several requests or conversations to share a channel. Multiplexing must handle fairness, prioritization, and the possibility that congestion on one shared connection affects other streams.</li>
+</ul>
+<h2>Code Construction &amp; Execution</h2>
+<ul>
+<li><strong>Library:</strong> A library is reusable code that a program calls to perform general or specialized operations. Libraries usually run within the application’s process and expose an API, unlike a standalone service that communicates across a network boundary. Good libraries document contracts, compatibility, errors, and resource ownership. <a href="https://informatics.fas.harvard.edu/resources/glossary/">1</a></li>
+<li><strong>Dependency:</strong> A dependency is an external component that a program relies on for compilation, execution, data, or infrastructure. Dependencies may be direct or transitive and can introduce version, security, licensing, and availability concerns. Dependency manifests and lockfiles make versions more reproducible. <a href="https://informatics.fas.harvard.edu/resources/glossary/">1</a></li>
+<li><strong>Linking:</strong> Linking combines compiled object files and libraries into a final executable or loadable module. A linker resolves references between separately compiled units and assigns addresses or relocation information. Static linking copies library code into the output, while dynamic linking resolves shared libraries at load time or during execution.</li>
+<li><strong>Interpreting:</strong> Interpreting executes source code or an intermediate representation through a runtime rather than first producing a complete native executable. Interpreters can provide portability and rapid experimentation, though repeated execution may be slower without caching or JIT compilation. Many modern runtimes combine interpretation with compilation.</li>
+<li><strong>Compiling:</strong> Compiling transforms source code into another executable representation, such as native machine code, bytecode, or an intermediate representation. A compiler may perform lexical analysis, parsing, type checking, optimization, and code generation. Compilation can happen before execution, during installation, or while the program runs. The output is not always raw binary machine code; the term includes many source-to-intermediate transformations.</li>
+<li><strong>Transpiling:</strong> Transpiling converts source code from one language or language version into another source language with a similar level of abstraction. TypeScript-to-JavaScript and modern JavaScript-to-older JavaScript are common examples. The result is then interpreted or compiled for its target environment. Source maps help developers relate generated code and errors back to the original source.</li>
+<li><strong>Refactoring:</strong> Refactoring changes the internal structure of code without intentionally changing its externally observable behavior. Extracting a function, renaming a variable, simplifying a conditional, or introducing a design pattern can improve readability and maintainability. Automated tests provide evidence that behavior was preserved. Refactoring is not the same as adding a feature or fixing a known behavior defect, although those activities may occur in the same change.</li>
+<li><strong>Interpolation:</strong> Interpolation inserts the value of an expression into a string or template. For example, a greeting template may contain a placeholder that is replaced with a user’s name at runtime. Interpolation improves readability compared with manual string concatenation. Values inserted into HTML, SQL, shell commands, or other executable contexts must still be escaped or parameterized to prevent injection vulnerabilities.</li>
+</ul>
+<h2>Security &amp; Data Integrity</h2>
+<ul>
+<li><strong>Threat:</strong> A threat is a potential event, actor, or circumstance capable of causing harm to an asset, system, or user. Threat modeling considers who or what could exploit a weakness and what outcome could result. A threat is not the same as a vulnerability: a vulnerability is a weakness, while a threat is a possible source or event of harm. <a href="https://csrc.nist.gov/glossary">3</a></li>
+<li><strong>Vulnerability:</strong> A vulnerability is a weakness in software, hardware, configuration, process, or design that can be exploited or otherwise lead to an undesirable security outcome. Vulnerabilities may be reduced through secure design, patching, isolation, monitoring, and compensating controls. A vulnerability’s severity depends on exploitability, impact, exposure, and affected assets. <a href="https://csrc.nist.gov/glossary">3</a></li>
+<li><strong>Encoding:</strong> Security-related encoding converts data into a representation suitable for a particular context, such as HTML, a URL, or a JSON string. Context-aware output encoding prevents data from being interpreted as markup or code. Encoding does not validate business rules and does not replace authentication, authorization, or parameterized database access.</li>
+<li><strong>Threat Modeling:</strong> Threat modeling systematically identifies assets, trust boundaries, likely attackers, attack paths, and mitigations. Teams may use methods such as STRIDE or attack trees during design reviews. It is most effective when repeated as the system changes and when identified threats are connected to concrete tests or controls.</li>
+<li><strong>Validation:</strong> Validation checks whether data satisfies expected rules before the program accepts or processes it. Rules may concern type, format, range, length, required fields, or relationships between fields. Client-side validation improves usability, but security-critical validation must also occur on the server or at the trust boundary. Validation asks whether data is acceptable; it does not necessarily make unsafe data safe.</li>
+<li><strong>Sanitization:</strong> Sanitization transforms or removes potentially dangerous content so it can be used safely in a particular context. For example, HTML sanitization can remove disallowed tags and attributes from user-generated content. Sanitization is context-dependent: the correct procedure for HTML is different from the correct procedure for SQL, a shell command, or a URL. Parameterized queries and context-aware output encoding are often safer than attempting to remove all suspicious characters.</li>
+<li><strong>Obfuscation:</strong> Obfuscation makes code, data, or control flow harder for humans or automated tools to understand while preserving its behavior. Minifying variable names and rearranging logic can deter casual inspection, reduce file size, or protect intellectual property. Obfuscation is not encryption and should not be used to protect secrets; determined analysts may reverse-engineer it. Sensitive credentials must be kept out of client-delivered code entirely.</li>
+</ul>
+<h2>Database &amp; Storage Management</h2>
+<ul>
+<li><strong>Schema:</strong> A database schema describes the structure and constraints of stored data, including tables, columns, types, relationships, indexes, and permissions. A schema provides a shared contract between applications and the database. Schema migrations should be versioned and designed for compatibility with running application versions. <a href="https://www.postgresql.org/docs/current/glossary.html">7</a></li>
+<li><strong>ACID:</strong> ACID describes four commonly desired transaction properties: <strong>atomicity</strong>, <strong>consistency</strong>, <strong>isolation</strong>, and <strong>durability</strong>. Together they define how a database should preserve valid state despite concurrent operations and failures. The exact guarantees depend on the database engine, transaction configuration, and isolation level. <a href="https://www.postgresql.org/docs/current/glossary.html">7</a></li>
+<li><strong>Transaction:</strong> A transaction is a logical unit of database work that should follow defined correctness properties, commonly described by atomicity, consistency, isolation, and durability. A transaction either commits its intended changes or rolls them back according to the database’s rules. Isolation level affects how concurrent transactions can observe one another.</li>
+<li><strong>Query Planning:</strong> Query planning is the process of choosing an execution strategy for a database query. A planner may select indexes, join orders, scans, and parallel operations based on statistics and estimated costs. Examining an execution plan helps diagnose slow queries and reveals when estimates or indexes do not match actual workload behavior.</li>
+<li><strong>Indexing:</strong> Indexing creates an auxiliary data structure that helps a database locate rows without scanning the entire table. A B-tree index can support ordered searches, while hash or specialized indexes support other access patterns. Indexes can greatly accelerate reads but consume storage and make inserts, updates, and deletes more expensive. The best index depends on query patterns, column selectivity, ordering, and the database engine.</li>
+<li><strong>Normalization:</strong> Database normalization organizes relational data to reduce unnecessary duplication and prevent update, insertion, and deletion anomalies. It commonly separates entities into related tables connected by keys and applies rules such as the normal forms. Normalization improves consistency, but highly normalized designs may require more joins. Controlled denormalization can be appropriate when measured read performance or reporting requirements justify the redundancy.</li>
+<li><strong>Sharding:</strong> Sharding horizontally partitions rows of a dataset across multiple databases or servers. A shard key determines where a record is stored, allowing capacity and traffic to be distributed. Sharding can scale beyond the limits of one machine, but it complicates joins, transactions, rebalancing, backups, and operational monitoring. A poor shard key can create hot spots or make related data difficult to access together.</li>
+</ul>
+<h2>System Architecture &amp; Infrastructure</h2>
+<ul>
+<li><strong>Service Mesh:</strong> A service mesh is an infrastructure layer that manages communication between services, commonly providing service identity, traffic policy, retries, observability, and encryption through sidecars or other data-plane components. It can standardize cross-service behavior but adds operational and latency complexity. <a href="https://kubernetes.io/docs/reference/glossary/">4</a></li>
+<li><strong>Infrastructure as Code (IaC):</strong> Infrastructure as code defines servers, networks, permissions, storage, and other infrastructure in declarative or scripted files that can be reviewed and applied automatically. IaC improves repeatability and auditability, but it must manage state, secrets, drift, destructive changes, and provider-specific behavior. <a href="https://informatics.fas.harvard.edu/resources/glossary/">1</a> <a href="https://kubernetes.io/docs/reference/glossary/">4</a></li>
+<li><strong>Virtualization:</strong> Virtualization presents a logical computing resource—such as a machine, processor, storage device, or network—to software while the underlying physical resource is shared or abstracted. Virtual machines emulate complete systems, while lighter techniques may virtualize only selected environments. Virtualization improves isolation and utilization but introduces management and performance overhead.</li>
+<li><strong>Service Discovery:</strong> Service discovery allows applications to locate the network endpoints of services whose instances may change dynamically. A registry, DNS-based mechanism, or orchestration platform can publish healthy instances and remove failed ones. Discovery must account for caching, stale endpoints, authentication, and graceful handling when no instance is available.</li>
+<li><strong>Containerization:</strong> Containerization packages an application with its libraries, configuration, and runtime assumptions into an isolated, portable unit. Containers share the host operating system kernel but have separated processes, filesystems, and resource controls. They improve deployment consistency and startup speed, although they are not identical to full virtual machines and still require security hardening. Images should be minimal, reproducible, and built from trusted sources.</li>
+<li><strong>Orchestration:</strong> Orchestration automates the deployment, scheduling, networking, scaling, health management, and rollout of services, often across many containers or machines. An orchestrator can restart failed instances, distribute workloads, and expose service endpoints. It adds operational complexity, so teams should use it when the benefits of automated coordination outweigh the management cost.</li>
+<li><strong>Load Balancing:</strong> Load balancing distributes requests or network traffic among multiple servers or service instances. It can use round-robin, least-connections, weighted, latency-aware, or content-based strategies. A load balancer may also perform health checks, TLS termination, connection management, and failover. Session state must be designed carefully if requests from one user can reach different instances.</li>
+</ul>
+<h2>Artificial Intelligence &amp; Data Science</h2>
+<ul>
+<li><strong>Bias:</strong> Bias is systematic error or skew that causes a model or dataset to behave differently from the intended target across inputs or groups. It can arise from sampling, labels, measurement, features, objectives, or deployment conditions. Bias analysis requires representative evaluation and careful interpretation rather than assuming that one aggregate metric is sufficient. <a href="https://developers.google.com/machine-learning/glossary">5</a></li>
+<li><strong>Label:</strong> A label is the target value or annotated outcome that a supervised-learning model is trained to predict. Labels may be categories, numbers, rankings, or structured outputs. Label quality, consistency, ambiguity, and leakage strongly affect the model’s learned behavior. <a href="https://developers.google.com/machine-learning/glossary">5</a></li>
+<li><strong>Feature:</strong> A feature is an input variable or measurable representation supplied to a machine-learning model. Features may be numerical, categorical, textual, visual, or derived from other data. Useful features capture predictive information without leaking answers from the future or from the label itself. Feature definitions should remain consistent between training and production.</li>
+<li><strong>Overfitting:</strong> Overfitting occurs when a model learns details, noise, or accidental patterns in its training data that do not generalize to new data. A model can have excellent training performance but poor validation performance. Regularization, simpler models, more data, data augmentation, and early stopping are common ways to reduce overfitting.</li>
+<li><strong>Training:</strong> Training is the process of adjusting a machine-learning model’s parameters using data and an optimization objective. The model makes predictions, calculates an error or loss, and updates its weights to improve on the training examples. A separate validation or test set helps measure generalization to unseen data. More data or compute does not automatically produce a better model; data quality, objective design, architecture, and evaluation all matter.</li>
+<li><strong>Inference:</strong> Inference is the use of a trained model to produce predictions, classifications, generated content, or other outputs for new inputs. It may occur offline in batches or online for interactive requests. Inference performance depends on model size, hardware, batching, caching, and precision. A model can perform fast inference while still producing inaccurate or unsafe results, so quality and monitoring remain necessary.</li>
+<li><strong>Tokenization:</strong> Tokenization divides text into tokens that a language model or NLP system can process. A token may represent a character, word fragment, word, punctuation mark, or special control symbol, depending on the tokenizer. Token count affects context limits, latency, and cost. Tokenization is not the same as semantic understanding: it is a representation step that converts text into model input units.</li>
+</ul>
+<h2>Version Control &amp; Collaboration</h2>
+<ul>
+<li><strong>Remote:</strong> A remote is a named reference to another repository location, such as a server-hosted repository. Developers use remotes to fetch, pull, and push commits between local and shared histories. A remote URL and its authentication method should be checked before transferring sensitive code. <a href="https://docs.github.com/en/get-started/learning-about-github/github-glossary">10</a></li>
+<li><strong>Pull Request:</strong> A pull request is a proposed set of changes submitted for review before it is merged into a target branch. It provides a place for discussion, automated checks, review comments, and approval. A pull request is a collaboration workflow rather than a special kind of commit. <a href="https://docs.github.com/en/get-started/learning-about-github/github-glossary">10</a></li>
+<li><strong>Commit:</strong> A commit is a recorded snapshot of selected changes in a version-control repository. It normally includes a message, author information, a parent reference, and the content changes. Small, coherent commits make review, debugging, reverting, and collaboration easier. A commit is not automatically a complete release or proof that the code works.</li>
+<li><strong>Cherry-Picking:</strong> Cherry-picking applies the changes from a selected commit onto another branch without merging the entire source branch. It is useful for backporting a focused bug fix to a maintenance release. Because the change receives a new commit identity and may conflict with later work, teams should document its origin and avoid creating duplicate histories unnecessarily.</li>
+<li><strong>Branching:</strong> Branching creates a separate line of development in a version-control repository. Developers can work on a feature, experiment, or fix without immediately changing the main branch. Branches support parallel collaboration, but long-lived branches can diverge and become difficult to integrate. Short-lived branches and frequent synchronization generally reduce integration risk.</li>
+<li><strong>Merging:</strong> Merging combines the histories and changes of two branches. If the same lines were changed in incompatible ways, the version-control system reports a conflict that a developer must resolve. A successful merge should be tested because syntactically valid combined code can still contain logical integration errors. Pull or merge requests often add review and automated checks before integration.</li>
+<li><strong>Rebasing:</strong> Rebasing replays a sequence of commits on top of a different base commit, producing a new linear history. It can make project history easier to read and ensure a feature is tested against current main-branch code. Because commit identities change, rebasing published commits can disrupt collaborators. Teams should establish clear rules about when rewriting shared history is acceptable.</li>
+</ul>
+<h2>Performance &amp; System Reliability</h2>
+<ul>
+<li><strong>Service-Level Objective (SLO):</strong> An SLO is a target for a measurable service behavior, such as availability, latency, or successful request rate, over a defined period. SLOs help teams prioritize reliability work and define an error budget for acceptable failures. An SLO is an internal engineering target, while an SLA may be a customer-facing agreement with consequences.</li>
+<li><strong>Fault Tolerance:</strong> Fault tolerance is the ability of a system to continue providing a defined level of service when components fail. Redundancy, replication, failover, retries, isolation, and graceful degradation can contribute to fault tolerance. No system tolerates every failure; the tolerated fault model and recovery objectives must be explicit.</li>
+<li><strong>Compression:</strong> Compression reduces the number of bytes required to represent data. Lossless compression preserves the original exactly, while lossy compression removes information that is considered less important. Compression can reduce storage and network costs but consumes CPU and may increase latency if applied repeatedly or to data that is already compressed.</li>
+<li><strong>Observability:</strong> Observability is the ability to understand a system’s internal behavior from its external outputs. Logs, metrics, traces, profiles, and structured events provide complementary views of failures and performance. Effective observability uses meaningful context, correlation identifiers, appropriate sampling, and privacy-aware retention rather than merely collecting large volumes of data.</li>
+<li><strong>Caching:</strong> Caching stores a copy of data or a computed result in a faster or closer location so future requests can be served more quickly. Caches may exist in CPUs, browsers, databases, application memory, CDNs, or distributed systems. The central challenge is freshness: stale data may be returned unless expiration, invalidation, versioning, or revalidation rules are defined. A cache miss and a cache failure should both be handled safely.</li>
+<li><strong>Rate Limiting:</strong> Rate limiting restricts how frequently a client, user, IP address, token, or service may perform an operation. It protects systems from accidental overload, abuse, and unfair resource consumption. Common algorithms include fixed windows, sliding windows, token buckets, and leaky buckets. A well-designed API communicates limits and retry timing clearly and distinguishes legitimate bursts from sustained excessive traffic.</li>
+<li><strong>Graceful Degradation:</strong> Graceful degradation allows a system to continue providing core service when a dependency, resource, or feature fails. Examples include serving cached content when a recommendation service is unavailable or disabling image previews while preserving text access. The degraded behavior should be deliberate, observable, and safe rather than silently corrupting results. This concept is related to fault tolerance but emphasizes reduced capability instead of unchanged operation.</li>
+</ul>
+<h2>Software Testing &amp; Quality Assurance</h2>
+<ul>
+<li><strong>Assertion:</strong> An assertion is a check that a condition expected by the program or test is true. In tests, assertions compare actual behavior with an expected result; in production code, they may document internal invariants. Assertions should not be the only validation for untrusted input, and some runtimes can disable them.</li>
+<li><strong>Regression Testing:</strong> Regression testing reruns tests after a change to detect behavior that worked previously but has been broken by the change. Regression suites may include unit, integration, system, performance, and security tests. A useful suite focuses on important contracts and past failure modes rather than accumulating arbitrary examples.</li>
+<li><strong>Unit Testing:</strong> Unit testing checks a small, isolated unit of behavior, such as a function, class, or module. Unit tests are usually fast and precise, making them useful for regression detection and design feedback. Isolation should not be interpreted as testing every dependency with a fake; boundary behavior still requires integration or system tests.</li>
+<li><strong>Integration Testing:</strong> Integration testing verifies that multiple components work together across a real or realistic boundary, such as an application and database or a service and message broker. These tests catch configuration, serialization, authentication, and contract errors that unit tests may miss. They are generally slower and require controlled test environments.</li>
+<li><strong>Linting:</strong> Linting performs automated static checks on source code to identify likely defects, style violations, suspicious constructs, and project-rule violations. Linters improve consistency and catch simple problems before execution. They do not prove that a program is correct, because many runtime, integration, and business-logic errors require tests or review.</li>
+<li><strong>Mocking:</strong> Mocking replaces a real dependency with a controlled test double that imitates selected behavior. A test may mock a payment provider, clock, database, or network service to isolate the unit being tested. Mocks can verify that calls were made with expected arguments, but overly detailed mocks may couple tests to implementation and fail to represent real systems. Integration tests are still needed to check actual boundaries.</li>
+<li><strong>Profiling:</strong> Profiling measures a program while it runs to identify where time, memory, I/O, or other resources are being consumed. A CPU profiler may report hot functions, while a memory profiler may reveal allocation patterns or leaks. Profiling should use representative workloads and account for measurement overhead. Optimization should target measured bottlenecks rather than assumptions.</li>
+</ul>
+<h2>Identity &amp; Security Operations</h2>
+<ul>
+<li><strong>Least Privilege:</strong> Least privilege grants an identity, process, or service only the permissions required for its legitimate task, for only as long as needed. It limits the damage caused by credential theft, software bugs, or misuse. Applying least privilege requires identifying operations, separating duties, managing service accounts, and reviewing permissions over time. <a href="https://csrc.nist.gov/glossary">3</a></li>
+<li><strong>OAuth:</strong> OAuth is an authorization framework that allows a client to obtain scoped access to a resource on behalf of a resource owner without receiving the owner’s password. Modern deployments use explicit flows, redirect validation, state protection, and narrowly scoped tokens. OAuth provides delegated authorization; it is not by itself a complete user-authentication protocol. <a href="https://csrc.nist.gov/glossary">3</a></li>
+<li><strong>Session:</strong> A session is the server-recognized period of interaction associated with an authenticated user or client. It may be represented by a secure cookie, a server-side record, or a signed token. Sessions need expiration, revocation or rotation strategies, protection against fixation and theft, and appropriate handling of logout and inactivity.</li>
+<li><strong>Multi-Factor Authentication (MFA):</strong> MFA requires two or more independent categories of evidence, such as something the user knows, has, or is. Combining factors reduces the impact of a stolen password, although the strength depends on the factor and recovery process. Phishing-resistant hardware or cryptographic factors generally provide stronger protection than easily intercepted codes.</li>
+<li><strong>Authentication (AuthN):</strong> Authentication verifies the identity of a person, service, or device. It may use a password, possession of a token, a cryptographic key, or biometric evidence, often combining multiple factors. Authentication answers “Who are you?” Secure systems protect credentials, limit failed attempts, and issue appropriately scoped sessions or tokens.</li>
+<li><strong>Authorization (AuthZ):</strong> Authorization determines what an authenticated identity is permitted to access or do. Policies may be based on roles, attributes, resource ownership, scopes, or explicit permissions. Authorization checks must be enforced at the server and at every relevant resource boundary. Authorization answers “What may you do?” and is distinct from authentication.</li>
+<li><strong>Salting:</strong> Salting adds a unique, unpredictable value to a password before applying a password-hashing function. The salt is normally stored with the resulting hash; it is not intended to be secret. A unique salt prevents identical passwords from producing identical stored hashes and makes precomputed rainbow-table attacks much less useful. Passwords should use a dedicated slow password-hashing algorithm rather than a fast general-purpose hash.</li>
+</ul>
+<h2>Operating System &amp; Hardware Integration</h2>
+<ul>
+<li><strong>Process:</strong> A process is an operating-system-managed instance of a program with its own virtual address space and execution resources. Processes provide isolation from one another, although they can communicate through pipes, sockets, shared memory, or other IPC mechanisms. Creating and switching processes generally costs more than creating and switching threads. <a href="https://informatics.fas.harvard.edu/resources/glossary/">1</a> <a href="https://docs.python.org/3/glossary.html">6</a></li>
+<li><strong>Thread:</strong> A thread is an execution path scheduled within a process. Threads share the process’s memory and resources, which makes communication efficient but creates risks from races and unsafe shared mutation. A program may use multiple threads for parallel work, responsiveness, or overlapping I/O. <a href="https://docs.python.org/3/glossary.html">6</a></li>
+<li><strong>Virtual Memory:</strong> Virtual memory gives each process an abstract address space that the operating system maps to physical memory. It provides isolation, simplifies allocation, and can allow inactive pages to move out of RAM. Address translation through page tables and translation-lookaside buffers adds overhead, and invalid or unauthorized accesses generate faults.</li>
+<li><strong>System Call:</strong> A system call is a controlled request from a user program to an operating-system service running with greater privilege. File access, process creation, networking, and memory mapping commonly use system calls. The transition validates arguments and changes execution mode, so excessive system calls or inefficient data copying can affect performance.</li>
+<li><strong>Context Switching:</strong> Context switching saves the execution state of one process or thread and restores the state of another. The state can include registers, program counters, stack information, and scheduling metadata. It enables multitasking but has overhead because the processor spends time switching rather than executing application instructions. Excessive switching can reduce performance, especially when tasks are too small or heavily synchronized.</li>
+<li><strong>Paging:</strong> Paging divides virtual memory and physical memory into fixed-size pages and frames. The operating system maps virtual pages to physical frames and may move less-used pages to secondary storage when RAM is scarce. Paging supports isolation and gives programs a larger virtual address space, but page faults that require disk or SSD access are much slower than RAM access. Excessive paging, called thrashing, can make a system nearly unusable.</li>
+<li><strong>Interrupts:</strong> An interrupt is a signal that causes the processor to pause its current execution path and run an interrupt handler. Hardware devices use interrupts to report events such as incoming data, while software can raise interrupts for system calls or exceptions. The operating system saves enough state to resume the interrupted task afterward. Handlers are usually kept short so they do not delay other work.</li>
+</ul>
+<h2>API &amp; Microservice Operations</h2>
+<ul>
+<li><strong>Retry:</strong> A retry repeats a failed operation under the assumption that the failure may be temporary. Safe retry design requires bounded attempts, delay and jitter, classification of retryable errors, and idempotent or deduplicated operations. Uncontrolled retries can amplify an outage and create a retry storm.</li>
+<li><strong>Timeout:</strong> A timeout limits how long a caller waits for an operation to complete. Timeouts prevent indefinitely occupied resources, but they do not necessarily cancel work already executing on the server. Timeout values should reflect the dependency’s expected latency and be paired with cancellation, retry, and fallback policies.</li>
+<li><strong>API Versioning:</strong> API versioning manages changes to an interface so existing clients continue to work while newer clients adopt updated behavior. Versions may appear in a URL, header, media type, or compatibility policy. A versioning strategy should define deprecation notices, migration guidance, compatibility guarantees, and a retirement schedule.</li>
+<li><strong>Circuit Breaker:</strong> A circuit breaker temporarily stops calls to a failing dependency after repeated failures. While open, it fails quickly or uses a fallback; after a waiting period, it allows limited test calls to determine whether recovery has occurred. Circuit breakers prevent a local dependency failure from exhausting all threads, connections, or request time in the caller.</li>
+<li><strong>Idempotency:</strong> An operation is idempotent when repeating it has the same intended effect as performing it once. Setting a resource’s status to “active” can be idempotent, while incrementing a counter usually is not. Idempotency is valuable when clients retry requests after timeouts. APIs often use an idempotency key so a server can recognize duplicate attempts to create or charge a resource.</li>
+<li><strong>Pagination:</strong> Pagination divides a large result set into smaller responses. Offset-based pagination is simple but can become slow or inconsistent when records change; cursor-based pagination uses a position marker and is often more stable for changing datasets. An API should document page size limits, ordering, continuation tokens, and behavior when items are added or deleted.</li>
+<li><strong>Webhooks:</strong> A webhook is an event-driven HTTP callback in which one service sends a request to another service when an event occurs. Webhooks avoid constant polling and can deliver near-real-time notifications. Receivers should authenticate and validate messages, handle retries and duplicate deliveries, respond quickly, and process work asynchronously. Because delivery may fail or be repeated, webhook consumers should usually be idempotent.</li>
+</ul>
+<h2>Network &amp; Connectivity</h2>
+<ul>
+<li><strong>Packet:</strong> A packet is a formatted unit of data carried across a packet-switched network. It usually contains a payload and headers describing addressing, protocol, sequencing, or control information. Packets may be delayed, reordered, duplicated, corrupted, or dropped, so higher-level protocols define the reliability they need. <a href="https://datatracker.ietf.org/doc/html/rfc1208">9</a></li>
+<li><strong>Port:</strong> A port is a logical endpoint identifier used with an IP address to direct network traffic to a service or process. Transport protocols such as TCP and UDP use port numbers, while firewalls use them in access rules. Opening a port makes a service reachable only if the surrounding routing, address, and application configuration also permit it. <a href="https://datatracker.ietf.org/doc/html/rfc1208">9</a></li>
+<li><strong>Routing:</strong> Routing selects a path for packets or requests to travel from a source to a destination. Routers use address information and routing tables, while application systems may route requests based on service, user, or content. Routing decisions can be static or dynamic and must account for reachability, cost, failures, and policy.</li>
+<li><strong>Latency:</strong> Latency is the time required for an operation or message to travel from initiation to a defined response or completion point. Network latency includes propagation, transmission, processing, and queuing delays. Low bandwidth and high latency are different problems: bandwidth concerns volume per unit time, while latency concerns delay.</li>
+<li><strong>Handshaking:</strong> Handshaking is the initial exchange in which communicating systems establish capabilities, parameters, identity, or readiness before ordinary data transfer. A handshake might negotiate a protocol version, encryption settings, connection properties, or device roles. Handshakes add setup cost but prevent incompatible systems from exchanging data under incorrect assumptions.</li>
+<li><strong>Telemetry:</strong> Telemetry is the automated collection and transmission of measurements, events, logs, or status information from a remote system to a monitoring or analysis service. It supports diagnostics, performance analysis, and operational awareness. Telemetry design should minimize sensitive data, define retention policies, and preserve enough context to make the information useful.</li>
+<li><strong>Heartbeating (Keep-Alive):</strong> Heartbeating is the periodic exchange of small messages used to determine whether a connection, process, or remote peer is still responsive. If heartbeats fail for a configured interval, a system may close the connection, elect a replacement, or trigger recovery. Timeouts must account for network delay and temporary congestion; a missed heartbeat is evidence of uncertainty, not always proof that a peer has crashed.</li>
+</ul>
+<h2>Advanced Artificial Intelligence Mechanics</h2>
+<ul>
+<li><strong>Context Window:</strong> A context window is the maximum amount of input and generated content that a model can consider in one interaction, measured in tokens or another model-specific unit. It includes instructions, user content, retrieved documents, tool results, and sometimes the expected output. Exceeding the limit requires truncation, summarization, retrieval, or other context-management strategies. <a href="https://developers.google.com/machine-learning/glossary">5</a></li>
+<li><strong>Zero-Shot Learning:</strong> Zero-shot learning performs a task or recognizes a category without task-specific examples supplied for that exact task. A model may rely on prior training, natural-language descriptions, or related representations. Zero-shot results can be useful but should be evaluated because unfamiliar wording, domain shift, and ambiguous labels can reduce accuracy. <a href="https://developers.google.com/machine-learning/glossary">5</a></li>
+<li><strong>Prompt Engineering:</strong> Prompt engineering designs instructions, examples, context, and output requirements to guide a language model toward a desired result. It may use structured formats, demonstrations, decomposition, or explicit evaluation criteria. Prompting improves task reliability but cannot substitute for permissions, deterministic validation, or safeguards around tool execution.</li>
+<li><strong>Reinforcement Learning from Human Feedback (RLHF):</strong> RLHF adapts a model using human preferences or rankings of outputs. A preference model or reward signal guides optimization toward responses judged more useful or aligned with the training objectives. The resulting behavior depends on the quality, diversity, and scope of the feedback and may still require separate safety and factuality evaluation.</li>
+<li><strong>Fine-Tuning:</strong> Fine-tuning continues the training of a pre-trained model on a narrower dataset or task. It can adapt the model’s style, vocabulary, behavior, or output format to a domain. Fine-tuning is different from prompting because it changes model parameters, and it is different from retrieval because it does not automatically provide current external facts at response time. Poor data or excessive training can cause overfitting or loss of general capabilities.</li>
+<li><strong>Embedding:</strong> An embedding represents an item such as text, an image, a user, or a product as a vector of numbers. Items with similar learned properties may have vectors that are close under a chosen similarity measure. Embeddings support semantic search, recommendations, clustering, and classification. Similarity in an embedding space is task-dependent and should be evaluated against real examples rather than assumed to represent universal meaning.</li>
+<li><strong>Grounding:</strong> Grounding connects a model’s response to specified evidence, tools, databases, or other external sources. A grounded system may retrieve documents, query a database, or use an authoritative API before generating an answer. Grounding can improve factuality and traceability, but it does not guarantee correctness: the retrieved evidence may be incomplete, outdated, or misinterpreted. Good systems preserve source information and distinguish evidence from generated explanation.</li>
+</ul>
+<h2>Advanced Algorithm &amp; Structure Mechanics</h2>
+<ul>
+<li><strong>Graph:</strong> A graph is a structure consisting of vertices, or nodes, and edges that represent relationships between them. Edges may be directed or undirected and may carry weights, capacities, or labels. Graphs model networks, dependencies, routes, state transitions, and social relationships, and support algorithms such as search, shortest path, and connectivity analysis.</li>
+<li><strong>Priority Queue:</strong> A priority queue stores items so that the item with the highest or lowest priority can be removed efficiently. Binary heaps are a common implementation. Priority queues support scheduling, shortest-path algorithms, event simulation, and task management; the priority rule must define how ties are handled.</li>
+<li><strong>Union-Find (Disjoint-Set Union):</strong> Union-find maintains a collection of non-overlapping sets and supports operations that determine whether two items belong to the same set and merge two sets. Path compression and union by rank or size make repeated operations very efficient in practice. It is widely used in connectivity problems and Kruskal’s minimum-spanning-tree algorithm.</li>
+<li><strong>Amortized Analysis:</strong> Amortized analysis measures the average cost of a sequence of operations rather than the worst cost of each individual operation. A dynamic array occasionally performs an expensive resize, but the average cost per append remains low across a long sequence. Amortized bounds are guarantees over sequences, not probabilities based on random input.</li>
+<li><strong>Balancing:</strong> Balancing reorganizes a data structure so that its parts remain sufficiently even, preventing operations from becoming slow in an extreme shape. Self-balancing search trees may rotate nodes after insertions or deletions to maintain a height bound. Balancing adds work during updates but generally preserves efficient search, insertion, and deletion performance.</li>
+<li><strong>Pruning:</strong> Pruning eliminates branches, candidates, or model components that cannot contribute useful results. A search algorithm may discard a branch whose best possible score is already worse than a known solution; a decision tree may remove insignificant branches; a neural network may remove low-impact weights. Effective pruning reduces computation, but incorrect pruning can discard the true solution.</li>
+<li><strong>Marshalling:</strong> Marshalling converts an in-memory object or set of parameters into a format suitable for transport across a boundary, such as a process, machine, or network. The receiving side unmarshals the representation back into usable values. Marshalling often includes type information, ordering, encoding, and compatibility rules. It is closely related to serialization, but the term often emphasizes procedure-call or inter-process communication boundaries.</li>
+</ul>
+<h2>Hardware &amp; Embedded Systems</h2>
+<ul>
+<li><strong>Device Driver:</strong> A device driver is software that translates operating-system or application requests into commands understood by a hardware device. Drivers manage initialization, I/O, interrupts, errors, and resource ownership. A driver operates near a trust boundary and must handle malformed requests and hardware failures safely.</li>
+<li><strong>Firmware:</strong> Firmware is software stored in non-volatile memory that directly controls or initializes hardware. It may run before an operating system, within a microcontroller, or inside a peripheral device. Firmware updates can improve features or fix vulnerabilities but require authenticity checks, recovery paths, and careful power-failure handling.</li>
+<li><strong>General-Purpose Input/Output (GPIO):</strong> GPIO pins are configurable digital interfaces used by a microcontroller to read signals or drive external devices. A pin may be configured as an input, output, pull-up, or pull-down depending on the circuit. Electrical limits, voltage levels, current capacity, and safe startup states must be respected.</li>
+<li><strong>Analog-to-Digital Converter (ADC):</strong> An ADC converts a continuous voltage into a digital number with a specified resolution and reference range. Its accuracy is affected by quantization, noise, sampling rate, reference stability, and input impedance. Sensor readings often require calibration and filtering before they are used for control or measurement.</li>
+<li><strong>Sampling:</strong> Sampling measures an analog signal at discrete points in time and converts those measurements into digital values. An analog-to-digital converter uses a sampling rate and resolution that affect the fidelity of the result. If the sampling rate is too low for the signal’s frequency content, aliasing can occur. Sensors, audio systems, and control loops all rely on carefully chosen sampling strategies.</li>
+<li><strong>Flashing:</strong> Flashing writes firmware or other machine code into non-volatile memory, such as a microcontroller’s flash storage. The process may erase sectors, program new bytes, verify them, and configure boot settings. Power loss or incompatible firmware can make a device unbootable, so robust systems provide validation, recovery, and sometimes dual firmware slots.</li>
+<li><strong>Bit-masking:</strong> Bit-masking uses bitwise operations and a mask value to inspect, set, clear, or toggle selected bits in an integer or register. For example, an AND operation can test whether a flag is set, while OR can enable a flag. Bit masks are common in device drivers, permissions, protocol headers, and compact status fields. Correct masks require attention to bit positions, signedness, and operator precedence.</li>
+<li><strong>Pulse Width Modulation (PWM):</strong> PWM represents a controllable average output by rapidly switching a digital signal between on and off. The <strong>duty cycle</strong>—the proportion of each period spent on—controls the average delivered power or perceived level. PWM can dim an LED, control motor speed, or generate an approximate analog output after filtering. The frequency and duty-cycle resolution must suit the hardware and application.</li>
+</ul>
+<h2>LLM &amp; Agentic AI Operations</h2>
+<ul>
+<li><strong>Agentic Loop:</strong> An agentic loop is a repeated observe–reason–act–feedback cycle in which an agent receives information, selects a next step, executes an action, examines the result, and continues until a termination condition is met. Limits on iterations, tools, permissions, and time prevent runaway behavior. <a href="https://developers.google.com/machine-learning/glossary">5</a></li>
+<li><strong>Action Space:</strong> An action space is the set of actions, tools, APIs, resources, or permissions available to an agent. A narrowly defined action space can reduce errors and limit risk, while one that is too small may prevent task completion. Action authorization should be enforced by the surrounding application, not left to model instructions alone. <a href="https://developers.google.com/machine-learning/glossary">5</a></li>
+<li><strong>Agent:</strong> An agent is a software system that observes inputs, plans or selects actions, uses tools or services, and works toward a defined objective. An agent may be a single model wrapped in a control loop or a larger system of specialized components. Reliable agents require bounded permissions, explicit state, error recovery, and evaluation of both decisions and side effects.</li>
+<li><strong>Guardrail:</strong> A guardrail is a policy, validation step, filter, permission check, or runtime constraint that reduces unsafe, invalid, or undesired model behavior. Guardrails may inspect inputs, outputs, tool arguments, or execution state. They are most effective when enforced outside the model as well as described in prompts, because a model’s textual compliance is not a security boundary.</li>
+<li><strong>Retrieval-Augmented Generation (RAG):</strong> Retrieval-augmented generation retrieves relevant information from a document store, search index, or database and supplies it to a language model as context for an answer. A typical pipeline chunks and indexes documents, retrieves candidates, optionally reranks them, and generates a response based on the selected evidence. RAG is useful when information changes frequently or must remain outside model parameters. Retrieval quality, chunk boundaries, access control, and citation behavior determine its reliability.</li>
+<li><strong>Delegation:</strong> Delegation assigns a subtask to another worker, model, service, or specialized agent and incorporates the result into a larger workflow. A coordinator might delegate code execution, document search, or image analysis to a component designed for that task. Effective delegation defines the input, expected output, authority, timeout, and failure behavior. Delegation does not remove the need for validation of the returned result.</li>
+<li><strong>Context Rolling:</strong> Context rolling manages a conversation or working context that is larger than the model’s input limit. The system may remove, summarize, compress, or archive older messages while preserving the most relevant instructions and facts. A rolling strategy should protect critical constraints and avoid changing the meaning of unresolved tasks. It is a form of context management, not a guarantee that the model remembers every discarded detail.</li>
+<li><strong>Chunking:</strong> Chunking divides a large document, dataset, or stream into smaller units for processing. In retrieval systems, chunks should be large enough to preserve meaning but small enough to fit efficiently in a model context. Overlap, headings, metadata, and semantic boundaries can improve retrieval. Poor chunking may split related facts or create repetitive, noisy context.</li>
+<li><strong>Tool Calling (Function Calling):</strong> Tool calling allows a model to emit structured arguments for a predefined function, API, or operation instead of directly performing that operation. The surrounding application validates the arguments, executes the tool, and returns the result to the model or user. Tool schemas, authorization, confirmation requirements, timeouts, and error handling are essential because model-generated arguments are not automatically trustworthy.</li>
+<li><strong>System Prompting:</strong> System prompting supplies high-priority instructions that establish an AI system’s role, constraints, format, or operating policy. It can define how the model should handle tasks and interact with tools. System instructions should not be treated as a substitute for application-level access controls or validation. Any external content placed into context should be treated as data unless the application explicitly authorizes it as an instruction.</li>
+<li><strong>Routing:</strong> Routing chooses which model, agent, tool, service, or workflow should handle an input. A router may use intent classification, rules, cost, latency, capability, or confidence. Routing can improve efficiency by sending simple questions to lightweight systems and specialized tasks to expert systems. It also creates failure modes if the input is misclassified, so fallback paths and observability are important.</li>
+</ul>
+<h2>UI Lifecycle &amp; Event Architecture</h2>
+<ul>
+<li><strong>Callback:</strong> A callback is a function supplied to another operation so it can be invoked later in response to completion, an event, or another condition. Callbacks are common in event-driven interfaces and asynchronous APIs. Deeply nested callbacks can make control flow difficult to follow, which is why promises, futures, and structured concurrency are often used instead. <a href="https://developer.mozilla.org/en-US/docs/Glossary">2</a> <a href="https://docs.python.org/3/glossary.html">6</a></li>
+<li><strong>Event Delegation:</strong> Event delegation attaches a listener to a common ancestor and uses event propagation to handle events from its descendants. It reduces the number of listeners and can work for elements added later. The handler must identify the relevant target and respect propagation, accessibility, and default browser behavior. <a href="https://developer.mozilla.org/en-US/docs/Glossary">2</a></li>
+<li><strong>Event Capturing:</strong> Event capturing is the phase in which a UI event travels from the document or outer ancestors down toward the target element before reaching the target. A listener can be registered for this phase when an application needs parent-level control before a child handles the event. Capturing and bubbling together form the event propagation path.</li>
+<li><strong>Controlled Component:</strong> A controlled component receives its current value from application state and reports requested changes through an event handler. This creates a single source of truth for inputs such as text fields, checkboxes, and selections. Controlled components make validation and synchronization straightforward but can cause frequent renders if state updates are not designed efficiently.</li>
+<li><strong>Mounting / Unmounting:</strong> Mounting inserts a UI component into the rendered interface and initializes its state, subscriptions, and event handlers. Unmounting removes it and should release associated resources such as timers, listeners, and network subscriptions. Lifecycle cleanup prevents memory leaks and updates to components that are no longer visible. Different frameworks use different terminology and lifecycle APIs, but the underlying resource-management concern is shared.</li>
+<li><strong>Dispatching:</strong> Dispatching sends an action, event, command, or message to a state manager or event system. The action describes what happened and may include data needed to update state. Reducers, handlers, or subscribers then process it according to defined rules. Centralized dispatch can make state transitions predictable, while an overly broad event system can make dependencies difficult to trace.</li>
+<li><strong>Bubbling:</strong> Event bubbling is the propagation of an event from a target element upward through its ancestors in a UI hierarchy. Event delegation uses this behavior by placing one listener on a parent to handle events from many children. A handler may stop propagation when higher-level listeners should not receive the event. Bubbling should be distinguished from capturing, which occurs during the initial downward phase.</li>
+<li><strong>Memoizing (Frontend):</strong> Frontend memoization reuses a previously computed value, rendered component, or derived result when its relevant inputs have not changed. It can reduce expensive rendering or calculation in component-based interfaces. Memoization also has a cost in memory and comparison work and can complicate code if applied indiscriminately. Correct dependency or equality rules are essential; stale memoized data is a correctness bug.</li>
+</ul>
+<h2>Distributed Data Operations</h2>
+<ul>
+<li><strong>Leader Election:</strong> Leader election is the process by which distributed nodes choose one coordinator for a role or term. A leader may serialize writes, assign work, or coordinate membership. Elections require rules for timeouts, split-brain prevention, stale leaders, and what happens when the network partitions. <a href="https://kubernetes.io/docs/reference/glossary/">4</a> <a href="https://datatracker.ietf.org/doc/html/rfc1208">9</a></li>
+<li><strong>Distributed Lock:</strong> A distributed lock coordinates access to a shared resource across processes or machines. It needs ownership, expiration or lease behavior, release rules, and protection against a paused or disconnected holder acting after its lease has expired. Many systems avoid distributed locks when idempotent operations or partitioned ownership can provide a simpler design.</li>
+<li><strong>Fan-Out:</strong> Fan-out distributes one input event or request to multiple consumers, workers, or destinations. A notification service may fan out one account event to email, analytics, and audit pipelines. Fan-out can be synchronous or asynchronous and must define retry, ordering, duplication, and partial-failure behavior.</li>
+<li><strong>Eventual Consistency:</strong> Eventual consistency means that replicas or views may temporarily disagree after a write but are expected to converge if no new updates occur. It can improve availability and reduce coordination cost in distributed systems. Applications must tolerate stale reads or use stronger consistency for operations that require an immediate, globally agreed result.</li>
+<li><strong>Broadcasting:</strong> Broadcasting sends one message to every member of a defined audience or connected group. A chat server may broadcast a new message to all participants in a room. Broadcast scope, ordering, authorization, and delivery guarantees must be explicit. Large-scale broadcasts may require fan-out services, queues, or topic-based messaging rather than one direct transmission to every client.</li>
+<li><strong>Scraping:</strong> Scraping automatically extracts information from websites or other human-oriented outputs. A scraper may parse HTML, follow links, and convert selected fields into structured records. Scraping must respect applicable law, terms of service, robots policies, privacy expectations, and server load. APIs or licensed datasets are generally more stable and appropriate when available.</li>
+<li><strong>Seeding:</strong> Seeding populates a new or empty database with initial records, reference data, test fixtures, or configuration. Development seeds make local testing reproducible, while production seeds may install essential roles or lookup values. Seeds should be deterministic, versioned, and safe to run repeatedly when possible. Real personal or secret data should not be copied into test environments without appropriate protection.</li>
+</ul>
+<h2>Functional Programming Mechanics</h2>
+<ul>
+<li><strong>Pure Function:</strong> A pure function always produces the same output for the same inputs and has no observable side effects such as modifying shared state or performing hidden I/O. Pure functions are easier to test, cache, parallelize, and compose. A function that reads time, randomness, global state, or a file is not pure unless those dependencies are supplied explicitly.</li>
+<li><strong>Referential Transparency:</strong> An expression is referentially transparent when it can be replaced by its result without changing the program’s behavior. Referential transparency is a practical consequence of purity and supports algebraic reasoning and compiler optimization. Hidden effects, exceptions, mutation, and nondeterminism can break it.</li>
+<li><strong>Immutability:</strong> Immutability means that a value cannot be changed after creation. Updates produce a new value rather than modifying the existing one. Immutability simplifies reasoning, enables safe sharing, and reduces some concurrency hazards, although copying large structures can be expensive and may require structural sharing.</li>
+<li><strong>Higher-Order Function:</strong> A higher-order function accepts another function as an argument, returns a function, or both. Mapping, filtering, event-handler factories, and decorators use this pattern. Higher-order functions support abstraction and composition but should be named and documented clearly when nested behavior becomes difficult to follow.</li>
+<li><strong>Closure:</strong> A closure is a function together with access to variables from the lexical environment in which it was created. The function can continue to use those captured variables even after the surrounding function has returned. Closures support callbacks, private state, event handlers, and factories. Capturing large objects or changing variables unexpectedly can extend lifetimes or produce subtle behavior.</li>
+<li><strong>Currying:</strong> Currying transforms a function that accepts several arguments into a chain of functions that each accept one argument. A curried function can be partially applied to create a specialized function with some inputs fixed. Currying supports composition and reusable configuration, although it may be less readable for ordinary multi-argument operations in languages that do not commonly use the style.</li>
+<li><strong>Composition:</strong> Function composition combines small functions so that the output of one becomes the input of another. For example, a program can parse input, validate it, and transform it through a sequence of functions. Composition encourages single-purpose units and reusable pipelines. The functions must agree on data types, error behavior, and ordering.</li>
+</ul>
+<h2>Graphics &amp; Rendering Operations</h2>
+<ul>
+<li><strong>Graphics Processing Unit (GPU):</strong> A GPU is a processor designed for highly parallel operations, especially graphics and data-parallel numerical workloads. It executes many lightweight operations concurrently through specialized execution units and memory systems. GPUs can accelerate rendering and machine learning, but data transfer, branching, memory access, and workload shape affect the benefit. <a href="https://wikis.khronos.org/opengl/Glossary">8</a></li>
+<li><strong>Framebuffer:</strong> A framebuffer is a memory-backed collection of image buffers used during rendering, commonly including a color buffer and optional depth or stencil buffers. A renderer draws into a framebuffer before it is displayed or used as input to another pass. Multiple framebuffers enable off-screen effects such as shadows, reflections, and post-processing. <a href="https://wikis.khronos.org/opengl/Glossary">8</a></li>
+<li><strong>Shader:</strong> A shader is a program executed on a graphics processor to calculate aspects of rendering, such as vertex positions, surface colors, lighting, or post-processing effects. Vertex and fragment shaders are common stages in real-time pipelines. Shader performance depends on instruction count, branching, texture access, and the number of rendered primitives.</li>
+<li><strong>Texture Mapping:</strong> Texture mapping applies a two-dimensional image or other data field to the surface of a geometric object. Texture coordinates determine which image location corresponds to each surface point. Filtering, mipmaps, wrapping, and resolution affect visual quality and memory use, while incorrect coordinates can cause stretching or seams.</li>
+<li><strong>Rasterization:</strong> Rasterization converts geometric descriptions—such as triangles, lines, and polygons—into pixels that can be displayed. A graphics pipeline determines which pixels a primitive covers and calculates attributes such as color, depth, and texture coordinates. Rasterization is efficient for interactive graphics, but it approximates continuous geometry on a discrete grid and may require anti-aliasing.</li>
+<li><strong>Culling:</strong> Culling skips graphical objects or parts of objects that cannot contribute to the final image. View-frustum culling removes objects outside the camera’s visible volume, back-face culling removes surfaces facing away from the camera, and occlusion culling removes objects hidden behind others. Culling saves processing time, but overly aggressive or incorrect culling can make visible objects disappear.</li>
+<li><strong>Ray Tracing:</strong> Ray tracing models the path of rays from a camera or light interaction to determine visibility, shadows, reflections, refractions, and illumination. It can produce physically convincing images but usually requires more computation than simpler rasterization techniques. Modern renderers often combine ray tracing with rasterization, denoising, and acceleration structures to achieve interactive performance.</li>
+</ul>
+<h2>Applied Cryptography</h2>
+<ul>
+<li><strong>Public-Key Cryptography:</strong> Public-key cryptography uses a related public key and private key rather than one shared secret for every operation. It supports encryption, signatures, authentication, and key establishment, depending on the algorithm. Private keys must remain protected, while public keys require a trustworthy association with their owner. <a href="https://csrc.nist.gov/glossary">3</a></li>
+<li><strong>Authenticated Encryption:</strong> Authenticated encryption provides confidentiality and integrity together, usually producing ciphertext plus an authentication tag. The recipient can reject altered or incorrectly authenticated data before using it. Nonces, keys, associated data, and error handling must follow the selected construction’s requirements. <a href="https://csrc.nist.gov/glossary">3</a></li>
+<li><strong>Message Authentication Code (MAC):</strong> A MAC is a keyed cryptographic value that lets a recipient verify the integrity and authenticity of a message when both parties share a secret key. HMAC is a common construction based on a hash function. A MAC does not provide confidentiality and does not prove which individual in a group created the message, because all holders of the shared key can generate valid MACs.</li>
+<li><strong>Nonce:</strong> A nonce is a value intended to be used only once within a defined cryptographic context. Nonces prevent replay or ensure that encrypting the same plaintext does not produce a dangerously repeated pattern. The required uniqueness or unpredictability depends on the algorithm, so nonce generation must follow the cryptographic protocol’s rules exactly.</li>
+<li><strong>Encryption / Decryption:</strong> Encryption transforms readable plaintext into ciphertext using an algorithm and key so that unauthorized parties cannot understand it. Decryption uses the appropriate key to recover the plaintext. Symmetric encryption uses the same secret key for both operations, while asymmetric systems use related public and private keys. Encryption protects confidentiality but does not by itself guarantee authenticity, integrity, or secure key management.</li>
+<li><strong>Signing:</strong> Cryptographic signing creates a value that allows recipients to verify that data came from the holder of a private key and was not altered after signing. A digital signature normally covers a digest of the data and is verified with a public key. Signatures provide authenticity and integrity, not secrecy. The trustworthiness of the public key and protection of the private key are fundamental.</li>
+<li><strong>Key Exchange:</strong> Key exchange allows parties to establish a shared secret over a channel that others may observe. Protocols based on public-key mathematics can derive the shared secret without transmitting it directly. Authentication is also needed to prevent a man-in-the-middle attack; an unauthenticated exchange may establish a secret with an attacker instead of the intended peer.</li>
+</ul>
+<h2>DevOps &amp; Infrastructure Management</h2>
+<ul>
+<li><strong>Artifact:</strong> An artifact is a versioned output of a build or development process, such as a binary, container image, package, test report, or deployment manifest. Artifacts provide a traceable link between source code, build inputs, and what is released. Reproducible builds and integrity checks make artifact promotion safer.</li>
+<li><strong>Rollout:</strong> A rollout is the controlled release of a new version to an environment or population. It may proceed all at once, gradually, by percentage, by region, or through a canary group. Rollouts should include health signals, abort criteria, migration compatibility, and a recovery plan. <a href="https://kubernetes.io/docs/reference/glossary/">4</a> <a href="https://docs.github.com/en/get-started/learning-about-github/github-glossary">10</a></li>
+<li><strong>Continuous Integration / Continuous Delivery (CI/CD):</strong> CI/CD is a set of automated practices that frequently build, test, scan, package, and release software. Continuous integration detects integration problems early, while continuous delivery keeps software ready for release and continuous deployment automatically releases approved changes. Pipelines should use reproducible builds, protected credentials, meaningful tests, and auditable approvals.</li>
+<li><strong>Blue-Green Deployment:</strong> A blue-green deployment maintains two production environments: one serving traffic and one prepared with the new release. Traffic can be switched between them after validation, enabling rapid rollback. The approach requires compatible data changes, sufficient duplicate capacity, and a reliable way to verify the inactive environment before switching.</li>
+<li><strong>Provisioning:</strong> Provisioning creates and configures infrastructure such as virtual machines, networks, databases, accounts, and storage. Infrastructure-as-code tools express this setup in version-controlled definitions so environments can be reproduced and reviewed. Provisioning should be idempotent, secure by default, and separated from sensitive secrets. It differs from deployment, which usually refers more specifically to releasing application software.</li>
+<li><strong>Pipelining:</strong> Pipelining divides a process into stages whose outputs feed the next stage. In a CPU, different instructions can occupy different pipeline stages simultaneously; in DevOps, source code may pass through build, test, security scanning, and deployment stages. Pipelining improves throughput by overlapping work, but dependencies, failures, buffering, and stage latency must be managed.</li>
+<li><strong>Rolling Back:</strong> Rolling back restores a system or deployment to a previously known-good version after a failure or unacceptable result. A rollback may switch traffic to an earlier release, restore a database migration, or redeploy an earlier image. Application rollback is safest when database changes are backward-compatible and artifacts are retained. Teams should distinguish rollback from roll-forward fixes, which deploy a new corrective version.</li>
+</ul>
+<h2>Distributed Systems &amp; Cloud Computing</h2>
+<ul>
+<li><strong>Autoscaling:</strong> Autoscaling adjusts the number or size of service instances in response to demand, schedules, or resource signals. It can improve utilization and absorb load, but scaling too slowly causes overload while scaling too aggressively increases cost or instability. Effective autoscaling uses meaningful signals, cooldowns, capacity limits, and workload startup-time awareness. <a href="https://kubernetes.io/docs/reference/glossary/">4</a></li>
+<li><strong>Availability Zone:</strong> An availability zone is an isolated location or failure domain within a cloud region, designed so workloads can be distributed across separate infrastructure. Deploying across zones can reduce the impact of a localized failure but does not eliminate all regional or shared-dependency risks. Applications must still replicate data and test failover behavior.</li>
+<li><strong>CAP Theorem:</strong> CAP theorem describes a trade-off in a distributed data system that experiences a network partition: it cannot simultaneously guarantee both strong consistency and availability for every request. A system must choose how it behaves during the partition, based on application requirements. CAP does not mean a system chooses only two permanent properties or that latency and all other trade-offs disappear.</li>
+<li><strong>Quorum:</strong> A quorum is the minimum number of participating nodes or votes required to make a decision or accept an operation. Read and write quorums can be designed to overlap so that a read observes a recent write under specified failure assumptions. Quorum size affects consistency, availability, and tolerance of failures.</li>
+<li><strong>Replication:</strong> Replication maintains copies of data or services on multiple nodes. It can improve availability, read capacity, disaster recovery, or geographic access. Replicas may be synchronous or asynchronous, and they may temporarily disagree because of propagation delay. A system must define how conflicts, failover, stale reads, and recovery are handled.</li>
+<li><strong>Consensus:</strong> Consensus is a protocol by which distributed participants agree on a value or ordered sequence of decisions despite communication delays and certain failures. Consensus algorithms are used for leader election, replicated logs, and coordination. Agreement, validity, and termination are common goals, but guarantees depend on assumptions about failures and networks. Consensus is not simply any informal agreement among servers.</li>
+<li><strong>Backpressure:</strong> Backpressure is a flow-control mechanism by which a downstream component signals that it cannot safely accept data as quickly as it is being produced. The producer may slow down, buffer, drop, or reject items. Backpressure prevents unbounded memory growth and protects overloaded services. Systems need explicit policies for timeouts, retries, prioritization, and data loss when pressure persists.</li>
+</ul>
+<h2>Network Engineering &amp; Protocols</h2>
+<ul>
+<li><strong>Address Resolution Protocol (ARP):</strong> ARP maps a network-layer IP address to a link-layer hardware address on a local IPv4 network. A host can then deliver a frame to the correct local interface. ARP messages can be spoofed, so networks may use inspection, segmentation, cryptographic protections at higher layers, and careful switch configuration. <a href="https://datatracker.ietf.org/doc/html/rfc1208">9</a></li>
+<li><strong>Transmission Control Protocol / User Datagram Protocol (TCP/UDP):</strong> TCP provides connection-oriented, ordered, and retransmitted byte-stream delivery, while UDP provides a connectionless datagram service with fewer built-in guarantees. Applications choose between them based on latency, reliability, ordering, congestion behavior, and protocol needs. Neither choice alone defines the complete application protocol. <a href="https://datatracker.ietf.org/doc/html/rfc1208">9</a></li>
+<li><strong>Network Address Translation (NAT):</strong> NAT translates addresses or ports in network packets as traffic crosses a device, commonly allowing many private hosts to share one public IPv4 address. It conserves address space and can hide internal addressing, but it complicates inbound connections, peer-to-peer communication, and end-to-end assumptions. NAT should not be treated as a complete security control.</li>
+<li><strong>Dynamic Host Configuration Protocol (DHCP):</strong> DHCP automatically supplies network configuration such as an IP address, subnet mask, default gateway, and DNS servers to clients. Leases allow addresses to be reused and renewed. DHCP infrastructure must be protected because a rogue server can provide malicious network settings to clients.</li>
+<li><strong>Subnetting:</strong> Subnetting divides an IP network into smaller logical networks by using a subnet mask or prefix length. It improves address management, routing control, isolation, and sometimes security. The available number of addresses and the valid host ranges depend on the address family and prefix. Subnetting is a logical network design operation, not necessarily a division into separate physical switches.</li>
+<li><strong>Tunneling:</strong> Tunneling encapsulates packets from one protocol or network inside packets of another protocol so they can travel across an intermediary network. VPNs use tunneling to carry private traffic over public infrastructure, and overlay networks use it to create logical connectivity over a different physical topology. Tunneling may provide transport or routing, but encryption and authentication must be added separately if confidentiality is required.</li>
+<li><strong>Resolution:</strong> Network resolution translates a human-oriented identifier into information needed for communication. DNS resolution commonly maps a domain name to an IP address, while service discovery may map a logical service name to endpoints. Resolution can involve caches, recursive queries, multiple record types, and time-to-live values. A cached result may remain available after the underlying mapping changes until its lifetime expires.</li>
+</ul>
+<h2>Data Science &amp; Big Data</h2>
+<ul>
+<li><strong>Data Lake:</strong> A data lake stores large volumes of raw or lightly processed data in many formats, often retaining detailed source records for later analysis. Its flexibility is useful for exploration and machine learning, but governance, metadata, access control, and lifecycle management are needed to prevent a disorganized “data swamp.”</li>
+<li><strong>Data Warehouse:</strong> A data warehouse stores curated, structured, and integrated data optimized for reporting, analytics, and consistent business definitions. Warehouses typically apply schema and quality rules before data is exposed to users. They complement rather than necessarily replace data lakes; an organization may use both for different workloads.</li>
+<li><strong>Extract, Transform, Load (ETL):</strong> ETL extracts data from source systems, transforms it into a consistent and useful form, and loads it into a destination such as a warehouse. Transformations may include cleaning, joining, validating, and aggregating. Pipelines should be repeatable, observable, and able to handle late, duplicate, or corrected source data.</li>
+<li><strong>Feature Engineering:</strong> Feature engineering creates, selects, transforms, or combines input variables to improve a model’s ability to learn useful patterns. Examples include extracting day-of-week from a timestamp or normalizing a measurement. Features must be constructed without leaking information unavailable at prediction time, and the same transformations must be applied consistently in production.</li>
+<li><strong>Aggregation:</strong> Aggregation combines many individual records into summary values such as counts, sums, averages, percentiles, or time-window metrics. It reduces data volume and makes trends easier to analyze. The result depends on the grouping key, time period, treatment of missing values, and statistical definition. Averages can hide distribution shape, so robust analysis may also report medians, ranges, or percentiles.</li>
+<li><strong>Imputation:</strong> Imputation replaces missing, invalid, or incomplete values with estimates or derived values. Simple approaches use a mean, median, mode, or constant; more advanced approaches use neighboring records, regression, or multiple imputation. Imputation can preserve dataset size, but it introduces assumptions and may create false certainty. The method and proportion of imputed values should be recorded and evaluated for bias.</li>
+<li><strong>Clustering:</strong> Clustering is an unsupervised learning task that groups data points according to similarity without requiring preassigned labels. Algorithms such as k-means, hierarchical clustering, and density-based methods make different assumptions about cluster shape, scale, and noise. Features usually need appropriate scaling, and the number or quality of clusters should be validated rather than accepted automatically.</li>
+</ul>
+<h2>Language Design &amp; Compiler Mechanics</h2>
+<ul>
+<li><strong>Decorator:</strong> A decorator is a language construct or function that wraps another function, class, or component to extend or alter its behavior without editing its original body. Decorators can add logging, authorization, caching, registration, or validation. They should preserve metadata and make their added effects clear to callers. <a href="https://docs.python.org/3/glossary.html">6</a></li>
+<li><strong>Iterator:</strong> An iterator is an object or protocol that produces a sequence of values one at a time and signals when the sequence is exhausted. Iterators support lazy processing, which can reduce memory use for large or infinite sequences. An iterator may be consumed only once unless the surrounding abstraction provides a way to restart it. <a href="https://docs.python.org/3/glossary.html">6</a></li>
+<li><strong>Abstract Syntax Tree (AST):</strong> An AST is a tree representation of the meaningful grammatical structure of source code, with unnecessary punctuation and formatting usually removed. Compilers, formatters, linters, refactoring tools, and interpreters use ASTs to analyze or transform programs. AST nodes commonly represent declarations, expressions, statements, and types.</li>
+<li><strong>Static Typing:</strong> Static typing checks many type relationships before a program runs, usually during compilation or an analysis phase. It can detect incompatible operations early and improve tooling, documentation, and optimization. Static typing may be strict or gradual, and it does not eliminate runtime validation for external data.</li>
+<li><strong>Lexing (Tokenization):</strong> Lexing converts a character sequence in source code into tokens such as identifiers, keywords, literals, operators, and punctuation. A lexer usually ignores or separately records whitespace and comments. The parser then uses those tokens to recognize grammatical structure. Lexing errors include invalid characters, malformed literals, or unterminated strings.</li>
+<li><strong>Typecasting:</strong> Typecasting converts or treats a value as another data type. An explicit cast may tell the compiler that a conversion is intended, such as converting an integer to a floating-point value or viewing bytes through another representation. Some casts are safe and checked, while others can truncate data, violate type assumptions, or cause runtime failure. A cast should not be used to hide an incorrect data model.</li>
+<li><strong>JIT Compilation (Just-In-Time):</strong> JIT compilation translates selected code into optimized machine code while the program is running. A runtime can observe which functions or paths are frequently used and optimize those hot paths using actual behavior. JIT compilation can improve long-running workloads, but it introduces warm-up time, memory use, and deoptimization complexity. Interpreters, ahead-of-time compilers, and JITs may be combined in one runtime.</li>
+</ul>
+<h2>Advanced Algorithmic Patterns</h2>
+<ul>
+<li><strong>Monotonic Stack:</strong> A monotonic stack maintains its elements in increasing or decreasing order while scanning data. It can solve next-greater-element, histogram-area, and range-boundary problems in linear time by removing elements that can no longer be useful. The invariant describing the stack order is central to proving correctness.</li>
+<li><strong>Prefix Sum:</strong> A prefix sum stores cumulative totals so that the sum of a contiguous range can be computed by subtracting two prefix values. The same idea generalizes to counts, differences, and multidimensional grids. Prefix sums trade preprocessing time and memory for fast repeated range queries.</li>
+<li><strong>Greedy Algorithm:</strong> A greedy algorithm repeatedly chooses the locally best-looking option according to a rule, without revisiting earlier choices. Greedy methods are efficient and can be optimal for problems with the right exchange or optimal-substructure properties, such as some scheduling and spanning-tree problems. They are not generally correct for every optimization problem.</li>
+<li><strong>Two-Pointer Technique:</strong> The two-pointer technique maintains two indices that move through a sequence, often from opposite ends or at different speeds. It can solve sorted-array searches, partitioning, and linked-list cycle detection with low extra memory. Correct pointer movement and boundary conditions are essential to avoid skipping candidates or reading outside the data structure.</li>
+<li><strong>Backtracking:</strong> Backtracking builds a candidate solution step by step and abandons a partial candidate as soon as it violates a constraint or cannot lead to a valid result. It is used for permutations, scheduling, maze solving, constraint satisfaction, and parsing. Backtracking can still have exponential worst-case complexity, but good ordering and pruning can make practical instances manageable.</li>
+<li><strong>Windowing (Sliding Window):</strong> A sliding-window algorithm maintains a contiguous sub-range of a sequence while moving its boundaries through the data. It can compute sums, longest substrings, or counts in linear time by adding entering elements and removing leaving elements rather than recomputing each range. The window may have fixed or variable size, and the algorithm must define how it handles empty ranges and boundary conditions.</li>
+<li><strong>Pivoting:</strong> Pivoting selects a reference element or value that divides data or search decisions into categories. In quicksort, a pivot partitions elements into values below and above it; in numerical methods, pivot selection can improve stability. The quality of a pivot affects performance and correctness. A poor pivot can produce unbalanced partitions and degrade an algorithm’s running time.</li>
+</ul>
+<h2>Low-Level &amp; Systems Programming</h2>
+<ul>
+<li><strong>Cache Line:</strong> A cache line is the unit of memory transferred between a processor cache and a lower memory level. Accessing nearby values can benefit from spatial locality because they may share a line, while unrelated writes from different cores can cause coherence traffic. Data layout and false sharing can therefore affect multithreaded performance.</li>
+<li><strong>Memory-Mapped I/O:</strong> Memory-mapped I/O exposes a file or device region through a process’s address space so reads and writes use memory-access instructions. It can simplify random access and allow the operating system to manage paging, but accesses can fault, require synchronization, or have device-specific side effects. <a href="https://informatics.fas.harvard.edu/resources/glossary/">1</a></li>
+<li><strong>Endianness:</strong> Endianness describes the order in which the bytes of a multi-byte value are stored or transmitted. Big-endian places the most significant byte first, while little-endian places the least significant byte first. Systems that exchange binary data must specify byte order and convert values consistently.</li>
+<li><strong>Application Binary Interface (ABI):</strong> An ABI defines low-level conventions that compiled programs use to interact, including calling conventions, register usage, data layout, symbol naming, and binary formats. Compatible ABIs allow separately compiled code or libraries to work together. A source-level API can remain unchanged while an ABI changes, potentially breaking existing binaries.</li>
+<li><strong>Dereferencing:</strong> Dereferencing follows a pointer or reference to access the value or object at the referenced location. It is fundamental to low-level data structures and systems programming. Dereferencing a null, dangling, invalid, or incorrectly typed pointer can cause crashes or memory corruption. Languages with memory safety may prevent many such errors through bounds and lifetime checks.</li>
+<li><strong>Vectorization:</strong> Vectorization performs the same operation on multiple data elements in parallel using SIMD instructions or another data-parallel mechanism. It is effective for arrays, image operations, numerical calculations, and machine-learning workloads. Data layout, alignment, branching, and memory bandwidth affect the benefit. Vectorization can be explicit in source code or performed automatically by a compiler.</li>
+<li><strong>Padding / Memory Alignment:</strong> Memory alignment places data at addresses suitable for the processor or hardware’s access requirements. Compilers may insert padding bytes between fields or at the end of a structure so fields align correctly and arrays of structures maintain alignment. Padding can improve access speed or be required for correctness, but it increases memory usage and affects binary layouts. Packed structures should be used cautiously when portability and performance matter.</li>
+</ul>
+<h2>Machine Learning &amp; Model Optimization</h2>
+<ul>
+<li><strong>Batch Size:</strong> Batch size is the number of training examples processed before a model update is calculated. Larger batches can use hardware efficiently but require more memory and may change optimization behavior; smaller batches can add noise that sometimes helps generalization. The useful size depends on model, hardware, data, and optimizer. <a href="https://developers.google.com/machine-learning/glossary">5</a></li>
+<li><strong>Regularization:</strong> Regularization discourages a model from fitting noise or relying on unnecessarily complex parameters. L1 and L2 penalties, dropout, data augmentation, early stopping, and architectural constraints are examples. Regularization must be balanced: too little can overfit, while too much can underfit. <a href="https://developers.google.com/machine-learning/glossary">5</a></li>
+<li><strong>Dropout:</strong> Dropout is a regularization technique that temporarily disables randomly selected units during training. The model is encouraged to avoid relying too heavily on any one path and to learn more robust representations. Dropout is normally disabled or adjusted during inference, and its usefulness depends on the architecture and training setup.</li>
+<li><strong>Learning Rate:</strong> The learning rate controls the size of parameter updates made by an optimization algorithm during training. A rate that is too large can cause unstable or divergent training, while one that is too small can make learning slow or trap the model in poor regions. Schedules, warm-up, decay, and adaptive optimizers adjust the effective learning rate over time.</li>
+<li><strong>Quantization:</strong> Quantization represents model weights, activations, or calculations with lower numerical precision, such as 8-bit integers instead of 32-bit floating-point values. It can reduce memory use, bandwidth, and inference cost and may improve hardware throughput. Quantization can also reduce accuracy if sensitive values are rounded too aggressively. Calibration, quantization-aware training, or selective high-precision layers can reduce the loss.</li>
+<li><strong>Distillation:</strong> Knowledge distillation trains a smaller student model to reproduce useful behavior from a larger teacher model. The student may learn from teacher probabilities, intermediate representations, generated examples, or hard labels. Distillation can reduce latency and deployment cost, but the student may inherit the teacher’s errors and biases. Evaluation must verify that compression did not remove important capabilities.</li>
+<li><strong>Attention (Self-Attention):</strong> Self-attention lets each element in a sequence compute how strongly it should relate to other elements in the same sequence. It forms weighted combinations of representations using learned query, key, and value transformations. This allows a model to use context that may be far away in the sequence and is a foundation of Transformer architectures. Attention can be computationally expensive for very long sequences, motivating efficient and sparse variants.</li>
+</ul>
+<h2>Concurrency &amp; Synchronization Primitives</h2>
+<ul>
+<li><strong>Race Condition:</strong> A race condition occurs when a program’s result depends on the timing or interleaving of concurrent operations. A data race is a specific case involving unsynchronized conflicting accesses to shared memory, while broader race conditions can also involve files, messages, or external systems. Synchronization, immutability, atomic operations, and ownership rules can remove the dependency on timing. <a href="https://docs.python.org/3/glossary.html">6</a></li>
+<li><strong>Barrier:</strong> A barrier is a synchronization point at which participating tasks wait until all required participants have arrived before any are allowed to proceed. Barriers are useful for phased parallel algorithms and collective computation. A missing participant or an incorrect reuse pattern can make all waiting tasks block indefinitely.</li>
+<li><strong>Semaphore:</strong> A semaphore is a synchronization primitive that maintains a counter representing available permits. A task acquires a permit before using a limited resource and releases it afterward. A binary semaphore resembles a lock but may have different ownership semantics; counting semaphores are useful for connection pools, worker capacity, and bounded queues.</li>
+<li><strong>Condition Variable:</strong> A condition variable allows a thread to sleep until a shared-state condition may have become true. The thread waits while releasing an associated lock, and another thread signals after changing the state. Code must recheck the condition in a loop because wake-ups can be spurious or another thread may consume the resource first.</li>
+<li><strong>Locking / Mutexing:</strong> A lock, or mutex, provides mutual exclusion so only one thread or process at a time enters a protected critical section. The owner acquires the lock before accessing shared state and releases it afterward, ideally using structured cleanup. Locks protect invariants but can reduce concurrency and can deadlock if acquisition order is inconsistent. Short critical sections and clear ownership rules improve safety.</li>
+<li><strong>Deadlocking:</strong> Deadlock is a state in which tasks are permanently unable to proceed because each is waiting for a resource held by another. The classic conditions are mutual exclusion, hold-and-wait, no preemption, and circular wait. Systems prevent or mitigate deadlocks through lock ordering, timeouts, detection, avoidance, or designs that use message passing instead of shared locks.</li>
+<li><strong>Starvation:</strong> Starvation occurs when a task waits indefinitely for CPU time, a lock, a queue position, or another resource because other tasks are continually favored. A scheduler or synchronization primitive may reduce starvation through fairness, aging, bounded waiting, or quotas. Starvation differs from deadlock because the other tasks may continue to make progress.</li>
+</ul>
+<h2>Microcontroller Mechanics</h2>
+<ul>
+<li><strong>Inter-Integrated Circuit (I²C):</strong> I²C is a synchronous, multi-device serial bus commonly used to connect sensors, displays, and peripherals over two shared signal lines. Devices use addresses and coordinated signaling to communicate, and pull-up resistors are typically required. Bus speed, address conflicts, capacitance, and electrical levels affect reliability.</li>
+<li><strong>Serial Peripheral Interface (SPI):</strong> SPI is a synchronous serial interface commonly using separate clock, data-in, data-out, and chip-select signals. It can provide high throughput and full-duplex communication, but each selected peripheral may need its own chip-select line and devices must agree on clock polarity and phase. <a href="https://informatics.fas.harvard.edu/resources/glossary/">1</a></li>
+<li><strong>Watchdog Timer:</strong> A watchdog timer resets or interrupts a microcontroller if software fails to respond within a required interval. Firmware periodically refreshes, or “feeds,” the watchdog during healthy operation. The watchdog can recover from hangs, but it should be configured carefully so long operations do not trigger false resets and so repeated resets remain diagnosable.</li>
+<li><strong>Direct Memory Access (DMA):</strong> DMA allows a hardware controller to move data between a peripheral and memory with limited CPU involvement. It improves throughput for streams such as audio, networking, and sensor data. Software must coordinate buffers, ownership, cache visibility, alignment, and completion interrupts correctly.</li>
+<li><strong>Hardware Debouncing:</strong> Hardware debouncing prevents the rapid electrical transitions produced when a mechanical switch physically bounces during a press or release. A circuit may use a resistor-capacitor filter, a Schmitt trigger, or a dedicated debounce component. Hardware debouncing reduces the burden on firmware and can provide predictable signals. It is different from software debouncing, which filters events in code.</li>
+<li><strong>Interrupt Service Routine (ISR):</strong> An ISR is a special function invoked in response to an interrupt. It should execute quickly, perform only time-critical work, record the event, and defer lengthy processing to the main loop or a task when possible. ISRs often have restrictions on blocking, memory allocation, and access to non-reentrant code. Shared data between an ISR and normal code must be synchronized appropriately.</li>
+<li><strong>Bit-Banging:</strong> Bit-banging implements a communication or timing protocol by directly changing and reading hardware pins in software rather than using a dedicated peripheral. It is flexible and useful when hardware support is unavailable, but timing can be sensitive to interrupts, compiler behavior, and processor load. It is commonly used for simple serial protocols, LEDs, or device initialization.</li>
+</ul>
+<h2>Web &amp; Component Architecture</h2>
+<ul>
+<li><strong>Accessibility:</strong> Accessibility is the practice of designing software so people with a wide range of abilities can perceive, operate, understand, and interact with it. Web accessibility includes semantic structure, keyboard operation, sufficient contrast, accessible names, focus management, and compatibility with assistive technologies. Accessibility is a functional quality requirement, not only a visual-design concern. <a href="https://developer.mozilla.org/en-US/docs/Glossary">2</a></li>
+<li><strong>Service Worker:</strong> A service worker is a browser-managed script that can intercept selected network requests and support capabilities such as offline caching, background synchronization, and push notifications. It operates separately from a page and has lifecycle and security restrictions. Cache versioning and update behavior must be designed carefully to avoid serving stale or incompatible assets. <a href="https://developer.mozilla.org/en-US/docs/Glossary">2</a></li>
+<li><strong>Server-Side Rendering (SSR):</strong> Server-side rendering generates HTML on a server for a request before sending it to the browser. It can improve initial content display and provide meaningful markup to crawlers, while client-side code may later hydrate it. SSR increases server work and requires careful handling of data loading, caching, and server/client output consistency.</li>
+<li><strong>Cross-Origin Resource Sharing (CORS):</strong> CORS is a browser security mechanism that controls whether a web page from one origin may access resources from another origin. Servers declare permitted origins, methods, headers, and credential behavior through response headers. CORS is enforced by browsers and is not a replacement for server-side authentication or authorization.</li>
+<li><strong>Middleware Execution:</strong> Middleware is code that runs between an incoming request and the final route handler or service. It may authenticate a request, log it, add headers, parse a body, enforce rate limits, or transform context. Middleware order matters because later components depend on earlier changes and checks. Middleware should fail safely and avoid performing expensive work before a request is known to be authorized.</li>
+<li><strong>Client-Side Routing:</strong> Client-side routing changes the displayed view and URL through JavaScript without performing a full document reload. A single-page application can map paths to components and preserve application state between navigations. The server still needs a fallback strategy so direct requests to client-managed paths return the application entry point. Routing must also address browser history, accessibility, authorization, and page-not-found behavior.</li>
+<li><strong>Prop Drilling:</strong> Prop drilling is the practice of passing data through several layers of components even when intermediate components do not use the data themselves. It may be acceptable for shallow or simple component trees. In larger applications, context, state stores, event systems, or component composition can reduce unnecessary coupling. Those alternatives also introduce their own complexity and should be chosen based on actual data-flow needs.</li>
+</ul>
+<h2>Terminal &amp; Version Control Workflow</h2>
+<ul>
+<li><strong>Clone:</strong> Cloning creates a local repository copy from a remote repository, including its history and remote-tracking configuration. It allows development, inspection, and version-control operations without immediately changing the remote. Cloning does not automatically grant permission to push changes. <a href="https://docs.github.com/en/get-started/learning-about-github/github-glossary">10</a></li>
+<li><strong>Fetch:</strong> Fetching downloads references and objects from a remote repository without merging them into the current working branch. It lets a developer inspect remote changes before deciding whether to merge or rebase. Fetching is generally safer than automatically integrating unknown changes. <a href="https://docs.github.com/en/get-started/learning-about-github/github-glossary">10</a></li>
+<li><strong>Permissions (<strong><strong><code>chmod</code></strong></strong>):</strong> File permissions determine which users or groups may read, write, or execute a file or directory. Tools such as <code>chmod</code> change these permission bits on Unix-like systems. Permissions should follow least privilege; making files broadly writable or executable can create security and reliability risks.</li>
+<li><strong>Environment Variable:</strong> An environment variable is a named value supplied to a process through its execution environment. Programs commonly use variables for configuration such as ports, feature flags, and service endpoints. Secrets should be handled carefully because environment variables can be exposed through process inspection, logs, crash reports, or deployment interfaces.</li>
+<li><strong>Stashing:</strong> Stashing temporarily stores uncommitted changes so a working tree can be cleaned for another task, branch switch, or urgent fix. The saved changes can later be reapplied or removed. A stash is local repository data rather than a normal commit and may not be visible to collaborators. Named stashes, regular commits on a temporary branch, and careful conflict handling make the workflow safer.</li>
+<li><strong>Piping:</strong> Piping connects the standard output of one command-line program to the standard input of another. For example, a search command can produce lines that a sorting or counting command consumes. Pipes encourage small tools that each perform one task. Programs should distinguish ordinary output from diagnostic errors and should handle empty input, broken pipes, and exit statuses correctly.</li>
+<li><strong>Daemonizing:</strong> Daemonizing detaches a program from an interactive terminal so it can run as a background service. A daemon typically manages its process identity, standard streams, working directory, permissions, lifecycle, and logging. Modern systems often use a service manager rather than manually forking into the background, because the manager can supervise restarts, dependencies, resource limits, and shutdown behavior.</li>
+</ul>
+<h2>Quick Distinctions</h2>
+<table>
+<thead>
+<tr>
+<th>Often-confused terms</th>
+<th>Main distinction</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Iteration and recursion</td>
+<td>Iteration repeats with loops; recursion repeats through nested function calls and needs a base case.</td>
+</tr>
+<tr>
+<td>Validation and sanitization</td>
+<td>Validation decides whether input meets rules; sanitization transforms input for safe use in a particular context.</td>
+</tr>
+<tr>
+<td>Authentication and authorization</td>
+<td>Authentication establishes identity; authorization determines permitted actions.</td>
+</tr>
+<tr>
+<td>Encryption and hashing</td>
+<td>Encryption is reversible with the right key; hashing is designed as a one-way digest operation.</td>
+</tr>
+<tr>
+<td>Concurrency and parallelism</td>
+<td>Concurrency concerns overlapping progress; parallelism means work executes simultaneously on multiple execution units.</td>
+</tr>
+<tr>
+<td>Debouncing and throttling</td>
+<td>Debouncing waits for a quiet period; throttling limits execution frequency during continued activity.</td>
+</tr>
+<tr>
+<td>Serialization and marshalling</td>
+<td>Both convert in-memory data to a transferable representation; marshalling often emphasizes a communication or procedure-call boundary.</td>
+</tr>
+<tr>
+<td>Compilation and transpilation</td>
+<td>Compilation produces an executable or lower-level representation; transpilation generally produces source code at a similar abstraction level.</td>
+</tr>
+<tr>
+<td>Polling and webhooks</td>
+<td>Polling repeatedly asks for updates; webhooks push event notifications to a receiver.</td>
+</tr>
+<tr>
+<td>RAG and fine-tuning</td>
+<td>RAG supplies retrieved external context at request time; fine-tuning changes model parameters using a training dataset.</td>
+</tr>
+</tbody></table>
+<h2>Practical Usage Guidance</h2>
+<p>A term should always be interpreted in context. For example, <strong>resolution</strong> may refer to DNS name resolution in networking, image resolution in graphics, or the act of resolving a software dependency. Similarly, <strong>tokenization</strong> may describe compiler lexing or the conversion of natural-language text into model tokens. When documenting a system, identify the domain, the inputs and outputs, the timing or lifecycle, and the guarantees the operation provides.</p>
+<p>Definitions are most useful when paired with constraints. For any operation that handles untrusted input, consider validation, authorization, and context-specific safe encoding. For any operation involving concurrency or distributed systems, define ordering, retries, timeouts, failure handling, and ownership of shared state. For performance features such as caching, indexing, batching, and vectorization, measure the workload before and after the change.</p>
+<h2>Web Research References</h2>
+<hr>
+<h2>Final Note</h2>
+<p>A term always means something specific to its context — the same word can point to different concepts across domains, so it helps to identify the domain, the inputs and outputs, the lifecycle, and the guarantees before applying a definition.</p>
+<p>That’s it — 290+ terms, one page. If you spot a term worth adding, or a definition worth sharpening, this glossary is a living document.</p>
+
+    <!-- ARTICLE_CONTENT_END -->
+    
+    <div style="margin-top: 64px; padding: 24px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg-raised); text-align: center; transition: border-color 0.5s ease, background-color 0.5s ease;">
+      <p style="margin-bottom: 16px; font-size: 1rem; color: var(--ink-soft);">
+        Enjoyed this write-up? Consider supporting my work!
+      </p>
+      <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+        <a href="https://github.com/sponsors/Shubh-153" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center; gap: 8px; padding: 10px 20px; background: var(--ink); color: var(--bg); border-radius: 6px; font-family: var(--mono); font-size: 0.9rem; transition: transform 0.2s ease, opacity 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.opacity='0.9';" onmouseout="this.style.transform='translateY(0)'; this.style.opacity='1';">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.161 22 16.418 22 12c0-5.523-4.477-10-10-10z"></path></svg>
+          Sponsor on GitHub
+        </a>
+        <a href="https://ko-fi.com/shubh153" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center; gap: 8px; padding: 10px 20px; background: #FF5E5B; color: #ffffff; border-radius: 6px; font-family: var(--mono); font-size: 0.9rem; transition: transform 0.2s ease, opacity 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.opacity='0.9';" onmouseout="this.style.transform='translateY(0)'; this.style.opacity='1';">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M23.881 8.948c-.773-4.085-4.859-4.593-4.859-4.593H.723c-.604 0-.679.798-.679.798s-.082 7.324-.022 11.822c.164 2.424 2.586 2.672 2.586 2.672s8.267-.023 11.966-.049c2.438-.426 2.683-2.566 2.658-3.734 4.352.24 7.422-2.831 6.649-6.916zm-11.062 3.511c-1.246 1.453-4.011 3.976-4.011 3.976s-.121.119-.31.023c-.076-.057-.108-.09-.108-.09-.443-.441-3.368-3.049-4.034-3.954-.709-.965-1.041-2.7-.091-3.71.951-1.01 3.005-1.086 4.363.407 0 0 1.565-1.782 3.468-.963 1.904.82 1.832 3.011.723 4.311zm6.173.478c-.928.116-1.682.028-1.682.028V7.284h1.77s1.971.551 1.971 2.638c0 1.913-.985 2.667-2.059 3.015z"/></svg>
+          Support on Ko-fi
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <p>&copy; 2026 Shubh Gupta.</p>
+    <p><a href="/creative.html" style="color:var(--accent);text-decoration:underline;text-underline-offset:2px;">Creative Portfolio</a> &nbsp;|&nbsp; <a href="/links.html" style="color:var(--accent);text-decoration:underline;text-underline-offset:2px;">All Links</a> &nbsp;|&nbsp; <a href="/" style="text-decoration:underline;text-underline-offset:2px;">shubhuu.in</a></p>
+  </div>
+</footer>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const themeToggle = document.getElementById('theme-toggle');
+    const moonIcon = document.getElementById('theme-icon-moon');
+    const sunIcon = document.getElementById('theme-icon-sun');
+    
+    const updateIcon = (isDark) => {
+      if (isDark) {
+        if(moonIcon) moonIcon.style.display = 'none';
+        if(sunIcon) sunIcon.style.display = 'block';
+      } else {
+        if(moonIcon) moonIcon.style.display = 'block';
+        if(sunIcon) sunIcon.style.display = 'none';
+      }
+    };
+
+    const savedTheme = localStorage.getItem('theme');
+    let isDark = savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    
+    if (isDark) {
+      document.body.classList.add('dark-theme');
+    }
+    updateIcon(isDark);
+
+    if (themeToggle) {
+      themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-theme');
+        isDark = document.body.classList.contains('dark-theme');
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        updateIcon(isDark);
+      });
+    }
+  });
+</script>
+
+</body>
+</html>

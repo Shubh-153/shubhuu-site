@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>From Scratch To SQL | Shubh Gupta</title>
+<meta name="description" content="A deep dive into why I chose to avoid heavy JavaScript frameworks for my personal site.">
+<meta name="keywords" content="Shubh Gupta, software development, ai software development, software development engineer, ai software developer, software engineering, application developer, app software developer, software development india, find a software developer, full stack, app developer, ai developer, software developer india, find developer, web app developer, it software developer, software developer skills, build software, dev ops">
+<meta property="og:title" content="Building a Minimalist Portfolio | Shubh Gupta">
+<meta property="og:description" content="A deep dive into why I chose to avoid heavy JavaScript frameworks for my personal site.">
+<meta property="og:image" content="https://shubhuu.in/thumbnail.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://shubhuu.in/thumbnail.png">
+<meta property="og:url" content="https://shubhuu.in/article.html">
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📄</text></svg>">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" as="style">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" media="print" onload="this.media="all"">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"></noscript>
+<style>
+  :root{
+    --bg:#F7F7F5;
+    --bg-raised:#FFFFFF;
+    --ink:#14161A;
+    --ink-soft:#4A4D52;
+    --graphite:#6B6558;
+    --accent:#2954A6;
+    --accent-soft:#EAF0FA;
+    --line:#DEDDD8;
+    --mono:'IBM Plex Mono', monospace;
+    --sans:'IBM Plex Sans', sans-serif;
+    --display:'Space Grotesk', sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--sans);
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none;}
+  a:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px;}
+  ::selection{background:var(--accent-soft);color:var(--accent);}
+
+  /* --- DARK THEME --- */
+  body.dark-theme {
+    --bg: #111216;
+    --bg-raised: #1A1D24;
+    --ink: #F7F7F5;
+    --ink-soft: #A09E96;
+    --graphite: #6B6558;
+    --accent: #6B94FA;
+    --accent-soft: #1E283C;
+    --line: #2A2D35;
+  }
+  body, .article-content code, .article-content pre {
+    transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease;
+  }
+
+  .wrap{max-width:920px;margin:0 auto;padding:0 28px;}
+
+  nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(247,247,245,0.88);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;}
+  .brand{font-family:var(--display);font-weight:700;font-size:1.05rem;letter-spacing:-0.01em;}
+  .navlinks{display:flex;gap:28px;font-family:var(--mono);font-size:0.82rem;color:var(--ink-soft);}
+  .navlinks a { transition: color .2s ease; position: relative; padding-bottom: 2px; }
+  .navlinks a::after {
+    content: ''; position: absolute; width: 0; height: 1.5px;
+    bottom: 0; left: 50%; background-color: var(--accent);
+    transition: width 0.2s ease, left 0.2s ease;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .navlinks a:hover::after, .navlinks a:focus-visible::after { width: 100%; left: 0; }
+  }
+  .navlinks a:hover, .navlinks a:focus-visible{color:var(--accent);}
+  @media (max-width:700px){ 
+    nav .wrap { flex-direction: column; height: auto; padding: 14px 28px; gap: 12px; align-items: flex-start; }
+    .navlinks { width: 100%; overflow-x: auto; padding-bottom: 4px; justify-content: flex-start; gap: 18px; white-space: nowrap; -webkit-overflow-scrolling: touch; }
+    .navlinks::-webkit-scrollbar { display: none; }
+    .navlinks { -ms-overflow-style: none; scrollbar-width: none; }
+    .navlinks span{display:none;} 
+  }
+
+  /* Article specific styles */
+  .article-wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 80px 28px;
+  }
+  .article-header { margin-bottom: 64px; }
+  .article-meta { font-family: var(--mono); font-size: 0.85rem; color: var(--ink-soft); margin-bottom: 24px; }
+  .article-title {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 3rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+    color: var(--ink);
+  }
+  .article-content h2 {
+    font-family: var(--display); font-weight: 600; font-size: 1.6rem;
+    margin-top: 48px; margin-bottom: 16px; color: var(--ink);
+  }
+  .article-content h3 {
+    font-family: var(--display); font-weight: 600; font-size: 1.25rem;
+    margin-top: 32px; margin-bottom: 12px; color: var(--ink);
+  }
+  .article-content p {
+    margin-bottom: 24px;
+    font-size: 1.05rem; color: var(--ink-soft);
+  }
+  .article-content ul, .article-content ol { margin-bottom: 24px; margin-left: 24px; color: var(--ink-soft); font-size: 1.05rem; }
+  .article-content li { margin-bottom: 8px; }
+  .article-content img { max-width: 100%; border-radius: 8px; margin-bottom: 24px; }
+  .article-content code {
+    font-family: var(--mono); font-size: 0.85rem;
+    background: var(--bg-raised); border: 1px solid var(--line);
+    padding: 2px 6px; border-radius: 4px;
+  }
+  .article-content pre {
+    background: var(--bg-raised); border: 1px solid var(--line);
+    padding: 24px; border-radius: 8px; margin-bottom: 24px;
+    overflow-x: auto;
+  }
+  .article-content pre code { background: none; border: none; padding: 0; }
+  .article-content blockquote {
+    border-left: 4px solid var(--accent); padding-left: 20px;
+    margin-left: 0; margin-bottom: 24px;
+    font-style: italic; color: var(--graphite);
+  }
+
+  .back-link {
+    display: inline-block;
+    font-family: var(--mono); font-size: 0.9rem; color: var(--accent);
+    margin-bottom: 40px; text-decoration: none;
+    border-bottom: 1px solid transparent; transition: border-color 0.2s;
+  }
+  .back-link:hover { border-bottom-color: var(--accent); }
+
+  footer{padding:32px 0; border-top:1px solid var(--line);}
+  footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
+  footer p{font-family:var(--mono);font-size:0.78rem;color:var(--graphite);}
+</style>
+
+<!-- PostHog Analytics -->
+<script>
+    !function(t,e){var o,n,p,r;e.__SV||(window.posthog && window.posthog.__loaded)||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="Ji Yi init fn mn Hr pn bn cn capture calculateEventProperties Sn register register_once register_for_session unregister unregister_for_session Tn getFeatureFlag getFeatureFlagPayload getFeatureFlagResult getAllFeatureFlags isFeatureEnabled reloadFeatureFlags updateFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSurveysLoaded onSessionId getSurveys getActiveMatchingSurveys renderSurvey displaySurvey cancelPendingSurvey canRenderSurvey canRenderSurveyAsync Mn identify setPersonProperties unsetPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset shutdown setIdentity clearIdentity get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException addExceptionStep captureLog startExceptionAutocapture stopExceptionAutocapture loadToolbar get_property getSessionProperty Cn xn createPersonProfile setInternalOrTestUser In hn Pn opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing get_explicit_consent_status is_capturing clear_opt_in_out_capturing debug Ur Rt getPageViewId captureTraceFeedback captureTraceMetric an".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+    posthog.init('phc_Csxr2shhxpQgnxkXGfEiYMdk3QNbG6KdU7ghdajiDxwK', {
+        api_host: 'https://us.i.posthog.com',
+        defaults: '2026-05-30',
+        person_profiles: 'identified_only',
+    })
+</script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-WT7SWY7306"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-WT7SWY7306');
+</script>
+
+<link rel="canonical" href="https://shubhuu.in/article.html">
+</head>
+<body>
+
+<div class="wrap" style="padding-top: 40px; display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px;">
+  <div style="display: flex; flex-direction: column; gap: 8px;">
+    <a href="/index.html" class="brand" style="font-family: var(--display); font-weight: 700; font-size: 1.05rem; letter-spacing: -0.01em;">shubh<span style="color:var(--accent)">.</span></a>
+  </div>
+  <div style="display: flex; align-items: center; gap: 16px; font-family: var(--mono); font-size: 0.85rem; color: var(--ink-soft);">
+    <a href="/links.html" style="display: flex; align-items: center; gap: 6px; transition: color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color=''">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg> Links
+    </a>
+    <a href="/creative.html" style="display: flex; align-items: center; gap: 6px; transition: color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color=''">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="4"></circle></svg> Creative
+    </a>
+    <a href="/" style="display: flex; align-items: center; gap: 6px; transition: color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color=''">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg> Portfolio
+    </a>
+    <button id="theme-toggle" style="background: none; border: none; cursor: pointer; color: var(--ink-soft); display: flex; align-items: center; justify-content: center; transition: color 0.2s; margin-left: 8px;" aria-label="Toggle Dark Mode" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color=''">
+      <svg id="theme-icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      <svg id="theme-icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+    </button>
+  </div>
+</div>
+
+<div class="article-wrap">
+  <a href="/blogs.html" class="back-link">← Back to blogs</a>
+  
+  <div class="article-header">
+    <div class="article-meta">August 17, 2026 • Blog</div>
+    <h1 class="article-title">From Scratch To SQL</h1>
+  </div>
+
+  <div class="article-content">
+    <!-- ARTICLE_CONTENT_START -->
+<h1>From Scratch to SQL: A No-BS Map of Computer Science</h1>
+<h2>Why This Exists</h2>
+<p>CS sounds scary because of the words, not the ideas. &quot;Loop,&quot; &quot;query,&quot; &quot;Boolean logic&quot; — every one of these is just a fancy name for something you already do daily. A loop is a routine. A query is a question. Boolean logic is just yes/no thinking.</p>
+<p>This is the fast version — no fluff, just the ideas that matter, each with a real-life comparison so it actually sticks. Every topic ends with a link if you want to go deeper.</p>
+<h2>1. How a Computer Actually Works</h2>
+<p>Start here — this is the machine everything else runs on.</p>
+<h3>Binary — The Computer&#39;s Only Language</h3>
+<p>What: Computers only understand two states — 0 and 1. Every letter, image, and app is secretly a long string of these.</p>
+<p>Analogy: A light switch — only &quot;on&quot; or &quot;off,&quot; nothing in between. Millions of switches flipping fast enough gives you Instagram.</p>
+<p>🔗 <a href="https://www.geeksforgeeks.org/maths/binary-number-system/">Binary Number System — GeeksforGeeks</a></p>
+<h3>Boolean Logic</h3>
+<p>What: True/False math, combined using logic gates.</p>
+<ul>
+<li>AND → both must be true (license and fuel to drive)</li>
+<li>OR → either works (pay by cash or card)</li>
+<li>NOT → flips it (not raining → false if it is)</li>
+</ul>
+<p>Analogy: These three gates are the grammar rules binary uses to make decisions.</p>
+<p>This is literally what&#39;s happening inside your processor, millions of times a second.</p>
+<p>🔗 <a href="https://www.geeksforgeeks.org/digital-logic/boolean-algebra/">Boolean Algebra — GeeksforGeeks</a></p>
+<h3>RAM vs. Storage</h3>
+<p>What: RAM holds what your computer is actively using right now — fast, but wiped when powered off. Storage (SSD/HDD) holds everything permanently, even when off — slower, but doesn&#39;t forget.</p>
+<p>Analogy: RAM is your desk — fast to grab things, but cleared at day&#39;s end. Storage is your cupboard — slower to reach, but stuff stays there.</p>
+<p>App feels laggy? Probably low RAM. Running out of space for photos? That&#39;s storage.</p>
+<h3>CPU vs. GPU</h3>
+<p>What: The CPU is the general-purpose brain — handles one task at a time, very fast, very smart. The GPU handles thousands of simple tasks at once — built for graphics and, more recently, AI.</p>
+<p>Analogy: CPU = one expert solving problems one by one. GPU = a thousand average workers solving a thousand simple problems simultaneously.</p>
+<p>This is why AI training uses GPUs — it&#39;s mostly small repeated math, done in parallel.</p>
+<h3>Operating System</h3>
+<p>What: The software that manages everything else — apps, files, memory — and lets you actually interact with the hardware.</p>
+<p>Analogy: The manager of a building. You never talk to the electricity or plumbing directly; the manager (OS) handles it and gives you a clean interface.</p>
+<p>Windows, macOS, Linux, Android — all doing the same core job, different personalities.</p>
+<p>🔗 <a href="https://www.geeksforgeeks.org/operating-systems/operating-systems/">Operating System Basics — GeeksforGeeks</a></p>
+<h2>2. Your Toolkit</h2>
+<p>Before you write real code, this is the setup you&#39;ll actually be using.</p>
+<h3>File Extensions</h3>
+<p>What: The letters after the dot in a filename — tells your computer (and you) what kind of file it is and how to open it.</p>
+<p>Analogy: Like a food label. .py is a Python meal, .html is a web page, .exe is ready-to-eat.</p>
+<table>
+<thead>
+<tr>
+<th>Extension</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>.py</td>
+<td>Python code</td>
+</tr>
+<tr>
+<td>.js</td>
+<td>JavaScript code</td>
+</tr>
+<tr>
+<td>.html / .css</td>
+<td>Webpage structure / style</td>
+</tr>
+<tr>
+<td>.cpp / .java</td>
+<td>C++ / Java code</td>
+</tr>
+<tr>
+<td>.json</td>
+<td>Data storage format (used everywhere in web apps)</td>
+</tr>
+<tr>
+<td>.csv</td>
+<td>Spreadsheet-style data (rows &amp; columns as plain text)</td>
+</tr>
+<tr>
+<td>.sql</td>
+<td>Database queries/scripts</td>
+</tr>
+<tr>
+<td>.md</td>
+<td>Markdown — plain text with light formatting (like this blog)</td>
+</tr>
+<tr>
+<td>.exe</td>
+<td>A ready-to-run Windows program</td>
+</tr>
+<tr>
+<td>.txt</td>
+<td>Plain, unformatted text</td>
+</tr>
+</tbody></table>
+<p>.py is the recipe, running it gives you the dish. Code files vs. data files vs. run-ready programs — know the difference.</p>
+<p>🔗 <a href="https://support.microsoft.com/en-us/windows/experience/storage-filemanagement/common-file-name-extensions-in-windows">File Extensions — Microsoft Support</a></p>
+<h3>IDE vs. Text Editor</h3>
+<p>What: A text editor just edits text (Notepad). An IDE (Integrated Development Environment) edits code and runs it, debugs it, and catches errors — all in one app.</p>
+<p>Analogy: A text editor is a plain notebook. An IDE is a notebook that also grades your homework and tells you where you went wrong, instantly.</p>
+<p>VS Code, PyCharm, IntelliJ — these are IDEs (or IDE-like editors). You&#39;ll live in one of these.</p>
+<p>🔗 <a href="https://www.ibm.com/think/topics/integrated-development-environment">IDE — IBM</a></p>
+<h3>Compiler vs. Interpreter</h3>
+<p>What: Both turn your code into something the computer understands. A compiler translates the whole program at once, before running it. An interpreter translates line-by-line, while running it.</p>
+<p>Analogy: Compiler = translating a whole book before handing it over. Interpreter = a live translator, speaking one sentence at a time as you go.</p>
+<p>C++ is compiled. Python is interpreted. This is why Python feels more &quot;instant&quot; but C++ often runs faster.</p>
+<p>🔗 <a href="https://www.geeksforgeeks.org/compiler-design/compiler-vs-interpreter-2/">Compiler vs Interpreter — GeeksforGeeks</a></p>
+<h3>The Command Line (Terminal)</h3>
+<p>What: A text-only way to talk to your computer — instead of clicking, you type commands.</p>
+<p>Analogy: Ordering food by typing a message vs. pointing at a menu. Slower to learn, way faster once you know it.</p>
+<p>Almost every real dev tool — Git, Python, servers — is run through here, not by clicking icons.</p>
+<p>🔗 <a href="https://www.geeksforgeeks.org/linux-unix/linux-commands/">Command Line Basics — GeeksforGeeks</a></p>
+<h3>Git &amp; GitHub</h3>
+<p>What: Git tracks every change you make to your code. GitHub is a website that hosts that code online so others can see, use, or contribute to it.</p>
+<p>Analogy: Git = &quot;Track Changes&quot; in a Word doc, but for code, with a full time-machine to undo anything. GitHub = Google Drive for that tracked project, but built for teams.</p>
+<p>Every job, every open-source project, every college group project runs on this. Learn git commit and git push early — it&#39;ll save you more than once.</p>
+<p>🔗 <a href="https://www.geeksforgeeks.org/git/git-tutorial/">Git &amp; GitHub — GeeksforGeeks</a></p>
+<h3>Package Managers</h3>
+<p>What: Tools that install other people&#39;s pre-written code into your project instead of you writing it from scratch.</p>
+<p>Analogy: Ordering a part online instead of manufacturing it yourself.</p>
+<p>pip install (Python) and npm install (JavaScript) — you&#39;ll type these constantly.</p>
+<p>🔗 <a href="https://www.geeksforgeeks.org/python/how-to-install-pip-in-macos/">pip — GeeksforGeeks</a> · <a href="https://www.geeksforgeeks.org/node-js/node-js-npm-node-package-manager/">npm — GeeksforGeeks</a></p>
+<h3>Debugging</h3>
+<p>What: The process of finding and fixing what&#39;s broken in your code — using error messages and breakpoints (pause points) instead of guessing.</p>
+<p>Analogy: A doctor using symptoms to diagnose, not randomly prescribing medicine.</p>
+<p>Reading the error message carefully solves 80% of bugs. Most beginners skip this step.</p>
+<h3>Comments</h3>
+<p>What: Plain-English notes inside your code that the computer ignores but humans read.</p>
+<p>Analogy: Sticky notes on a recipe explaining why you changed a step.</p>
+<p>Six months later, you will forget why you wrote what you wrote. Comments save future-you.</p>
+<h2>3. Thinking Like a Programmer</h2>
+<p>Before real code, there&#39;s logic. This is where every programmer starts.</p>
+<h3>Scratch (Block-Based Coding)</h3>
+<p>What: Drag-and-drop blocks instead of typed code. You learn the logic without worrying about spelling mistakes.</p>
+<p>Analogy: LEGO instructions, not a blueprint. Same result, way less friction.</p>
+<p>Three core ideas hide inside it:</p>
+<ul>
+<li>Loops → repeat something (a washing machine&#39;s spin cycle)</li>
+<li>Conditionals → if X, then Y (if it rains, take an umbrella)</li>
+<li>Event listeners → wait, then react (a doorbell)</li>
+</ul>
+<p>Every app ever built runs on these three things: repeat, decide, react.</p>
+<p>🔗 <a href="https://www.scratchfoundation.org/home">Scratch — Scratch Foundation</a></p>
+<h3>Algorithms &amp; Flowcharts</h3>
+<p>What: An algorithm = steps to solve a problem. A flowchart = that plan, drawn out.</p>
+<p>Analogy: A recipe. Chop → cook → stir → done. You plan before you touch the pan.</p>
+<p>Real engineers sketch flowcharts before writing code. Plan first, build second.</p>
+<p>🔗 <a href="https://www.geeksforgeeks.org/dsa/introduction-to-algorithms/">Algorithms</a> · <a href="https://www.ibm.com/think/topics/flowchart">Flowcharts — IBM</a></p>
+<h3>Pseudocode</h3>
+<p>What: Writing your logic in plain English that looks like code but isn&#39;t tied to any language.</p>
+<p>Analogy: A rough draft before the final essay.</p>
+<p>Plain Text</p>
+<p>IF number MOD 2 equals 0
+    PRINT &quot;Even&quot;
+ELSE
+    PRINT &quot;Odd&quot;</p>
+<p>Used in interviews and textbooks because anyone can read it — no language required.</p>
+<p>🔗 <a href="https://www.geeksforgeeks.org/dsa/how-to-write-a-pseudo-code/">Pseudocode — GeeksforGeeks</a></p>
+<h2>4. Real Programming</h2>
+<h3>Python / C++ Basics</h3>
+<ul>
+<li>Variable → a labeled box (age = 18)</li>
+<li>Data type → what&#39;s inside the box: text (string), numbers (int), yes/no (boolean)</li>
+<li>Typecasting → converting formats, like $ to ₹ — value stays, format changes</li>
+<li>Operator → symbols that act on data (+, ==)</li>
+</ul>
+<p>This is the vocabulary. Every program is just variables + operators.</p>
+<p>🔗 <a href="https://www.w3schools.com/python/">Python — W3Schools</a></p>
+<h3>Control Structures</h3>
+<ul>
+<li>if-elif-else → decisions</li>
+<li>for loop → repeat a known number of times (10 push-ups)</li>
+<li>while loop → repeat until something changes (eat popcorn till bowl&#39;s empty)</li>
+</ul>
+<p>Same logic as Scratch — just typed, with strict rules now.</p>
+<p>🔗 <a href="https://www.geeksforgeeks.org/python/loops-in-python/">Loops — GeeksforGeeks</a></p>
+<h3>Functions</h3>
+<p>What: Reusable blocks of code you can call anytime instead of rewriting.</p>
+<p>Analogy: A blender — press the button, don&#39;t rebuild it every smoothie.</p>
+<p>🔗 <a href="https://www.w3schools.com/python/python_functions.asp">Functions — W3Schools</a></p>
+<h3>Exception Handling</h3>
+<p>What: Code that catches errors instead of crashing the whole program.</p>
+<p>Analogy: A circuit breaker — one fault trips it, the house doesn&#39;t burn down.</p>
+<p>🔗 <a href="https://www.geeksforgeeks.org/python/python-exception-handling/">Exception Handling — GeeksforGeeks</a></p>
+<h3>Object-Oriented Programming (OOP)</h3>
+<p>What: Organizing code around objects — bundles of data and behavior — instead of loose functions.</p>
+<ul>
+<li>Class → the blueprint (e.g., &quot;Car&quot;)</li>
+<li>Object → an actual instance (e.g., &quot;my red Honda&quot;)</li>
+<li>Inheritance → a new class reusing an existing one&#39;s features (e.g., &quot;ElectricCar&quot; inherits from &quot;Car&quot;)</li>
+</ul>
+<p>Analogy: A class is a cookie cutter. Objects are the individual cookies — same shape, different toppings.</p>
+<p>Python, Java, C++ — all lean heavily on OOP. It&#39;s how most real-world software is structured.</p>
+<p>🔗 <a href="https://www.geeksforgeeks.org/dsa/introduction-of-object-oriented-programming/">OOP — GeeksforGeeks</a></p>
+<h3>Recursion</h3>
+<p>What: A function that calls itself to solve a smaller version of the same problem, until it hits a stopping point.</p>
+<p>Analogy: Two mirrors facing each other — the reflection keeps repeating itself, smaller each time, until it fades out.</p>
+<p>🔗 <a href="https://www.geeksforgeeks.org/dsa/introduction-to-recursion-2/">Recursion — GeeksforGeeks</a></p>
+<h3>File Handling</h3>
+<p>What: Reading and saving data permanently, not just while the program runs.</p>
+<p>Analogy: Whiteboard (temporary) vs. notebook (permanent).</p>
+<p>🔗 <a href="https://www.w3schools.com/python/python_file_handling.asp">File Handling — W3Schools</a></p>
+<h2>5. Data Structures &amp; Big O</h2>
+<h3>Data Structures</h3>
+<ul>
+<li>List/Array → numbered lockers, grab any item directly</li>
+<li>Stack (LIFO) → plate stack — last one in, first one out</li>
+<li>Queue (FIFO) → checkout line — first one in, first one served</li>
+</ul>
+<p>How you store data decides how fast your program runs. This is the core of CS.</p>
+<p>🔗 <a href="https://www.geeksforgeeks.org/dsa/dsa-tutorial-learn-data-structures-and-algorithms/">Data Structures — GeeksforGeeks</a></p>
+<h3>Big O (Time Complexity)</h3>
+<p>What: A way to describe how slow or fast your code gets as the input grows — without needing an exact stopwatch.</p>
+<p>Analogy: Searching for a name in a phonebook one page at a time (slow) vs. jumping straight to the right letter (fast). Big O describes which strategy you&#39;re using.</p>
+<p>O(1) = instant, O(n) = grows with input, O(n²) = grows painfully fast. Interviewers love asking this.</p>
+<p>🔗 <a href="https://www.geeksforgeeks.org/dsa/analysis-algorithms-big-o-analysis/">Big O Notation — GeeksforGeeks</a></p>
+<h2>6. Databases &amp; SQL</h2>
+<h3>Databases</h3>
+<p>What: Data stored in tables — rows (entries) and columns (categories) — instead of scattered files.</p>
+<p>Analogy: A class attendance register. Each row = one student. Each column = one detail about them.</p>
+<p>Instagram, Amazon, your college portal — all run on databases behind the scenes.</p>
+<p>🔗 <a href="https://www.geeksforgeeks.org/dbms/dbms/">Databases — GeeksforGeeks</a></p>
+<h3>SQL</h3>
+<p>What: The language for talking to databases.</p>
+<ul>
+<li>Primary Key → a unique ID per row (like your Aadhaar number)</li>
+<li>SELECT → get data</li>
+<li>INSERT → add data</li>
+<li>UPDATE → edit data</li>
+<li>JOIN → combine two tables</li>
+</ul>
+<p>Nearly every company on Earth uses SQL to manage data. Learn this, it&#39;s job-ready.</p>
+<p>🔗 <a href="https://www.w3schools.com/sql/">SQL — W3Schools</a></p>
+<h2>7. Building the Web</h2>
+<h3>HTML — The Skeleton</h3>
+<p>What: Structures a page using tags — headings, paragraphs, images, links.</p>
+<p>Analogy: A skeleton. Holds everything together, no style, no color.</p>
+<p>🔗 <a href="https://www.w3schools.com/html/">HTML — W3Schools</a></p>
+<h3>CSS — The Outfit</h3>
+<p>What: Controls how HTML looks — color, spacing, fonts, layout.</p>
+<p>Analogy: Clothes on the skeleton. Same body, different vibe.</p>
+<p>🔗 <a href="https://www.w3schools.com/css/">CSS — W3Schools</a></p>
+<h3>JavaScript — The Muscles</h3>
+<p>What: Makes pages react — clicks, pop-ups, live updates.</p>
+<p>Analogy: The nervous system. Without it, a page just sits there.</p>
+<p>HTML + CSS + JS = structure + style + behavior. That&#39;s every website you&#39;ve ever used.</p>
+<p>🔗 <a href="https://www.w3schools.com/js/">JavaScript — W3Schools</a></p>
+<h2>8. The Internet, Behind the Curtain</h2>
+<h3>Client-Server Model</h3>
+<p>What: The client is your device asking for something (like opening Instagram). The server is a remote computer that has the data and sends it back.</p>
+<p>Analogy: A restaurant. You (client) place an order; the kitchen (server) makes it and sends it out. You never see the kitchen — you just get the result.</p>
+<p>This is literally what happens every time you open a website or app — a request goes out, a server answers.</p>
+<p>🔗 <a href="https://www.geeksforgeeks.org/system-design/client-server-model/">Client-Server Model — GeeksforGeeks</a></p>
+<h3>HTTP/HTTPS &amp; Status Codes</h3>
+<p>What: The &quot;language&quot; browsers and servers use to talk. HTTPS is the secure version. Status codes are short replies telling you what happened.</p>
+<p>Analogy: Ordering food and getting a receipt code back: 200 = order confirmed, 404 = item doesn&#39;t exist, 500 = kitchen&#39;s on fire.</p>
+<p>🔗 <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status">HTTP Status Codes — MDN Web Docs</a></p>
+<h3>DNS</h3>
+<p>What: Turns a website name (google.com) into the actual numeric address (IP) computers use to find it.</p>
+<p>Analogy: A phonebook — you know the name, DNS finds the number.</p>
+<p>🔗 <a href="https://developer.mozilla.org/en-US/docs/Glossary/DNS">DNS — MDN Web Docs</a></p>
+<h3>Cookies &amp; Sessions</h3>
+<p>What: Small bits of data a website stores in your browser so it &quot;remembers&quot; you — like staying logged in.</p>
+<p>Analogy: A wristband at a festival — proof you already paid, so you don&#39;t show ID at every stall.</p>
+<p>🔗 <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Cookies">Cookies — MDN Web Docs</a></p>
+<h3>Localhost &amp; Ports</h3>
+<p>What: localhost means &quot;this computer, right now&quot; — used to test your own project before it goes live. A port is a specific &quot;door&quot; a program listens on (like :3000).</p>
+<p>Analogy: Localhost is testing a recipe in your own kitchen before serving customers. A port is a specific counter number in a shared building — same address, different service.</p>
+<h3>APIs</h3>
+<p>What: A set way for two programs to talk to each other and exchange data.</p>
+<p>Analogy: A waiter. You (the app) don&#39;t walk into the kitchen (another company&#39;s server) yourself — you tell the waiter (API) what you want, and it brings back the response.</p>
+<p>Weather apps, payment gateways, login-with-Google — all of it runs on APIs talking to other companies&#39; servers.</p>
+<p>🔗 <a href="https://www.geeksforgeeks.org/software-testing/what-is-an-api/">APIs — GeeksforGeeks</a></p>
+<h2>9. What Is a &quot;Tech Stack&quot;?</h2>
+<p>What: The full combo of tools used to build one app — not just one language, but everything working together.</p>
+<p>Analogy: Building a house needs bricks and wiring and plumbing. A tech stack is the whole toolkit, not one tool.</p>
+<p>Three layers:</p>
+<ul>
+<li>Frontend (what users see) → HTML, CSS, JS + frameworks like React, Angular, Vue</li>
+<li>Backend (server logic) → Python, Java, Node.js + frameworks like Django, Express, Spring Boot</li>
+<li>Database (data storage) → MySQL, PostgreSQL, MongoDB</li>
+</ul>
+<p>What&#39;s a framework? Pre-built code that handles the boring, repetitive stuff for you.</p>
+<p>Analogy: Flat-pack furniture vs. cutting your own wood. Same result, way less effort.</p>
+<p>Example — MERN stack: MongoDB + Express + React + Node.js. One language (JavaScript), the entire app — frontend to database.</p>
+<p>Every topic in this blog is a piece of a stack. Real apps are built by combining them.</p>
+<p>🔗 <a href="https://www.coursera.org/articles/tech-stack">Tech Stack — Coursera</a></p>
+<h2>10. AI, Since You&#39;ll Be Using It Anyway</h2>
+<h3>Machine Learning</h3>
+<p>What: Instead of manually coding every rule, you feed a program lots of examples, and it learns the pattern itself.</p>
+<p>Analogy: Teaching a kid to recognize dogs by showing thousands of dog photos, not by describing &quot;four legs, fur, tail&quot; in a rulebook.</p>
+<p>Netflix recommendations, spam filters, Google Photos face-grouping — all pattern-finding, not magic.</p>
+<h3>What Is an LLM?</h3>
+<p>What: A Large Language Model (like the one you&#39;re reading this from) is trained on massive amounts of text to predict what word comes next — and that turns out to be enough to hold conversations, write code, and explain concepts.</p>
+<p>Analogy: A very well-read friend who&#39;s read almost everything and can guess, with startling accuracy, what should come next in any sentence.</p>
+<p>Tools like Claude and ChatGPT are now part of a fresher&#39;s actual toolkit — for debugging, learning, and writing faster. Learn to use them well, not just copy-paste from them.</p>
+<h2>The Big Picture</h2>
+<p>The machine (binary, hardware) → your tools (Git, IDE, terminal) → how to think (logic, algorithms) → real code (Python, functions, OOP) → organizing data efficiently (data structures, Big O) → storing it (databases, SQL) → showing it (HTML, CSS, JS) → connecting it to the world (networking, APIs) → the full stack that ties it together → and the AI tools you&#39;ll use every day from here on.</p>
+<p>Nothing here is separate. A variable becomes a function, a function pulls from a database, a database feeds a frontend, an API connects it to the outside world, and underneath all of it — binary and Boolean logic flipping switches on a chip. CS isn&#39;t a pile of topics. It&#39;s one story. Now you know it.</p>
+
+    <!-- ARTICLE_CONTENT_END -->
+    
+    <div style="margin-top: 64px; padding: 24px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg-raised); text-align: center; transition: border-color 0.5s ease, background-color 0.5s ease;">
+      <p style="margin-bottom: 16px; font-size: 1rem; color: var(--ink-soft);">
+        Enjoyed this write-up? Consider supporting my work!
+      </p>
+      <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+        <a href="https://github.com/sponsors/Shubh-153" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center; gap: 8px; padding: 10px 20px; background: var(--ink); color: var(--bg); border-radius: 6px; font-family: var(--mono); font-size: 0.9rem; transition: transform 0.2s ease, opacity 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.opacity='0.9';" onmouseout="this.style.transform='translateY(0)'; this.style.opacity='1';">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.161 22 16.418 22 12c0-5.523-4.477-10-10-10z"></path></svg>
+          Sponsor on GitHub
+        </a>
+        <a href="https://ko-fi.com/shubh153" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center; gap: 8px; padding: 10px 20px; background: #FF5E5B; color: #ffffff; border-radius: 6px; font-family: var(--mono); font-size: 0.9rem; transition: transform 0.2s ease, opacity 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.opacity='0.9';" onmouseout="this.style.transform='translateY(0)'; this.style.opacity='1';">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M23.881 8.948c-.773-4.085-4.859-4.593-4.859-4.593H.723c-.604 0-.679.798-.679.798s-.082 7.324-.022 11.822c.164 2.424 2.586 2.672 2.586 2.672s8.267-.023 11.966-.049c2.438-.426 2.683-2.566 2.658-3.734 4.352.24 7.422-2.831 6.649-6.916zm-11.062 3.511c-1.246 1.453-4.011 3.976-4.011 3.976s-.121.119-.31.023c-.076-.057-.108-.09-.108-.09-.443-.441-3.368-3.049-4.034-3.954-.709-.965-1.041-2.7-.091-3.71.951-1.01 3.005-1.086 4.363.407 0 0 1.565-1.782 3.468-.963 1.904.82 1.832 3.011.723 4.311zm6.173.478c-.928.116-1.682.028-1.682.028V7.284h1.77s1.971.551 1.971 2.638c0 1.913-.985 2.667-2.059 3.015z"/></svg>
+          Support on Ko-fi
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <p>&copy; 2026 Shubh Gupta.</p>
+    <p><a href="/creative.html" style="color:var(--accent);text-decoration:underline;text-underline-offset:2px;">Creative Portfolio</a> &nbsp;|&nbsp; <a href="/links.html" style="color:var(--accent);text-decoration:underline;text-underline-offset:2px;">All Links</a> &nbsp;|&nbsp; <a href="/" style="text-decoration:underline;text-underline-offset:2px;">shubhuu.in</a></p>
+  </div>
+</footer>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const themeToggle = document.getElementById('theme-toggle');
+    const moonIcon = document.getElementById('theme-icon-moon');
+    const sunIcon = document.getElementById('theme-icon-sun');
+    
+    const updateIcon = (isDark) => {
+      if (isDark) {
+        if(moonIcon) moonIcon.style.display = 'none';
+        if(sunIcon) sunIcon.style.display = 'block';
+      } else {
+        if(moonIcon) moonIcon.style.display = 'block';
+        if(sunIcon) sunIcon.style.display = 'none';
+      }
+    };
+
+    const savedTheme = localStorage.getItem('theme');
+    let isDark = savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    
+    if (isDark) {
+      document.body.classList.add('dark-theme');
+    }
+    updateIcon(isDark);
+
+    if (themeToggle) {
+      themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-theme');
+        isDark = document.body.classList.contains('dark-theme');
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        updateIcon(isDark);
+      });
+    }
+  });
+</script>
+
+</body>
+</html>
