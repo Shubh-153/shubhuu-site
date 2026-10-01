@@ -56,13 +56,13 @@ today's work. One claim is half-wrong. It also missed three real bugs (Part 3).
 
 ### Valid and worth doing
 
-- [ ] **Pause `requestAnimationFrame` when the tab is hidden.** Confirmed: zero
+- [x] **Pause `requestAnimationFrame` when the tab is hidden.** Confirmed: zero
       occurrences of `visibilitychange` across the entire repo. `drawCanvas()`
       (`creative.html:1454`) and `updateCursor()` (`creative.html:1025`) recurse
       forever, burning CPU and battery in a background tab.
       Fix: a `document.visibilityState` check before re-scheduling.
 
-- [ ] **Suspend the `AudioContext` when muted.** `initAudio()`
+- [x] **Suspend the `AudioContext` when muted.** `initAudio()`
       (`creative.html:1114`) calls `resume()` but nothing ever calls `suspend()`
       or `close()`, so the audio graph stays live after muting. Minor resource
       retention, not a correctness bug.
@@ -163,12 +163,13 @@ Notion mein ye update kiya:
 
 Jo atka hua hai:
 
-- [ ] **Resume Roaster (Vercel):** code ready hai — `~/Projects/resume-roaster` mein `api/roast.js`, `api/health.js`, `vercel.json` add kiye, tests pass. Bas AI API key chahiye (Anthropic / Gemini / OpenRouter).
+- [x] **Resume Roaster (Vercel):** code ready hai — `~/Projects/resume-roaster` mein `api/roast.js`, `api/health.js`, `vercel.json` add kiye, tests pass. Bas AI API key chahiye (Anthropic / Gemini / OpenRouter).
   - Key Vercel mein add karo (`vercel env add ANTHROPIC_API_KEY production`) ya batao kaunsi use karni hai.
   - Default model `claude-3-haiku-20240307` purana hai → `claude-haiku-4-5` pe set karna hai.
   - Deploy ke baad Notion mein naya URL + screenshot lagana hai, aur URL ke shuru wala tab character saaf karna hai.
-- [ ] **ModelHive:** koi web UI nahi, terminal tool hai. Ek run = Ollama + Claude Code + Gemini CLI + Copilot CLI, 5 rounds, quota + 10–30 min. Ya README architecture ka terminal-style cover image banana hai.
-- [ ] **Second Brain:** web app "Loading…" pe atakta hai, Rust API server chahiye. Throwaway data dir ke saath chalane ki koshish ki, par release build `sqlx` macro dylib ke linker error ("mis-aligned LINKEDIT string pool") pe fail hua. Options: `target/release` saaf karke debug build, ya desktop app ka apna screenshot (bina personal data).
+  - **Done (2026-10-01):** Gemini 3.5 Flash pe live — https://resume-roaster-neon-mu.vercel.app, Notion Live URL updated.
+- [x] **ModelHive:** *(AI-generated cover laga diya, screenshot ki zaroorat nahi.)* koi web UI nahi, terminal tool hai. Ek run = Ollama + Claude Code + Gemini CLI + Copilot CLI, 5 rounds, quota + 10–30 min. Ya README architecture ka terminal-style cover image banana hai.
+- [x] **Second Brain:** *(AI-generated cover laga diya, screenshot ki zaroorat nahi.)* web app "Loading…" pe atakta hai, Rust API server chahiye. Throwaway data dir ke saath chalane ki koshish ki, par release build `sqlx` macro dylib ke linker error ("mis-aligned LINKEDIT string pool") pe fail hua. Options: `target/release` saaf karke debug build, ya desktop app ka apna screenshot (bina personal data).
 
 Local changes jo commit nahi hue:
 - `~/Projects/resume-roaster`: Vercel ke naye files.
