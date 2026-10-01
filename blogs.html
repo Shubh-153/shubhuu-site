@@ -92,7 +92,7 @@
 
   section{padding:72px 0;border-bottom:1px solid var(--line);}
   .path{font-family:var(--mono);font-size:0.8rem;color:var(--graphite);margin-bottom:8px;}
-  h2{
+  h2, h1.page-title{
     font-family:var(--display);font-weight:600;
     font-size:clamp(1.5rem,3vw,1.9rem);letter-spacing:-0.01em;
     margin-bottom:36px;
@@ -137,12 +137,12 @@
   footer p{font-family:var(--mono);font-size:0.78rem;color:var(--graphite);}
   
   /* Entrance Animations */
-  h2, .blog-card, .path {
+  h2, h1.page-title, .blog-card, .path {
     opacity: 0;
     transform: translateY(15px);
     transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .is-visible {
+  .is-visible, h1.page-title.is-visible {
     opacity: 1;
     transform: translateY(0);
   }
@@ -211,7 +211,7 @@
 <section id="blog-list" style="border-bottom: none;">
   <div class="wrap">
     <p class="path">~/blogs</p>
-    <h2>All Articles</h2>
+    <h1 class="page-title">All Articles</h1>
 
     <!-- BLOG_FILTERS_START -->
     <!-- BLOG_FILTERS_END -->
@@ -267,7 +267,7 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    const fadeElements = document.querySelectorAll('h2, .blog-card, .path');
+    const fadeElements = document.querySelectorAll('h2, h1.page-title, .blog-card, .path');
     if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       let staggerDelay = 0;
       let staggerTimeout;

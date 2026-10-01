@@ -235,11 +235,12 @@
     font-family:var(--mono);font-size:0.8rem;color:var(--graphite);
     margin-bottom:8px;
   }
-  h2{
+  h2, h1.page-title{
     font-family:var(--display);font-weight:600;
     font-size:clamp(1.5rem,3vw,1.9rem);letter-spacing:-0.01em;
     margin-bottom:36px;
   }
+  h1.page-title{line-height:inherit;max-width:none;}
 
   /* PROJECTS */
   .projects {
@@ -521,7 +522,7 @@
   <div class="wrap">
     <a href="/" class="back-link">&larr; Back to Portfolio</a>
     <p class="path">~/projects</p>
-    <h2>Things I've built</h2>
+    <h1 class="page-title">Things I've built</h1>
     <!-- PROJECT_FILTERS_START -->
     <div class="project-controls">
       <div class="project-search">
