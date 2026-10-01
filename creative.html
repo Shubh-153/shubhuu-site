@@ -987,7 +987,11 @@
       });
     });
 
+    let cursorRunning = false;
     function updateCursor() {
+      // Stop the loop in a background tab; visibilitychange restarts it
+      if (document.hidden) { cursorRunning = false; return; }
+      cursorRunning = true;
       // Lerp for smooth trailing effect
       cursorX += (targetX - cursorX) * 0.2;
       cursorY += (targetY - cursorY) * 0.2;
@@ -1024,6 +1028,9 @@
       
       requestAnimationFrame(updateCursor);
     }
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden && !cursorRunning) updateCursor();
+    });
     updateCursor();
   }
 
@@ -1350,7 +1357,13 @@
   window.addEventListener('mouseup', endInteraction);
   window.addEventListener('touchend', endInteraction);
 
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let canvasRunning = false;
+
   function drawCanvas() {
+    // Stop the loop in a background tab; visibilitychange restarts it
+    if (document.hidden) { canvasRunning = false; return; }
+    canvasRunning = true;
     ctx.clearRect(0, 0, width, height);
     
     particles.forEach((p, index) => {
@@ -1468,6 +1481,10 @@
       if (ambientGain && audioCtx) {
         ambientGain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 1);
       }
+      // Suspend the audio graph once the fade-out finishes; initAudio() resumes it
+      setTimeout(() => {
+        if (isMuted && audioCtx && audioCtx.state === 'running') audioCtx.suspend();
+      }, 1100);
     } else {
       document.body.classList.remove('muted-mode');
       initAudio();
@@ -1556,10 +1573,16 @@
   });
 
   initCanvas();
-  drawCanvas();
+  // Reduced motion hides the canvas below, so never start its loop
+  if (!reducedMotion) {
+    drawCanvas();
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden && !canvasRunning) drawCanvas();
+    });
+  }
 
   // Disable all heavy JS effects for reduced motion users
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  if (reducedMotion) {
     canvas.style.display = 'none'; // hide canvas entirely
     tiltCards.forEach(card => card.replaceWith(card.cloneNode(true))); // strip tilt listeners
     magneticBtns.forEach(btn => btn.replaceWith(btn.cloneNode(true))); // strip magnetic listeners
