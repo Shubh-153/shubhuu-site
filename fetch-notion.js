@@ -108,10 +108,10 @@ ${chips.map(([slug, c]) => `      <button type="button" class="filter-chip" data
 }
 
 function buildFeed(blogs) {
-  // Newest post date, not "now": a timestamp that changes every run made the
-  // hourly sync commit an otherwise identical feed.
-  const newest = blogs.reduce((max, b) => (b.createdTime > max ? b.createdTime : max), new Date(0));
-  const now = (blogs.length ? newest : new Date()).toUTCString();
+  // Deliberately "now": the changing timestamp makes the hourly sync commit
+  // every run, which the owner wants for their contribution graph. Keep the
+  // sitemap deterministic instead (build-sitemap.js) — that one affects SEO.
+  const now = new Date().toUTCString();
   return `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
