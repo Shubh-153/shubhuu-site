@@ -39,7 +39,7 @@
 }
 </script>
 
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍌</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛠️</text></svg>">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -340,6 +340,56 @@
   .blog-empty p.sub{color:var(--ink-soft);font-size:0.95rem;max-width:56ch;}
   .blog-empty .path{margin-top:18px;margin-bottom:0;}
 
+
+  /* --- EXPLORE CONTROLS (search + tech-stack filters) --- */
+  .visually-hidden {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+  }
+  .project-controls { margin-bottom: 32px; }
+  .project-search { margin-bottom: 16px; }
+  .project-search input {
+    width: 100%; max-width: 420px;
+    font-family: var(--mono); font-size: 0.88rem;
+    color: var(--ink); background: var(--bg-raised);
+    border: 1px solid var(--line); border-radius: 8px;
+    padding: 11px 14px;
+    transition: border-color .2s ease, background-color .5s ease, color .5s ease;
+  }
+  .project-search input::placeholder { color: var(--graphite); }
+  .project-search input:focus { outline: none; border-color: var(--accent); }
+  .project-search input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .blog-filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+  .filter-chip {
+    font-family: var(--mono); font-size: 0.72rem;
+    color: var(--ink-soft); background: transparent;
+    border: 1px solid var(--line); border-radius: 20px;
+    padding: 6px 14px; cursor: pointer;
+    transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+  }
+  .filter-chip:hover { color: var(--accent); border-color: var(--accent); }
+  .filter-chip[aria-pressed="true"] {
+    color: var(--accent); background: var(--accent-soft); border-color: var(--accent);
+  }
+  .project-count { font-family: var(--mono); font-size: 0.75rem; color: var(--graphite); }
+  .project[hidden], .blog-empty[hidden] { display: none; }
+
+  /* The whole card is now a link to the project's detail page. */
+  a.project { text-decoration: none; color: inherit; }
+  a.project:hover .project-title { color: var(--accent); }
+  .project-status {
+    font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.02em;
+    padding: 3px 9px; border-radius: 20px; white-space: nowrap;
+    border: 1px solid var(--line); color: var(--ink-soft); background: var(--bg);
+  }
+  .project-status[data-status="live"] { color: #0E8A44; border-color: #0E8A4433; background: #0E8A441a; }
+  .project-status[data-status="in-progress"] { color: #B26A00; border-color: #B26A0033; background: #B26A001a; }
+  .project-status[data-status="archived"] { color: var(--graphite); }
+  .project-status[data-status="none"] { display: none; }
+  body.dark-theme .project-status[data-status="live"] { color: #4ADE80; }
+  body.dark-theme .project-status[data-status="in-progress"] { color: #FBBF24; }
+
   /* CONTACT */
   .contact-grid{display:flex;flex-direction:column;gap:14px;max-width:480px;}
   .contact-row{
@@ -398,6 +448,30 @@
     opacity: 1;
     transform: translateY(0);
   }
+  .back-link {
+    display: inline-block;
+    font-family: var(--mono); font-size: 0.9rem; color: var(--accent);
+    margin-bottom: 32px; text-decoration: none;
+    border-bottom: 1px solid transparent; transition: border-color 0.2s;
+  }
+  .back-link:hover { border-bottom-color: var(--accent); }
+  /* Card thumbnail — bleeds to the card edges; placeholder letter when a project has no cover. */
+  .project-thumb {
+    margin: -32px -32px 8px; aspect-ratio: 16 / 10; overflow: hidden;
+    border-radius: 15px 15px 0 0; border-bottom: 1px solid var(--line); background: var(--bg);
+  }
+  .project.bento-wide .project-thumb { aspect-ratio: 16 / 6; } /* full-width card: keep the image from filling the screen */
+  .project-thumb img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; transition: transform .4s ease; }
+  .project-thumb-ph {
+    display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, hsl(var(--h) 55% 90%), hsl(calc(var(--h) + 40) 55% 82%));
+  }
+  .project-thumb-ph span { font-family: var(--display, var(--sans)); font-size: 3.2rem; font-weight: 600; color: hsl(var(--h) 40% 32%); }
+  body.dark-theme .project-thumb-ph { background: linear-gradient(135deg, hsl(var(--h) 30% 22%), hsl(calc(var(--h) + 40) 30% 15%)); }
+  body.dark-theme .project-thumb-ph span { color: hsl(var(--h) 60% 75%); }
+  @media (prefers-reduced-motion: no-preference) {
+    a:hover > .project-thumb img { transform: scale(1.04); }
+  }
 </style>
 
 <!-- PostHog Analytics -->
@@ -423,86 +497,286 @@
 <link rel="preload" as="image" href="profile1.webp">
 </head>
 <body>
+<script>/* theme-init: apply the saved theme before first paint so dark mode doesn't flash light first */(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme: dark)').matches)){var b=document.body;b.style.transition='none';b.classList.add('dark-theme');requestAnimationFrame(function(){requestAnimationFrame(function(){b.style.transition='';});});}}catch(e){}})();</script>
 
 <nav>
   <div class="wrap">
-    <a href="#" class="brand">shubh<span style="color:var(--accent)">.</span></a>
-    <div class="nav-right">
+    <a href="/index.html" class="brand">shubh<span style="color:var(--accent)">.</span></a>
+    <div style="display:flex;align-items:center;gap:20px;">
       <div class="navlinks">
-        <a href="#projects"><span>~/</span>projects</a>
-        <a href="#skills"><span>~/</span>skills</a>
-        <a href="#blog"><span>~/</span>blog</a>
-        <a href="#academics"><span>~/</span>academics</a>
-        <a href="#contact"><span>~/</span>contact</a>
+        <a href="/blogs.html"><span>~/</span>blog</a>
+        <a href="/academics.html"><span>~/</span>academics</a>
       </div>
-      <div class="qa-container">
-        <button class="qa-btn" aria-label="Quick Access Menu" onclick="document.getElementById('qa-dropdown').classList.toggle('active')">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="20" y2="12"></line><line x1="4" y1="6" x2="20" y2="6"></line><line x1="4" y1="18" x2="20" y2="18"></line></svg>
-        </button>
-        <div id="qa-dropdown" class="qa-dropdown">
-          <a href="/creative.html"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="4"></circle></svg> Creative Space</a>
-          <a href="/links.html"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg> Links</a>
-          <a href="/blogs.html"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg> Blogs</a>
-        </div>
-      </div>
+      <button id="theme-toggle" style="background:none;border:none;cursor:pointer;color:var(--ink-soft);display:flex;align-items:center;justify-content:center;transition:color 0.2s;" aria-label="Toggle Dark Mode">
+        <svg id="theme-icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        <svg id="theme-icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+      </button>
     </div>
   </div>
 </nav>
 
-<header style="padding-top: 150px;"></header>
 
 <main>
 <section id="projects">
   <div class="wrap">
+    <a href="/" class="back-link">&larr; Back to Portfolio</a>
     <p class="path">~/projects</p>
     <h2>Things I've built</h2>
+    <!-- PROJECT_FILTERS_START -->
+    <div class="project-controls">
+      <div class="project-search">
+        <label class="visually-hidden" for="project-search">Search projects</label>
+        <input type="search" id="project-search" placeholder="Search projects..." autocomplete="off" spellcheck="false">
+      </div>
+      <div class="blog-filters" role="group" aria-label="Filter projects by tech stack">
+        <button type="button" class="filter-chip" data-filter="all" aria-pressed="true">All (18)</button>
+        <button type="button" class="filter-chip" data-filter="javascript" aria-pressed="false">JavaScript (7)</button>
+        <button type="button" class="filter-chip" data-filter="ai-ml" aria-pressed="false">AI/ML (4)</button>
+        <button type="button" class="filter-chip" data-filter="react" aria-pressed="false">React (4)</button>
+        <button type="button" class="filter-chip" data-filter="typescript" aria-pressed="false">TypeScript (4)</button>
+        <button type="button" class="filter-chip" data-filter="agents" aria-pressed="false">Agents (3)</button>
+        <button type="button" class="filter-chip" data-filter="next-js" aria-pressed="false">Next.js (3)</button>
+        <button type="button" class="filter-chip" data-filter="python" aria-pressed="false">Python (3)</button>
+        <button type="button" class="filter-chip" data-filter="fastapi" aria-pressed="false">FastAPI (2)</button>
+        <button type="button" class="filter-chip" data-filter="supabase" aria-pressed="false">Supabase (2)</button>
+        <button type="button" class="filter-chip" data-filter="canvas" aria-pressed="false">canvas (1)</button>
+        <button type="button" class="filter-chip" data-filter="chatbot" aria-pressed="false">Chatbot (1)</button>
+        <button type="button" class="filter-chip" data-filter="chrome-extension" aria-pressed="false">Chrome Extension (1)</button>
+        <button type="button" class="filter-chip" data-filter="ethereum" aria-pressed="false">Ethereum (1)</button>
+        <button type="button" class="filter-chip" data-filter="express" aria-pressed="false">Express (1)</button>
+        <button type="button" class="filter-chip" data-filter="fhir" aria-pressed="false">FHIR (1)</button>
+        <button type="button" class="filter-chip" data-filter="firebase" aria-pressed="false">Firebase (1)</button>
+        <button type="button" class="filter-chip" data-filter="flask" aria-pressed="false">Flask (1)</button>
+        <button type="button" class="filter-chip" data-filter="gemini" aria-pressed="false">Gemini (1)</button>
+        <button type="button" class="filter-chip" data-filter="google-apps-script" aria-pressed="false">Google Apps Script (1)</button>
+        <button type="button" class="filter-chip" data-filter="hardhat" aria-pressed="false">Hardhat (1)</button>
+        <button type="button" class="filter-chip" data-filter="html" aria-pressed="false">HTML (1)</button>
+        <button type="button" class="filter-chip" data-filter="ios-shortcuts" aria-pressed="false">iOS Shortcuts (1)</button>
+        <button type="button" class="filter-chip" data-filter="leaflet" aria-pressed="false">Leaflet (1)</button>
+        <button type="button" class="filter-chip" data-filter="mcp" aria-pressed="false">MCP (1)</button>
+        <button type="button" class="filter-chip" data-filter="mediapipe" aria-pressed="false">MediaPipe (1)</button>
+        <button type="button" class="filter-chip" data-filter="node-js" aria-pressed="false">Node.js (1)</button>
+        <button type="button" class="filter-chip" data-filter="react-18" aria-pressed="false">React 18 (1)</button>
+        <button type="button" class="filter-chip" data-filter="recharts" aria-pressed="false">Recharts (1)</button>
+        <button type="button" class="filter-chip" data-filter="redis" aria-pressed="false">Redis (1)</button>
+        <button type="button" class="filter-chip" data-filter="rust" aria-pressed="false">Rust (1)</button>
+        <button type="button" class="filter-chip" data-filter="solidity" aria-pressed="false">Solidity (1)</button>
+        <button type="button" class="filter-chip" data-filter="tailwind-css" aria-pressed="false">Tailwind CSS (1)</button>
+        <button type="button" class="filter-chip" data-filter="tauri" aria-pressed="false">Tauri (1)</button>
+        <button type="button" class="filter-chip" data-filter="three-js" aria-pressed="false">Three.js (1)</button>
+        <button type="button" class="filter-chip" data-filter="tone-js" aria-pressed="false">Tone.js (1)</button>
+        <button type="button" class="filter-chip" data-filter="upi" aria-pressed="false">UPI (1)</button>
+        <button type="button" class="filter-chip" data-filter="zustand" aria-pressed="false">Zustand (1)</button>
+      </div>
+      <p class="project-count" role="status" aria-live="polite"></p>
+    </div>
+    <!-- PROJECT_FILTERS_END -->
+
     <div class="projects">
-
-      <div class="project bento-wide">
+      <!-- PROJECT_CARDS_START -->
+      <a href="/project-table-scraper.html" class="project" data-stack="javascript chrome-extension" data-status="live" data-search="table scraper a chrome extension that extracts any table on any webpage to csv or clipboard in one click, with bulk export, auto-clean and multi-page merge. live javascript chrome extension">
+        <div class="project-thumb"><img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_800,h_500,c_fill,g_north/v1790790175/shubhuu-projects/thumbs/table-scraper.png" alt="" loading="lazy" decoding="async"></div>
         <div class="project-top">
-          <div class="project-title"><a href="https://github.com/Shubh-153/ModelHive/tree/main" target="_blank" rel="noopener">ModelHive</a></div>
+          <div class="project-title">Table Scraper</div>
+          <span class="project-status" data-status="live">Live</span>
         </div>
-        <p class="project-desc">An autonomous orchestrator where specialized LLM agents (Ollama, Claude, Gemini) collaborate to generate and refine full-stack applications, featuring a strict automated Copilot reviewer to enforce API contracts.</p>
-        <div class="tags"><span class="tag">Python</span><span class="tag">Flask</span><span class="tag">React</span><span class="tag">Agents</span></div>
-        <div class="project-action"><a href="https://github.com/Shubh-153/ModelHive/tree/main" target="_blank" rel="noopener">View on GitHub ↗</a></div>
-      </div>
+        <p class="project-desc">A Chrome extension that extracts any table on any webpage to CSV or clipboard in one click, with bulk export, auto-clean and multi-page merge.</p>
+        <div class="tags"><span class="tag">JavaScript</span><span class="tag">Chrome Extension</span></div>
+        <div class="project-action"><span>View Project &#8594;</span></div>
+      </a>
 
-      <div class="project">
+      <a href="/project-mediplug.html" class="project" data-stack="next-js fastapi supabase redis fhir" data-status="live" data-search="mediplug interoperability middleware for smart india hackathon that automates hospital insurance claims — from the doctor&#39;s desk to mjpjay / nhcx approval — via semantic code mapping, pre-flight rule checks and fhir bundles. live next.js fastapi supabase redis fhir">
+        <div class="project-thumb"><img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_800,h_500,c_fill,g_north/v1790790160/shubhuu-projects/thumbs/mediplug.png" alt="" loading="lazy" decoding="async"></div>
         <div class="project-top">
-          <div class="project-title"><a href="https://marvelcam.vercel.app/" target="_blank" rel="noopener">Gesture Power FX</a></div>
+          <div class="project-title">MediPlug</div>
+          <span class="project-status" data-status="live">Live</span>
         </div>
-        <p class="project-desc">A webcam-based superhero energy effects app that reads hand gestures in real time and renders cinematic particle effects over live video.</p>
-        <div class="tags"><span class="tag">React 18</span><span class="tag">TypeScript</span><span class="tag">Three.js</span><span class="tag">MediaPipe</span><span class="tag">Tone.js</span></div>
-        <div class="project-action"><a href="https://marvelcam.vercel.app/" target="_blank" rel="noopener">View Project ↗</a></div>
-      </div>
+        <p class="project-desc">Interoperability middleware for Smart India Hackathon that automates hospital insurance claims — from the doctor&#39;s desk to MJPJAY / NHCX approval — via semantic code mapping, pre-flight rule checks and FHIR bundles.</p>
+        <div class="tags"><span class="tag">Next.js</span><span class="tag">FastAPI</span><span class="tag">Supabase</span><span class="tag">Redis</span><span class="tag">FHIR</span></div>
+        <div class="project-action"><span>View Project &#8594;</span></div>
+      </a>
 
-      <div class="project">
+      <a href="/project-fin.html" class="project" data-stack="google-apps-script ios-shortcuts javascript" data-status="live" data-search="fin a frictionless personal finance tracker: log an expense in 2–3 taps from the iphone action button or siri, store it in your own google sheet, and analyze cash flow on a web dashboard. live google apps script ios shortcuts javascript">
+        <div class="project-thumb"><img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_800,h_500,c_fill,g_north/v1790790151/shubhuu-projects/thumbs/fin.png" alt="" loading="lazy" decoding="async"></div>
         <div class="project-top">
-          <div class="project-title"><a href="https://mental-health-ai-chat-bot.vercel.app/" target="_blank" rel="noopener">MindCare</a></div>
+          <div class="project-title">fin</div>
+          <span class="project-status" data-status="live">Live</span>
         </div>
-        <p class="project-desc">A mental health-focused AI chat companion designed around supportive, low-pressure conversation.</p>
-        <div class="tags"><span class="tag">AI/ML</span><span class="tag">Chatbot</span></div>
-        <div class="project-action"><a href="https://mental-health-ai-chat-bot.vercel.app/" target="_blank" rel="noopener">View Project ↗</a></div>
-      </div>
+        <p class="project-desc">A frictionless personal finance tracker: log an expense in 2–3 taps from the iPhone Action Button or Siri, store it in your own Google Sheet, and analyze cash flow on a web dashboard.</p>
+        <div class="tags"><span class="tag">Google Apps Script</span><span class="tag">iOS Shortcuts</span><span class="tag">JavaScript</span></div>
+        <div class="project-action"><span>View Project &#8594;</span></div>
+      </a>
 
-      <div class="project">
+      <a href="/project-gym-champion.html" class="project" data-stack="react tailwind-css recharts" data-status="live" data-search="gym champion a personal fitness and macro tracker with weight-trend and macro charts; fully client-side, with all data in one exportable json blob. live react tailwind css recharts">
+        <div class="project-thumb"><img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_800,h_500,c_fill,g_north/v1790790156/shubhuu-projects/thumbs/gym-champion.png" alt="" loading="lazy" decoding="async"></div>
         <div class="project-top">
-          <div class="project-title"><a href="https://shubh-153.github.io/ASCII-ART-CONVERTER/" target="_blank" rel="noopener">ASCII Art Studio</a></div>
+          <div class="project-title">Gym Champion</div>
+          <span class="project-status" data-status="live">Live</span>
         </div>
-        <p class="project-desc">A single-file web app that converts images into ASCII art across six modes, including Braille and Matrix-style rendering.</p>
-        <div class="tags"><span class="tag">JavaScript</span><span class="tag">Canvas</span></div>
-        <div class="project-action"><a href="https://shubh-153.github.io/ASCII-ART-CONVERTER/" target="_blank" rel="noopener">View Project ↗</a></div>
-      </div>
+        <p class="project-desc">A personal fitness and macro tracker with weight-trend and macro charts; fully client-side, with all data in one exportable JSON blob.</p>
+        <div class="tags"><span class="tag">React</span><span class="tag">Tailwind CSS</span><span class="tag">Recharts</span></div>
+        <div class="project-action"><span>View Project &#8594;</span></div>
+      </a>
 
-      <div class="project">
+      <a href="/project-splitbill-dapp.html" class="project" data-stack="solidity hardhat ethereum javascript" data-status="in-progress" data-search="splitbill dapp a trustless, non-custodial group expense splitter on ethereum: front a shared bill, and each participant&#39;s share is forwarded to you atomically on-chain. in progress solidity hardhat ethereum javascript">
+        <div class="project-thumb"><img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_800,h_500,c_fill,g_north/v1790790173/shubhuu-projects/thumbs/splitbill-dapp.png" alt="" loading="lazy" decoding="async"></div>
         <div class="project-top">
-          <div class="project-title"><a href="https://resume-roaster-production-3be6.up.railway.app/" target="_blank" rel="noopener">Resume Roaster</a></div>
+          <div class="project-title">SplitBill DApp</div>
+          <span class="project-status" data-status="in-progress">In Progress</span>
+        </div>
+        <p class="project-desc">A trustless, non-custodial group expense splitter on Ethereum: front a shared bill, and each participant&#39;s share is forwarded to you atomically on-chain.</p>
+        <div class="tags"><span class="tag">Solidity</span><span class="tag">Hardhat</span><span class="tag">Ethereum</span><span class="tag">JavaScript</span></div>
+        <div class="project-action"><span>View Project &#8594;</span></div>
+      </a>
+
+      <a href="/project-academic-dashboard.html" class="project" data-stack="node-js express javascript" data-status="live" data-search="academic dashboard a private, local home base for the semester: parses course syllabi into a browsable structure and adds a lecture log, dsa practice sheet, daily planner, contribution heatmap and an exam-focused llm prompt generator. live node.js express javascript">
+        <div class="project-thumb"><img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_800,h_500,c_fill,g_north/v1790790146/shubhuu-projects/thumbs/academic-dashboard.png" alt="" loading="lazy" decoding="async"></div>
+        <div class="project-top">
+          <div class="project-title">Academic Dashboard</div>
+          <span class="project-status" data-status="live">Live</span>
+        </div>
+        <p class="project-desc">A private, local home base for the semester: parses course syllabi into a browsable structure and adds a lecture log, DSA practice sheet, daily planner, contribution heatmap and an exam-focused LLM prompt generator.</p>
+        <div class="tags"><span class="tag">Node.js</span><span class="tag">Express</span><span class="tag">JavaScript</span></div>
+        <div class="project-action"><span>View Project &#8594;</span></div>
+      </a>
+
+      <a href="/project-resume-roaster.html" class="project" data-stack="javascript ai-ml" data-status="live" data-search="resume roaster a web app that gives blunt, constructive feedback on resumes. live javascript ai/ml">
+        <div class="project-thumb"><img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_800,h_500,c_fill,g_north/v1790790167/shubhuu-projects/thumbs/resume-roaster.png" alt="" loading="lazy" decoding="async"></div>
+        <div class="project-top">
+          <div class="project-title">Resume Roaster</div>
+          <span class="project-status" data-status="live">Live</span>
         </div>
         <p class="project-desc">A web app that gives blunt, constructive feedback on resumes.</p>
         <div class="tags"><span class="tag">JavaScript</span><span class="tag">AI/ML</span></div>
-        <div class="project-action"><a href="https://resume-roaster-production-3be6.up.railway.app/" target="_blank" rel="noopener">View Project ↗</a></div>
-      </div>
+        <div class="project-action"><span>View Project &#8594;</span></div>
+      </a>
 
+      <a href="/project-ascii-art-studio.html" class="project" data-stack="javascript canvas" data-status="live" data-search="ascii art studio a single-file web app that converts images into ascii art across six modes, including braille and matrix-style rendering. live javascript canvas">
+        <div class="project-thumb"><img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_800,h_500,c_fill,g_north/v1790790150/shubhuu-projects/thumbs/ascii-art-studio.png" alt="" loading="lazy" decoding="async"></div>
+        <div class="project-top">
+          <div class="project-title">ASCII Art Studio</div>
+          <span class="project-status" data-status="live">Live</span>
+        </div>
+        <p class="project-desc">A single-file web app that converts images into ASCII art across six modes, including Braille and Matrix-style rendering.</p>
+        <div class="tags"><span class="tag">JavaScript</span><span class="tag">canvas</span></div>
+        <div class="project-action"><span>View Project &#8594;</span></div>
+      </a>
+
+      <a href="/project-mindcare.html" class="project" data-stack="ai-ml chatbot" data-status="live" data-search="mindcare a mental health-focused ai chat companion designed around supportive, low-pressure conversation. live ai/ml chatbot">
+        <div class="project-thumb"><img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_800,h_500,c_fill,g_north/v1790790366/shubhuu-projects/thumbs/mindcare.png" alt="" loading="lazy" decoding="async"></div>
+        <div class="project-top">
+          <div class="project-title">MindCare</div>
+          <span class="project-status" data-status="live">Live</span>
+        </div>
+        <p class="project-desc">A mental health-focused AI chat companion designed around supportive, low-pressure conversation.</p>
+        <div class="tags"><span class="tag">AI/ML</span><span class="tag">Chatbot</span></div>
+        <div class="project-action"><span>View Project &#8594;</span></div>
+      </a>
+
+      <a href="/project-gesture-power-fx.html" class="project" data-stack="react-18 typescript three-js mediapipe tone-js" data-status="live" data-search="gesture power fx a webcam-based superhero energy effects app that reads hand gestures in real time and renders cinematic particle effects over live video. live react 18 typescript three.js mediapipe tone.js">
+        <div class="project-thumb"><img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_800,h_500,c_fill,g_north/v1790790153/shubhuu-projects/thumbs/gesture-power-fx.png" alt="" loading="lazy" decoding="async"></div>
+        <div class="project-top">
+          <div class="project-title">Gesture Power FX</div>
+          <span class="project-status" data-status="live">Live</span>
+        </div>
+        <p class="project-desc">A webcam-based superhero energy effects app that reads hand gestures in real time and renders cinematic particle effects over live video.</p>
+        <div class="tags"><span class="tag">React 18</span><span class="tag">TypeScript</span><span class="tag">Three.js</span><span class="tag">MediaPipe</span><span class="tag">Tone.js</span></div>
+        <div class="project-action"><span>View Project &#8594;</span></div>
+      </a>
+
+      <a href="/project-modelhive.html" class="project bento-wide" data-stack="python flask react agents" data-status="live" data-search="modelhive an autonomous orchestrator where specialized llm agents (ollama, claude, gemini) collaborate to generate and refine full-stack applications, featuring a strict automated copilot reviewer to enforce api contracts. live python flask react agents">
+        <div class="project-thumb"><img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_800,h_500,c_fill,g_north/v1790790164/shubhuu-projects/thumbs/modelhive.png" alt="" loading="lazy" decoding="async"></div>
+        <div class="project-top">
+          <div class="project-title">ModelHive</div>
+          <span class="project-status" data-status="live">Live</span>
+        </div>
+        <p class="project-desc">An autonomous orchestrator where specialized LLM agents (Ollama, Claude, Gemini) collaborate to generate and refine full-stack applications, featuring a strict automated Copilot reviewer to enforce API contracts.</p>
+        <div class="tags"><span class="tag">Python</span><span class="tag">Flask</span><span class="tag">React</span><span class="tag">Agents</span></div>
+        <div class="project-action"><span>View Project &#8594;</span></div>
+      </a>
+
+      <a href="/project-agentflow.html" class="project" data-stack="python fastapi next-js gemini agents" data-status="in-progress" data-search="agentflow an autonomous multi-agent platform where you give it a goal, not instructions — a lead planner agent decomposes it, delegates to specialist agents, monitors execution and recovers from failures. built for the all things agentic hackathon. in progress python fastapi next.js gemini agents">
+        <div class="project-thumb"><img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_800,h_500,c_fill,g_north/v1790790148/shubhuu-projects/thumbs/agentflow.png" alt="" loading="lazy" decoding="async"></div>
+        <div class="project-top">
+          <div class="project-title">AgentFlow</div>
+          <span class="project-status" data-status="in-progress">In Progress</span>
+        </div>
+        <p class="project-desc">An autonomous multi-agent platform where you give it a goal, not instructions — a lead planner agent decomposes it, delegates to specialist agents, monitors execution and recovers from failures. Built for the All Things Agentic Hackathon.</p>
+        <div class="tags"><span class="tag">Python</span><span class="tag">FastAPI</span><span class="tag">Next.js</span><span class="tag">Gemini</span><span class="tag">Agents</span></div>
+        <div class="project-action"><span>View Project &#8594;</span></div>
+      </a>
+
+      <a href="/project-aarogya-grid.html" class="project" data-stack="react firebase python ai-ml" data-status="live" data-search="aarogya grid a health supply chain forecasting and management platform that predicts medicine demand and tracks stock across facilities to keep critical supplies from running out. live react firebase python ai/ml">
+        <div class="project-thumb"><img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_800,h_500,c_fill,g_north/v1790790143/shubhuu-projects/thumbs/aarogya-grid.png" alt="" loading="lazy" decoding="async"></div>
+        <div class="project-top">
+          <div class="project-title">Aarogya Grid</div>
+          <span class="project-status" data-status="live">Live</span>
+        </div>
+        <p class="project-desc">A health supply chain forecasting and management platform that predicts medicine demand and tracks stock across facilities to keep critical supplies from running out.</p>
+        <div class="tags"><span class="tag">React</span><span class="tag">Firebase</span><span class="tag">Python</span><span class="tag">AI/ML</span></div>
+        <div class="project-action"><span>View Project &#8594;</span></div>
+      </a>
+
+      <a href="/project-second-brain.html" class="project" data-stack="rust typescript ai-ml" data-status="in-progress" data-search="second brain a local-first, privacy-first personal knowledge os: capture anything into an inbox, organize it into projects, tasks and notes, search it, and reason over it with a local llm. in progress rust typescript ai/ml">
+        <div class="project-thumb"><img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_800,h_500,c_fill,g_north/v1790790168/shubhuu-projects/thumbs/second-brain.png" alt="" loading="lazy" decoding="async"></div>
+        <div class="project-top">
+          <div class="project-title">Second Brain</div>
+          <span class="project-status" data-status="in-progress">In Progress</span>
+        </div>
+        <p class="project-desc">A local-first, privacy-first personal knowledge OS: capture anything into an inbox, organize it into projects, tasks and notes, search it, and reason over it with a local LLM.</p>
+        <div class="tags"><span class="tag">Rust</span><span class="tag">TypeScript</span><span class="tag">AI/ML</span></div>
+        <div class="project-action"><span>View Project &#8594;</span></div>
+      </a>
+
+      <a href="/project-buy-me-a-chai.html" class="project" data-stack="html javascript upi" data-status="live" data-search="buy me a chai a self-contained upi sponsor button and qr ticket generator for your github readme — no backend, no third-party account, just your upi id. live html javascript upi">
+        <div class="project-thumb"><img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_800,h_500,c_fill,g_north/v1790790364/shubhuu-projects/thumbs/buy-me-a-chai.png" alt="" loading="lazy" decoding="async"></div>
+        <div class="project-top">
+          <div class="project-title">Buy Me a Chai</div>
+          <span class="project-status" data-status="live">Live</span>
+        </div>
+        <p class="project-desc">A self-contained UPI sponsor button and QR ticket generator for your GitHub README — no backend, no third-party account, just your UPI ID.</p>
+        <div class="tags"><span class="tag">HTML</span><span class="tag">JavaScript</span><span class="tag">UPI</span></div>
+        <div class="project-action"><span>View Project &#8594;</span></div>
+      </a>
+
+      <a href="/project-lpu-loop.html" class="project" data-stack="next-js supabase typescript" data-status="live" data-search="lpu loop a hyperlocal campus marketplace for lovely professional university students — buy, sell and share without leaving campus. live next.js supabase typescript">
+        <div class="project-thumb"><img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_800,h_500,c_fill,g_north/v1790790158/shubhuu-projects/thumbs/lpu-loop.png" alt="" loading="lazy" decoding="async"></div>
+        <div class="project-top">
+          <div class="project-title">LPU Loop</div>
+          <span class="project-status" data-status="live">Live</span>
+        </div>
+        <p class="project-desc">A hyperlocal campus marketplace for Lovely Professional University students — buy, sell and share without leaving campus.</p>
+        <div class="tags"><span class="tag">Next.js</span><span class="tag">Supabase</span><span class="tag">TypeScript</span></div>
+        <div class="project-action"><span>View Project &#8594;</span></div>
+      </a>
+
+      <a href="/project-shubhukun.html" class="project" data-stack="typescript tauri mcp agents" data-status="in-progress" data-search="shubhukun a personal ai orchestration workspace: one shared core that routes every request to the right model, with mcp tools, skills, memory and observability, surfaced through a cli and a desktop app. in progress typescript tauri mcp agents">
+        <div class="project-thumb"><img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_800,h_500,c_fill,g_north/v1790790170/shubhuu-projects/thumbs/shubhukun.png" alt="" loading="lazy" decoding="async"></div>
+        <div class="project-top">
+          <div class="project-title">ShubhuKun</div>
+          <span class="project-status" data-status="in-progress">In Progress</span>
+        </div>
+        <p class="project-desc">A personal AI orchestration workspace: one shared core that routes every request to the right model, with MCP tools, skills, memory and observability, surfaced through a CLI and a desktop app.</p>
+        <div class="tags"><span class="tag">TypeScript</span><span class="tag">Tauri</span><span class="tag">MCP</span><span class="tag">Agents</span></div>
+        <div class="project-action"><span>View Project &#8594;</span></div>
+      </a>
+
+      <a href="/project-viora-civicverse.html" class="project" data-stack="react leaflet zustand" data-status="live" data-search="viora civicverse a civic complaint portal where every repair is verified with photos, gps and ai before being marked complete, with a live map and analytics for tracking complaints. live react leaflet zustand">
+        <div class="project-thumb"><img src="https://res.cloudinary.com/sxgn1uaq/image/upload/f_auto,q_auto,w_800,h_500,c_fill,g_north/v1790790177/shubhuu-projects/thumbs/viora-civicverse.png" alt="" loading="lazy" decoding="async"></div>
+        <div class="project-top">
+          <div class="project-title">Viora CivicVerse</div>
+          <span class="project-status" data-status="live">Live</span>
+        </div>
+        <p class="project-desc">A civic complaint portal where every repair is verified with photos, GPS and AI before being marked complete, with a live map and analytics for tracking complaints.</p>
+        <div class="tags"><span class="tag">React</span><span class="tag">Leaflet</span><span class="tag">Zustand</span></div>
+        <div class="project-action"><span>View Project &#8594;</span></div>
+      </a>
+      <!-- PROJECT_CARDS_END -->
+    </div>
+
+    <div class="blog-empty" id="project-empty" hidden>
+      <p class="lead">No projects match that.</p>
+      <p class="sub">Try a different search term, or pick <em>All</em> to clear the filter.</p>
     </div>
   </div>
 </section>
@@ -547,22 +821,24 @@
       fadeElements.forEach(el => el.classList.add('is-visible'));
     }
 
-    // 2. Custom Theme Transition on Scroll
-    const themeSections = document.querySelectorAll('header.hero, section');
-    const themeObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const id = entry.target.id;
-          if (id === 'projects' || id === 'skills' || id === 'creative') {
-            document.body.classList.add('dark-theme');
-          } else {
-            document.body.classList.remove('dark-theme');
-          }
-        }
+    // 2. Theme toggle (same behaviour as academics/blogs)
+    const themeToggle = document.getElementById('theme-toggle');
+    const moonIcon = document.getElementById('theme-icon-moon');
+    const sunIcon = document.getElementById('theme-icon-sun');
+    const updateIcon = (dark) => {
+      if (moonIcon) moonIcon.style.display = dark ? 'none' : 'block';
+      if (sunIcon) sunIcon.style.display = dark ? 'block' : 'none';
+    };
+    let isDark = document.body.classList.contains('dark-theme');
+    updateIcon(isDark);
+    if (themeToggle) {
+      themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-theme');
+        isDark = document.body.classList.contains('dark-theme');
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        updateIcon(isDark);
       });
-    }, { rootMargin: "-50% 0px -50% 0px" }); 
-
-    themeSections.forEach(section => themeObserver.observe(section));
+    }
 
     // 3. Quick Access Click Outside
     document.addEventListener('click', (e) => {
@@ -571,6 +847,58 @@
         if(dropdown) dropdown.classList.remove('active');
       }
     });
+
+    // --- EXPLORE: combined tech-stack filter + text search ---
+    // The chip bar is only generated when there is more than one distinct tag,
+    // so the chip half of this is a no-op until the Notion database has some.
+    const searchInput = document.getElementById('project-search');
+    const chips = document.querySelectorAll('.filter-chip');
+    const cards = document.querySelectorAll('.project[data-search]');
+    const countEl = document.querySelector('.project-count');
+    const emptyEl = document.getElementById('project-empty');
+
+    if (cards.length && (searchInput || chips.length)) {
+      let activeFilter = 'all';
+      let query = '';
+
+      const apply = () => {
+        let shown = 0;
+        cards.forEach(card => {
+          const tags = (card.dataset.stack || '').split(' ');
+          const matchesChip = activeFilter === 'all' || tags.indexOf(activeFilter) !== -1;
+          const matchesQuery = !query || (card.dataset.search || '').indexOf(query) !== -1;
+          const visible = matchesChip && matchesQuery;
+          card.hidden = !visible;
+          if (visible) shown++;
+        });
+        if (countEl) countEl.textContent = shown === cards.length
+          ? shown + (shown === 1 ? ' project' : ' projects')
+          : shown + ' of ' + cards.length + ' projects';
+        if (emptyEl) emptyEl.hidden = shown !== 0;
+      };
+
+      chips.forEach(chip => {
+        chip.addEventListener('click', () => {
+          activeFilter = chip.dataset.filter;
+          chips.forEach(c => c.setAttribute('aria-pressed', String(c === chip)));
+          apply();
+        });
+      });
+
+      if (searchInput) {
+        let debounce;
+        searchInput.addEventListener('input', () => {
+          clearTimeout(debounce);
+          debounce = setTimeout(() => {
+            query = searchInput.value.trim().toLowerCase();
+            apply();
+          }, 120);
+        });
+      }
+
+      apply();
+    }
+
   });
 </script>
 

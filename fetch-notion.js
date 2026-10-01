@@ -3,99 +3,19 @@ const { Client } = require('@notionhq/client');
 const { NotionToMarkdown } = require('notion-to-md');
 const fs = require('fs');
 
+const {
+  SITE, AUTHOR, OG_IMAGE, BASE_KEYWORDS,
+  escapeHtml, replaceBlock, injectMarker, slugify, makeSlug, uniqueSlug,
+  extractMarkdownContent, buildExcerpt, queryAllPages,
+  pruneGenerated, pickRelated, assertNotEmpty,
+} = require('./lib/notion');
+
 const notion = new Client({ auth: process.env.NOTION_API_KEY });
 const n2m = new NotionToMarkdown({ notionClient: notion });
 
-const SITE = 'https://shubhuu.in';
-const AUTHOR = 'Shubh Gupta';
-const OG_IMAGE = `${SITE}/thumbnail.png`;
 const MANIFEST = '.generated-posts.json';
 
-const BASE_KEYWORDS = 'Shubh Gupta, software development, ai software development, software development engineer, ai software developer, software engineering, application developer, app software developer, software development india, find a software developer, full stack, app developer, ai developer, software developer india, find developer, web app developer, it software developer, software developer skills, build software, dev ops';
-
-// Static pages that belong in the sitemap. Demo/orphan pages (article*.html,
-// creative-bento.html, creative-masonry.html) are deliberately excluded.
-const STATIC_PAGES = [
-  { loc: `${SITE}/`, changefreq: 'weekly', priority: '1.0' },
-  { loc: `${SITE}/blogs.html`, changefreq: 'weekly', priority: '0.8' },
-  { loc: `${SITE}/projects.html`, changefreq: 'monthly', priority: '0.8' },
-  { loc: `${SITE}/creative.html`, changefreq: 'monthly', priority: '0.8' },
-  { loc: `${SITE}/academics.html`, changefreq: 'monthly', priority: '0.6' },
-  { loc: `${SITE}/links.html`, changefreq: 'monthly', priority: '0.6' },
-];
-
-function escapeHtml(str) {
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
-}
-
-function extractMarkdownContent(value) {
-  if (typeof value === 'string') return value;
-  if (Array.isArray(value)) {
-    return value.map(extractMarkdownContent).filter(Boolean).join('\n');
-  }
-  if (value && typeof value === 'object') {
-    if (typeof value.parent === 'string') return value.parent;
-    return Object.values(value).map(extractMarkdownContent).filter(Boolean).join('\n');
-  }
-  return '';
-}
-
-function decodeEntities(str) {
-  return String(str)
-    .replace(/&#39;/g, "'")
-    .replace(/&quot;/g, '"')
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&amp;/g, '&');
-}
-
-// Replacement values are injected verbatim: use a function so that `$&`, `$'`
-// and friends inside post content are never interpreted as replacement patterns.
-function replaceBlock(haystack, regex, replacement) {
-  return haystack.replace(regex, () => replacement);
-}
-
 const postUrl = slug => `${SITE}/${slug}.html`;
-const slugify = str => String(str).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
-
-function buildExcerpt(htmlContent, title, limit = 155) {
-  let text = decodeEntities(String(htmlContent).replace(/<[^>]+>/g, ' '));
-  // Notion bodies usually repeat the title as the first heading — drop it so the
-  // meta description does not start by restating the <title>.
-  const titlePattern = title.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  text = text.replace(new RegExp('^\\s*' + titlePattern + '\\s*', 'i'), '');
-  text = text.replace(/\s+/g, ' ').trim();
-  if (text.length <= limit) return text;
-  const cut = text.slice(0, limit);
-  const lastSpace = cut.lastIndexOf(' ');
-  return (lastSpace > limit * 0.6 ? cut.slice(0, lastSpace) : cut).replace(/[,;:.\s]+$/, '') + '...';
-}
-
-async function queryAllPages(databaseId) {
-  const results = [];
-  let cursor;
-  do {
-    const res = await fetch(`https://api.notion.com/v1/databases/${databaseId}/query`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${process.env.NOTION_API_KEY}`,
-        'Notion-Version': '2022-06-28',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(cursor ? { start_cursor: cursor } : {})
-    });
-    if (!res.ok) throw new Error(`Failed to fetch database: ${res.status} ${res.statusText}`);
-    const page = await res.json();
-    results.push(...page.results);
-    cursor = page.has_more ? page.next_cursor : undefined;
-  } while (cursor);
-  return results;
-}
 
 function buildSeoBlock(blog) {
   const fullTitle = `${blog.title} | ${AUTHOR}`;
@@ -154,20 +74,8 @@ function blogCard(blog, extraClass = '') {
       </a>`;
 }
 
-// Prefer posts sharing categories (most overlap first), then fall back to the
-// newest remaining posts. `blogs` is already sorted newest-first.
-function pickRelated(current, blogs, limit = 3) {
-  const others = blogs.filter(b => b.slug !== current.slug);
-  const shared = b => b.categorySlugs.filter(c => current.categorySlugs.includes(c)).length;
-  return others
-    .map((b, i) => ({ b, score: shared(b), i }))
-    .sort((x, y) => (y.score - x.score) || (x.i - y.i))
-    .slice(0, limit)
-    .map(x => x.b);
-}
-
 function buildRelatedBlock(current, blogs) {
-  const related = pickRelated(current, blogs);
+  const related = pickRelated(current, blogs, b => b.categorySlugs);
   if (!related.length) return '<!-- RELATED_POSTS_START -->\n  <!-- RELATED_POSTS_END -->';
   return `<!-- RELATED_POSTS_START -->
   <section class="related">
@@ -199,27 +107,11 @@ ${chips.map(([slug, c]) => `      <button type="button" class="filter-chip" data
     <!-- BLOG_FILTERS_END -->`;
 }
 
-function buildSitemap(blogs) {
-  const now = new Date().toISOString();
-  const urls = [
-    ...STATIC_PAGES.map(p => ({ ...p, lastmod: now })),
-    ...blogs.map(b => ({ loc: postUrl(b.slug), changefreq: 'monthly', priority: '0.7', lastmod: b.isoDate })),
-  ];
-  return `<?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated by fetch-notion.js. Do not edit by hand. -->
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${urls.map(u => `  <url>
-    <loc>${u.loc}</loc>
-    <lastmod>${u.lastmod}</lastmod>
-    <changefreq>${u.changefreq}</changefreq>
-    <priority>${u.priority}</priority>
-  </url>`).join('\n')}
-</urlset>
-`;
-}
-
 function buildFeed(blogs) {
-  const now = new Date().toUTCString();
+  // Newest post date, not "now": a timestamp that changes every run made the
+  // hourly sync commit an otherwise identical feed.
+  const newest = blogs.reduce((max, b) => (b.createdTime > max ? b.createdTime : max), new Date(0));
+  const now = (blogs.length ? newest : new Date()).toUTCString();
   return `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
@@ -242,38 +134,16 @@ ${b.categories.map(c => `      <category>${escapeHtml(c)}</category>`).join('\n'
 `;
 }
 
-// Delete pages this script generated on a previous run but no longer owns (i.e.
-// a post was renamed or removed in Notion). Only ever touches slugs recorded in
-// our own manifest, so hand-written pages can never be caught by it.
-function pruneRenamedPosts(currentSlugs) {
-  let previous = [];
-  try {
-    previous = JSON.parse(fs.readFileSync(MANIFEST, 'utf8')).slugs || [];
-  } catch (e) { /* first run, or manifest missing */ }
-
-  previous
-    .filter(slug => !currentSlugs.includes(slug))
-    .forEach(slug => {
-      const file = `${slug}.html`;
-      if (fs.existsSync(file)) {
-        fs.unlinkSync(file);
-        console.log(`Removed stale post: ${file}`);
-      }
-    });
-
-  fs.writeFileSync(MANIFEST, JSON.stringify({ slugs: currentSlugs }, null, 2) + '\n');
-}
-
 async function buildSite() {
   const { marked } = await import('marked');
 
   const databaseId = process.env.NOTION_DATABASE_ID;
   if (!databaseId) {
-    console.log("No NOTION_DATABASE_ID provided. Skipping build.");
+    console.log("No NOTION_DATABASE_ID provided. Skipping blog build.");
     return;
   }
 
-  console.log("Fetching database from Notion...");
+  console.log("Fetching blog database from Notion...");
   const pages = await queryAllPages(databaseId);
   console.log(`Fetched ${pages.length} page(s).`);
 
@@ -282,7 +152,6 @@ async function buildSite() {
   for (const page of pages) {
     const titleProperty = Object.values(page.properties).find(p => p.type === 'title');
     const title = titleProperty && titleProperty.title.length > 0 ? titleProperty.title[0].plain_text : 'Untitled';
-    const slug = slugify(title);
 
     const dateProperty = Object.values(page.properties).find(p => p.type === 'date');
     let dateStr = page.created_time;
@@ -306,7 +175,7 @@ async function buildSite() {
     const htmlContent = marked.parse(extractMarkdownContent(mdString));
 
     blogs.push({
-      title, slug, date, isoDate: createdTime.toISOString(),
+      title, id: page.id, date, isoDate: createdTime.toISOString(),
       categories, categoryLabel, categorySlugs,
       excerpt: buildExcerpt(htmlContent, title),
       htmlContent, createdTime
@@ -314,6 +183,15 @@ async function buildSite() {
   }
 
   blogs.sort((a, b) => b.createdTime - a.createdTime);
+
+  // Slugs are assigned after sorting so a duplicate-title suffix (-2, -3) is
+  // deterministic across runs rather than depending on Notion's response order.
+  const usedSlugs = new Set();
+  blogs.forEach(b => { b.slug = uniqueSlug(makeSlug(b.title, b.id), usedSlugs, 'blog post'); });
+
+  // A transient API failure returning zero rows must never blank blogs.html and
+  // get auto-committed by CI.
+  if (!assertNotEmpty(blogs, 'published blog posts')) return;
 
   // 1. Generate individual article HTML pages
   const articleTemplate = fs.readFileSync('article.html', 'utf8');
@@ -336,32 +214,27 @@ async function buildSite() {
   fs.writeFileSync('blogs.html', blogsHtml);
 
   // 3. Update index.html latest articles
-  if (blogs.length > 0) {
-    let indexHtml = fs.readFileSync('index.html', 'utf8');
-    const latestHtml = `<!-- LATEST_BLOG_START -->
-    <div class="blog-grid">
+  let indexHtml = fs.readFileSync('index.html', 'utf8');
+  indexHtml = injectMarker(indexHtml, 'LATEST_BLOG', `    <div class="blog-grid">
 ${blogs.slice(0, 3).map(b => blogCard(b)).join('\n')}
-    </div>
-    <!-- LATEST_BLOG_END -->`;
-    indexHtml = replaceBlock(indexHtml, /<!-- LATEST_BLOG_START -->[\s\S]*?<!-- LATEST_BLOG_END -->/, latestHtml);
-    fs.writeFileSync('index.html', indexHtml);
-  }
+    </div>`, '    ');
+  fs.writeFileSync('index.html', indexHtml);
 
-  // 4. SEO artifacts
-  fs.writeFileSync('sitemap.xml', buildSitemap(blogs));
+  // 4. RSS feed (blog-only by design; sitemap.xml is built by build-sitemap.js
+  //    so it can also see the generated project pages).
   fs.writeFileSync('feed.xml', buildFeed(blogs));
 
   // 5. Clean up posts renamed/removed in Notion
-  pruneRenamedPosts(blogs.map(b => b.slug));
+  pruneGenerated(MANIFEST, blogs.map(b => b.slug));
 
-  console.log(`Site built successfully: ${blogs.length} post(s), sitemap.xml, feed.xml.`);
+  console.log(`Blogs built successfully: ${blogs.length} post(s), feed.xml.`);
 }
 
 if (require.main === module) {
   buildSite().catch(err => {
-    console.error(err);
+    console.error(err.isConfigError ? `\n${err.message}\n` : err);
     process.exit(1);
   });
 }
 
-module.exports = { buildSite, buildSeoBlock, buildExcerpt, buildSitemap, buildFeed, blogCard, slugify, escapeHtml };
+module.exports = { buildSite, buildSeoBlock, buildFeed, blogCard };

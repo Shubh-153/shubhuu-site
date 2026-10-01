@@ -1,4 +1,4 @@
-name: Sync Notion Blogs
+name: Sync Notion Content
 
 on:
   schedule:
@@ -22,13 +22,33 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Fetch Notion Data
+      # These steps run sequentially on purpose: fetch-notion.js and
+      # fetch-projects.js both read-modify-write index.html (different markers),
+      # so they must never run concurrently.
+      - name: Sync blogs
         env:
           NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
           NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
         run: node fetch-notion.js
 
+      - name: Sync projects
+        env:
+          NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
+          NOTION_PROJECTS_DB_ID: ${{ secrets.NOTION_PROJECTS_DB_ID }}
+        run: node fetch-projects.js
+
+      - name: Sync academics and achievements
+        env:
+          NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
+          NOTION_ACADEMICS_DB_ID: ${{ secrets.NOTION_ACADEMICS_DB_ID }}
+          NOTION_ACHIEVEMENTS_DB_ID: ${{ secrets.NOTION_ACHIEVEMENTS_DB_ID }}
+        run: node fetch-profile.js
+
+      # Runs last so it can see every page the generators produced.
+      - name: Rebuild sitemap
+        run: node build-sitemap.js
+
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "chore: auto-sync blogs from Notion"
+          commit_message: "chore: auto-sync content from Notion"

@@ -10,31 +10,48 @@ The entire site is built using **Vanilla HTML, CSS, and JavaScript**. This ensur
 ### Directory Structure
 ```text
 /
-├── index.html           # Main landing page
-├── creative.html        # The physics-driven gallery page
-├── fetch-bento.js       # Node script to fetch Cloudinary images
+├── index.html            # Main landing page
+├── projects.html         # Projects explore page (search + tech-stack filters)
+├── project.html          # Template for generated project detail pages
+├── article.html          # Template for generated blog post pages
+├── academics.html        # Education + achievements
+├── creative.html         # The physics-driven gallery page
+├── lib/
+│   └── notion.js         # Shared generator helpers
+├── fetch-notion.js       # Notion → blog posts
+├── fetch-projects.js     # Notion → projects + detail pages
+├── fetch-profile.js      # Notion → academics + achievements
+├── fetch-bento.js        # Cloudinary → creative gallery
+├── build-sitemap.js      # manifests → sitemap.xml
 ├── .github/
 │   └── workflows/
-│       └── cloudinary-sync.yml # GitHub Action for the CMS
+│       ├── notion-sync.yml     # Hourly Notion content sync
+│       └── cloudinary-sync.yml # Hourly gallery sync
 └── README.md
 ```
 
 ---
 
 ## ⚙️ 2. The Headless "Zero-Maintenance" CMS
-Instead of using a traditional CMS or database, we use **Cloudinary + GitHub Actions**. 
+Instead of a traditional CMS or database, we use **Notion + Cloudinary + GitHub Actions**. The pattern is the same for every content type, so adding a new one is mechanical.
 
-### How to Replicate:
-1. **Cloudinary Setup:** Create a free Cloudinary account and upload your photos to a specific folder (e.g., `shubhuu-portfolio`).
-2. **The Node Script (`fetch-bento.js`):** 
-   - Write a script that pings the `Cloudinary Search API` for images in your specific folder.
-   - Loop through the JSON response and generate HTML strings for each image (using a Bento grid layout).
-   - Read `creative.html`, locate a marker (e.g., `<!-- CLOUDINARY_START -->`), replace everything until `<!-- CLOUDINARY_END -->` with the new HTML, and overwrite the file.
-3. **The GitHub Action (`.github/workflows/cloudinary-sync.yml`):**
-   - Create a workflow triggered by `schedule: - cron: '0 * * * *'` (Runs every hour).
-   - In the workflow: checkout the repo, setup Node.js, run `node fetch-bento.js`, and then run `git commit` and `git push` if the HTML changed.
+### The pattern: marker injection
+1. **Put a marker pair in the HTML** where generated content belongs:
+   ```html
+   <!-- PROJECT_CARDS_START -->
+   <!-- PROJECT_CARDS_END -->
+   ```
+2. **Write a generator** that fetches rows, builds an HTML string, and replaces everything between the markers. Use `injectMarker()` from `lib/notion.js` — it throws if the marker is missing (so a typo fails loudly instead of silently producing nothing) and injects the replacement through a function callback so `$&` / `` $` `` inside content are never treated as replacement patterns.
+3. **Add a step** to `.github/workflows/notion-sync.yml`. Keep steps sequential if two generators write the same file.
 
-**Result:** Every time you upload a photo to Cloudinary from your phone, the site automatically updates and redeploys itself within an hour.
+### How to replicate
+1. **Notion setup:** create a database, share it with your integration (an unshared database returns 404), and add its ID as a repo secret.
+2. **Read properties by name, not by type.** It's tempting to grab "the first date property", but that breaks the moment a schema has two URL fields. `readProps(page)` in `lib/notion.js` does named lookup and returns a neutral empty value when a property is missing or the wrong type, so a rename in Notion degrades one field instead of crashing the hourly job.
+3. **Always guard against empty results.** `assertNotEmpty()` makes a generator refuse to write when its query returns zero rows. Without it, one API hiccup blanks a page and the auto-commit action pushes it.
+4. **Track what you generated.** Slugs derive from titles, so renaming a row orphans its old page. Keep a manifest and prune only slugs you previously owned.
+5. **Escape everything.** All interpolated values go through `escapeHtml()` — Notion content is user input as far as the generator is concerned.
+
+**Result:** Write in Notion or upload to Cloudinary from your phone, and the site updates and redeploys itself within an hour.
 
 ---
 

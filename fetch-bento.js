@@ -1,6 +1,8 @@
 require('dotenv').config();
 const cloudinary = require('cloudinary').v2;
 const fs = require('fs');
+// lib/notion.js only requires `fs`, so this adds no npm dependency.
+const { escapeHtml, assertNotEmpty } = require('./lib/notion');
 
 cloudinary.config({ 
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
@@ -9,14 +11,6 @@ cloudinary.config({
   secure: true
 });
 
-function escapeHtml(str) {
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
-}
 
 async function buildCreative() {
   console.log("Fetching resources from Cloudinary...");
@@ -30,6 +24,12 @@ async function buildCreative() {
       
     const resources = result.resources;
     console.log(`Found ${resources.length} items in Cloudinary.`);
+
+    // An empty result means a renamed folder, an auth failure or a transient
+    // error far more often than it means "the gallery is genuinely empty".
+    // Writing it out would blank creative.html and the workflow would commit it.
+    if (!assertNotEmpty(resources, 'Cloudinary items')) return;
+
     
     let htmlContent = '';
     resources.forEach((item, index) => {
