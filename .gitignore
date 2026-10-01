@@ -1,2 +1,6 @@
 node_modules/
 .env
+Thumbnails/
+project-screenshots/
+.DS_Store
+.claude/autoharness/
