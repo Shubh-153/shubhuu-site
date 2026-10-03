@@ -176,3 +176,29 @@ Local changes jo commit nahi hue:
 - `~/Projects/ModelHive`: naya clone.
 - `~/Projects/AgentFlow/frontend`: `node_modules` install.
 - `shubhuu-site/project-screenshots/`: images Cloudinary pe hain, commit karne ki zaroorat nahi.
+
+---
+
+## Part 5 — Google search visibility (2026-10-04)
+
+Pehle ka status: homepage Google pe index hai. Baaki 8 pages "Discovered – currently not indexed" hain (validation 3 Oct ko shuru hua). Sitemap (29 URLs) 3 Oct ko dobara submit kiya. Title ab **"Shubh Gupta (Shubh-153) — Software Developer, LPU"** hai. "Shubhuu" naam pe 1.24M waala YouTuber hai, isliye unique naam "Shubh-153" use kiya. 6 public repos ki Website field project pages pe set hai.
+
+**Search Console**
+- [ ] Homepage `https://shubhuu.in/` pe **Request Indexing**, kyunki title "Shubh-153" waala ho gaya hai
+- [ ] Request Indexing: `/projects.html`, `/blogs.html`, `/project-resume-roaster.html`, `/project-modelhive.html` (roz ~10 ki limit)
+- [ ] 1–2 din baad: Sitemaps mein "Discovered pages" 11 se 29 hua ya nahi
+
+**Profiles se site ka link** (Google inhe pehle se "shubh153" se jodta hai)
+- [ ] GitHub profile → Website: `https://shubhuu.in` (abhi `links.html` hai)
+- [ ] LinkedIn → Contact info → Website: `https://shubhuu.in` (type: Portfolio)
+- [ ] LinkedIn → Featured section mein site add karo
+- [ ] Linktree mein sabse upar `shubhuu.in`, ya Linktree ki jagah `shubhuu.in/links.html` use karo
+- [ ] Hugging Face profile → Website: `https://shubhuu.in`
+- [ ] Instagram bio mein `shubhuu.in`
+
+**Check (1–2 hafte baad)**
+- [ ] Google pe `shubh153`, `Shubh-153`, `shubhuu.in` aur `Shubh Gupta LPU` search karo, site dikhni chahiye
+- [ ] Search Console → Pages: 8 "Discovered" pages ka validation result
+
+**Baaki**
+- [ ] Gemini key rotate karo (chat mein aa chuki hai): AI Studio pe nayi key → Vercel `GEMINI_API_KEY` update → `vercel deploy --prod`
