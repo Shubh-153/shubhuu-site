@@ -4,7 +4,7 @@ const { NotionToMarkdown } = require('notion-to-md');
 const fs = require('fs');
 
 const {
-  SITE, AUTHOR, OG_IMAGE, BASE_KEYWORDS,
+  SITE, AUTHOR, TWITTER_HANDLE, OG_IMAGE, BASE_KEYWORDS,
   escapeHtml, replaceBlock, injectMarker, slugify, makeSlug, uniqueSlug, extractMarkdownContent,
   buildExcerpt, queryAllPages, readProps, optimizeCloudinary,
   pruneGenerated, pickRelated, assertNotEmpty, formatDate,
@@ -33,42 +33,54 @@ function buildSeoBlock(p) {
   const fullTitle = `${p.title} | ${AUTHOR}`;
   const url = projectUrl(p.slug);
   const image = p.cover || OG_IMAGE;
-  const keywords = p.stack.length
-    ? `${p.stack.join(', ')}, ${BASE_KEYWORDS}`
-    : BASE_KEYWORDS;
 
   const jsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
-    name: p.title,
-    description: p.description,
-    applicationCategory: 'WebApplication',
-    operatingSystem: 'Any',
-    image,
-    url: p.liveUrl || url,
-    author: { '@type': 'Person', name: AUTHOR, url: `${SITE}/` },
-    mainEntityOfPage: { '@type': 'WebPage', '@id': url },
+    '@graph': [
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
+          { '@type': 'ListItem', position: 2, name: 'Projects', item: `${SITE}/projects.html` },
+          { '@type': 'ListItem', position: 3, name: p.title, item: url }
+        ]
+      },
+      {
+        '@type': 'SoftwareApplication',
+        name: p.title,
+        description: p.description,
+        applicationCategory: 'WebApplication',
+        operatingSystem: 'Any',
+        image,
+        url: p.liveUrl || url,
+        author: { '@type': 'Person', name: AUTHOR, url: `${SITE}/` },
+        mainEntityOfPage: { '@type': 'WebPage', '@id': url },
+        ...(p.isoDate ? { datePublished: p.isoDate } : {}),
+        ...(p.repoUrl ? { codeRepository: p.repoUrl } : {})
+      }
+    ]
   };
-  if (p.stack.length) jsonLd.keywords = p.stack.join(', ');
-  if (p.isoDate) jsonLd.datePublished = p.isoDate;
-  if (p.repoUrl) jsonLd.codeRepository = p.repoUrl;
 
   return `<!-- SEO_META_START -->
 <title>${escapeHtml(fullTitle)}</title>
 <meta name="description" content="${escapeHtml(p.description)}">
-<meta name="keywords" content="${escapeHtml(keywords)}">
 <meta name="author" content="${escapeHtml(AUTHOR)}">
+<meta name="robots" content="index, follow, max-image-preview:large">
 <link rel="canonical" href="${escapeHtml(url)}">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="${escapeHtml(AUTHOR)}">
 <meta property="og:title" content="${escapeHtml(fullTitle)}">
 <meta property="og:description" content="${escapeHtml(p.description)}">
 <meta property="og:image" content="${escapeHtml(image)}">
+<meta property="og:image:alt" content="${escapeHtml(p.title)}">
 <meta property="og:url" content="${escapeHtml(url)}">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="${escapeHtml(TWITTER_HANDLE)}">
+<meta name="twitter:creator" content="${escapeHtml(TWITTER_HANDLE)}">
 <meta name="twitter:title" content="${escapeHtml(fullTitle)}">
 <meta name="twitter:description" content="${escapeHtml(p.description)}">
 <meta name="twitter:image" content="${escapeHtml(image)}">
+<meta name="twitter:image:alt" content="${escapeHtml(p.title)}">
 <script type="application/ld+json">
 ${JSON.stringify(jsonLd, null, 2).replace(/<\//g, '<\\/')}
 </script>
@@ -143,7 +155,7 @@ function hueFor(slug) {
 
 function projectThumb(p, cls = 'project-thumb') {
   if (p.thumb) {
-    return `<div class="${cls}"><img src="${escapeHtml(p.thumb)}" alt="" loading="lazy" decoding="async"></div>`;
+    return `<div class="${cls}"><img src="${escapeHtml(p.thumb)}" alt="Thumbnail for ${escapeHtml(p.title)}" loading="lazy" decoding="async"></div>`;
   }
   const letter = escapeHtml([...p.title.trim()][0]?.toUpperCase() || '?');
   return `<div class="${cls} ${cls}-ph" style="--h:${hueFor(p.slug)}" aria-hidden="true"><span>${letter}</span></div>`;

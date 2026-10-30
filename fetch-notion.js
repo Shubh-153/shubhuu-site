@@ -4,7 +4,7 @@ const { NotionToMarkdown } = require('notion-to-md');
 const fs = require('fs');
 
 const {
-  SITE, AUTHOR, OG_IMAGE, BASE_KEYWORDS,
+  SITE, AUTHOR, TWITTER_HANDLE, OG_IMAGE, BASE_KEYWORDS,
   escapeHtml, replaceBlock, injectMarker, slugify, makeSlug, uniqueSlug,
   extractMarkdownContent, buildExcerpt, queryAllPages,
   pruneGenerated, pickRelated, assertNotEmpty,
@@ -20,43 +20,56 @@ const postUrl = slug => `${SITE}/${slug}.html`;
 function buildSeoBlock(blog) {
   const fullTitle = `${blog.title} | ${AUTHOR}`;
   const url = postUrl(blog.slug);
-  const keywords = blog.categories.length
-    ? `${blog.categories.join(', ')}, ${BASE_KEYWORDS}`
-    : BASE_KEYWORDS;
 
   const jsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'BlogPosting',
-    headline: blog.title,
-    description: blog.excerpt,
-    image: OG_IMAGE,
-    datePublished: blog.isoDate,
-    dateModified: blog.isoDate,
-    author: { '@type': 'Person', name: AUTHOR, url: `${SITE}/` },
-    publisher: { '@type': 'Person', name: AUTHOR, url: `${SITE}/` },
-    mainEntityOfPage: { '@type': 'WebPage', '@id': url },
+    '@graph': [
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
+          { '@type': 'ListItem', position: 2, name: 'Blogs', item: `${SITE}/blogs.html` },
+          { '@type': 'ListItem', position: 3, name: blog.title, item: url }
+        ]
+      },
+      {
+        '@type': 'BlogPosting',
+        headline: blog.title,
+        description: blog.excerpt,
+        image: OG_IMAGE,
+        datePublished: blog.isoDate,
+        dateModified: blog.isoDate,
+        author: { '@type': 'Person', name: AUTHOR, url: `${SITE}/` },
+        publisher: { '@type': 'Person', name: AUTHOR, url: `${SITE}/` },
+        mainEntityOfPage: { '@type': 'WebPage', '@id': url },
+        ...(blog.categories.length ? { articleSection: blog.categories } : {})
+      }
+    ]
   };
-  if (blog.categories.length) jsonLd.articleSection = blog.categories;
 
   return `<!-- SEO_META_START -->
 <title>${escapeHtml(fullTitle)}</title>
 <meta name="description" content="${escapeHtml(blog.excerpt)}">
-<meta name="keywords" content="${escapeHtml(keywords)}">
 <meta name="author" content="${escapeHtml(AUTHOR)}">
+<meta name="robots" content="index, follow, max-image-preview:large">
 <link rel="canonical" href="${url}">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="${escapeHtml(AUTHOR)}">
 <meta property="og:title" content="${escapeHtml(fullTitle)}">
 <meta property="og:description" content="${escapeHtml(blog.excerpt)}">
 <meta property="og:image" content="${OG_IMAGE}">
+<meta property="og:image:alt" content="${escapeHtml(blog.title)}">
 <meta property="og:url" content="${url}">
 <meta property="article:published_time" content="${blog.isoDate}">
 <meta property="article:author" content="${escapeHtml(AUTHOR)}">
 ${blog.categories.map(c => `<meta property="article:section" content="${escapeHtml(c)}">`).join('\n')}
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="${escapeHtml(TWITTER_HANDLE)}">
+<meta name="twitter:creator" content="${escapeHtml(TWITTER_HANDLE)}">
 <meta name="twitter:title" content="${escapeHtml(fullTitle)}">
 <meta name="twitter:description" content="${escapeHtml(blog.excerpt)}">
 <meta name="twitter:image" content="${OG_IMAGE}">
+<meta name="twitter:image:alt" content="${escapeHtml(blog.title)}">
 <link rel="alternate" type="application/rss+xml" title="${escapeHtml(AUTHOR)} — Blog" href="/feed.xml">
 <script type="application/ld+json">
 ${JSON.stringify(jsonLd, null, 2).replace(/<\//g, '<\\/')}
@@ -172,7 +185,17 @@ async function buildSite() {
 
     const mdblocks = await n2m.pageToMarkdown(page.id);
     const mdString = n2m.toMarkdownString(mdblocks);
-    const htmlContent = marked.parse(extractMarkdownContent(mdString));
+    let htmlContent = marked.parse(extractMarkdownContent(mdString));
+
+    // SEO cleanups for markdown body:
+    // 1. Convert any internal H1s to H2s so the article title is the only primary H1
+    htmlContent = htmlContent.replace(/<h1[^>]*>([\s\S]*?)<\/h1>/gi, (match, inner) => {
+      return inner.trim() ? `<h2>${inner}</h2>` : '';
+    });
+    // 2. Remove any remaining empty headings
+    htmlContent = htmlContent.replace(/<h[1-6][^>]*>\s*<\/h[1-6]>/gi, '');
+    // 3. Fix Notion TOC about:blank# links
+    htmlContent = htmlContent.replace(/href=["']about:blank#([^"']+)["']/gi, 'href="#$1"');
 
     blogs.push({
       title, id: page.id, date, isoDate: createdTime.toISOString(),

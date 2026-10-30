@@ -29,12 +29,25 @@ function unchangedSinceCommit(file) {
   }
 }
 
+function gitCommitDate(file) {
+  try {
+    const out = execFileSync('git', ['log', '-1', '--format=%cI', '--', file], { encoding: 'utf8' }).trim();
+    if (out) return new Date(out).toISOString();
+  } catch (e) { /* fallback */ }
+  return null;
+}
+
 // Keep a page's previous <lastmod> unless the page itself changed in this run.
 // File mtimes don't work here: CI checks out a fresh tree every hour, so every
 // mtime is "now" and the sync committed a new sitemap each run, which also
 // trains crawlers to ignore <lastmod>.
 function lastmodFor(loc, file, previous, now) {
-  return previous.has(loc) && unchangedSinceCommit(file) ? previous.get(loc) : now;
+  if (unchangedSinceCommit(file)) {
+    if (previous.has(loc)) return previous.get(loc);
+    const commitDate = gitCommitDate(file);
+    if (commitDate) return commitDate;
+  }
+  return now;
 }
 
 function buildSitemap() {
